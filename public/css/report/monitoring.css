@@ -1,0 +1,45 @@
+.summary {
+    margin: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    background: #fcfdff;
+    padding: 5px;
+    box-shadow: inset 0 0 23px -13px #d8d8d8;
+}
+.num {
+    border: 1px solid #e8e4e4;
+    padding: 5px;
+    strong {
+        border: 1px dashed;
+        margin: 0 5px 5px -3px;
+        padding: 5px;
+    }
+}
+
+
+
+.smart-form {
+    gap: 0;
+    padding: 10px;
+    max-width: 90%;
+}
+.smart-form input, .smart-form select, .smart-form textarea {
+
+    padding: 5px 2px;
+
+
+}
+
+
+.smart-form label {
+    font-size: 14px;
+}
+th.asc::after {
+    content: " ▲";
+    font-size: 12px;
+}
+th.desc::after {
+    content: " ▼";
+    font-size: 12px;
+}

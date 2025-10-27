@@ -1,0 +1,289 @@
+/* ========== أساسيات ومتغيرات ألوان ========== */
+:root{
+    --bg: #ffffff;
+    --card: #f7f9fc;
+    --text: #0f172a;         /* slate-900 */
+    --muted: #64748b;        /* slate-500 */
+    --border: #f6f2f2;       /* slate-200 */
+    --accent: #5d697d;       /* blue-500 */
+    --accent-weak: #dbeafe;  /* blue-100 */
+    --success: #10b981;      /* emerald-500 */
+    --warning: #f59e0b;      /* amber-500 */
+    --danger:  #ef4444;      /* red-500 */
+    --shadow:  0 8px 20px rgba(2,6,23,.06);
+}
+
+@media (prefers-color-scheme: dark){
+    :root{
+        --bg: #0b1220;
+        --card: #0f172a;
+        --text: #e5e7eb;       /* gray-200 */
+        --muted: #94a3b8;      /* slate-400 */
+        --border: #f6f2f2;     /* darker */
+        --accent: #5d697d;
+        --accent-weak: #77818c;
+        --shadow: 0 8px 24px rgba(0,0,0,.35);
+    }
+}
+
+/* ========== حاوية الجدول ========== */
+.table-wrap{
+    width: 98%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+/* سكرول أفقي ناعم عند ضيق الشاشة */
+.table-scroll{
+    overflow: auto;
+    border-radius: 14px;
+}
+
+
+.table{
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font: 500 14px/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color: var(--text);
+    background: var(--bg);
+    min-width: 760px;
+}
+
+.table thead th{
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: linear-gradient(to bottom, var(--card), var(--bg));
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(2px);
+}
+
+/* خلايا البودي */
+.table tbody td{
+    padding: 0 5px;
+    vertical-align: middle;
+    border: 1px solid var(--border);
+}
+.table tbody td.three {
+    width: 30%;
+}.table tbody td.four {
+    width: 25%;
+}
+.table tbody td.six {
+    width: 15%;
+}
+.table tbody td.ten {
+    width: 15%;
+}
+
+/* أول وآخر خلية بحواف ناعمة */
+.table thead th:first-child,
+.table tbody td:first-child{ padding-left: 20px; }
+.table thead th:last-child,
+.table tbody td:last-child{ padding-right: 20px; }
+
+/* سترايب لطيف */
+.table tbody tr:nth-child(odd){
+    background: color-mix(in oklab, var(--accent-weak) 8%, transparent);
+}
+
+/* هوفر أنيق مع ظل خفيف */
+.table tbody tr{
+    transition: background .25s ease, transform .12s ease;
+}
+.table tbody tr:hover{
+    background: color-mix(in oklab, var(--accent-weak) 16%, transparent);
+}
+
+/* صف مميز (مثلا تحديد أو حالة) */
+.table tr.is-active{
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+    background: color-mix(in oklab, var(--accent-weak) 26%, transparent);
+}
+
+/* ========== شارات الحالة ========== */
+.badge{
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+}
+.badge--success{ background: color-mix(in oklab, var(--success) 14%, transparent); color: #065f46; }
+.badge--warning{ background: color-mix(in oklab, var(--warning) 14%, transparent); color: #7c3a03; }
+.badge--danger{  background: color-mix(in oklab, var(--danger) 14%,  transparent); color: #7f1d1d; }
+@media (prefers-color-scheme: dark){
+    .badge--success{ color: #a7f3d0; }
+    .badge--warning{ color: #fde68a; }
+    .badge--danger{  color: #fecaca; }
+    .btn--bg{  color: #ffffff; }
+    .btn{  color: #ffffff; }
+
+}
+
+/* ========== أزرار صغيرة للأكشن ========== */
+.btn{
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 34px; padding: 0 12px;
+    background: var(--bg);
+    font-weight: 600; font-size: 13px;
+    cursor: pointer;
+    text-wrap: nowrap;
+    transition: transform .08s ease, background .2s ease, border-color .2s ease;
+    color: black;
+    border: 2px outset #d4d1d1;
+    border-radius: 8px;
+    max-width: 100px;
+    text-align: center;
+}
+.btn.add{
+    margin-right: 1%;
+}
+.btn:hover{ background: color-mix(in oklab, var(--accent-weak) 20%, var(--bg)); }
+.btn:active{ transform: translateY(1px); }
+.btn--primary{ border-color: color-mix(in oklab, var(--accent) 50%, var(--border)); }
+.btn--ghost{ background: transparent; }
+
+/* ========== حجم مدمج اختياري ========== */
+.table--compact thead th{ padding: 10px 12px; font-size: 11px; }
+.table--compact tbody td{ padding: 10px 12px; font-size: 13px; }
+.table-title{
+    font-weight: bold;
+    padding: 10px;
+    background: #c0c1c22b;
+    font-size: 18px;
+    cursor: pointer;
+    position: relative;
+}
+.table-title::after {
+    content: "▼"; /* سهم للأسفل بشكل افتراضي */
+    position: absolute;
+    left: 10px;
+    transition: transform 0.3s ease;
+}
+
+/* عند الطي */
+.table-title.collapsed::after {
+    transform: rotate(-90deg); /* يصبح سهم لليسار */
+}
+.table-wrap {
+    transition: max-height 1s ease;
+    overflow: hidden;
+}
+.table-wrap.collapsed {
+    max-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+}
+.worn{
+    background: radial-gradient(#ec8e16, #b55d21d9) !important;
+    color: white;
+}
+.danger{
+    background: radial-gradient(#b40f0f, #ff0000d9)!important;
+    color: white;
+}
+.done{
+    background: radial-gradient(#0b3d06a6, #052302d9) !important;
+    color: white;
+}
+/* ========== موبايل: تحويل لبطاقات أنيقة ========== */
+@media (max-width: 640px){
+    .table{ min-width: 100%; border-spacing: 0; }
+    .table thead{ display: none; }
+    .table tbody tr{
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 12px 14px;
+        margin: 10px 0;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        background: var(--bg);
+    }
+    .table tbody td{
+        border: 0; padding: 0;
+    }
+    .table tbody td[data-label]::before{
+        content: attr(data-label);
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 4px;
+        letter-spacing: .06em;
+    }
+}
+ .btn-danger{
+    background: radial-gradient(#873014a6, #aa1c07fc);
+     color: white;
+}
+  .btn-primary{
+    background: radial-gradient(#0c6774a6, #118695e0);
+      color: white;
+  }
+   .btn-worn{
+    background: radial-gradient(#8d8236a6, #aca314);
+       color: white;
+   }
+  .btn-save{
+    background: radial-gradient(#47710da6, #0b6b13e0);
+      color: white;
+  }
+.btn-secondary{
+    background: radial-gradient(#ebf1f5, #bbcdd9);
+}
+.pagination {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.pagination a {
+    padding: 8px 12px;
+    margin: 0 3px;
+    text-decoration: none;
+    color: #2a5298;
+    border: 1px solid #2a5298;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.pagination a.active,
+.pagination a:hover {
+    background-color: #2a5298;
+    color: white;
+}
+
+.pagination span.disabled {
+    padding: 8px 12px;
+    margin: 0 3px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #aaa;
+    cursor: not-allowed;
+}
+.inside-table{
+
+    th{
+        border: 1px solid;
+        padding: 0 3px;
+    }
+    td{
+        border: 1px solid #484848;
+        padding: 0 3px;
+    }
+}

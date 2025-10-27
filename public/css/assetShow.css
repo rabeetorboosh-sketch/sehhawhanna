@@ -1,0 +1,154 @@
+.report-container {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 20px 0 10px;
+    color: #333;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.info-card {
+    background: #f9fafb;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.info-title {
+    font-weight: bold;
+    color: #555;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.info-content {
+    color: #222;
+}
+
+.table-container {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.styled-table th, .styled-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.styled-table th {
+    background: #f1f1f1;
+    font-weight: bold;
+}
+
+.status {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.status.completed {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.btn-back {
+    display: inline-block;
+    padding: 10px 16px;
+    background: radial-gradient(#47710da6, #0b6b13e0);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.btn-back:hover {
+    background: radial-gradient(#47710da6, #0b6b63e0);
+}
+/* اخفاء الجداول في الموبايل */
+.mobile-view {
+    display: none;
+}
+
+.desktop-view {
+    display: block;
+}
+
+/* تصميم الكاردات */
+.card {
+    background: #f9fafb;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.card p {
+    margin: 6px 0;
+    color: #333;
+    font-size: 14px;
+}
+
+.btn-show {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 12px;
+    background: radial-gradient(#0c6774a6, #118695e0);
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.btn-show:hover {
+    background: radial-gradient(#0c6774a6, #118670e0);
+}
+
+/* في الشاشات الصغيرة (الهاتف) نخفي الجدول ونظهر الكاردات */
+@media (max-width: 768px) {
+    .desktop-view {
+        display: none;
+    }
+    .mobile-view {
+        display: block;
+    }
+}
+.department-block {
+    background: #f9fafb; /* خلفية فاتحة */
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin: 25px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.department-block h4 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    border-bottom: 2px dashed #e2e8f0;
+    padding-bottom: 5px;
+}

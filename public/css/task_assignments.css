@@ -1,0 +1,75 @@
+/* الحاوية الرئيسية */
+.task-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    font-family: 'Cairo', sans-serif;
+    color: #333;
+}
+
+/* العناوين */
+.task-container h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #1f2937;
+}
+
+/* شبكة التفاصيل */
+.task-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 1rem;
+}
+
+/* العناوين الفرعية */
+.task-details strong {
+    display: inline-block;
+    width: 120px;
+    font-weight: bold;
+    color: #111827;
+}
+
+/* قسم الأيام */
+.recurrence-days {
+    margin-top: 1rem;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 0.95rem;
+}
+
+/* الأزرار */
+.task-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.task-actions a,
+.task-actions button {
+    padding: 0 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+
+.task-actions a.btn-primary {
+    background-color: #1da8d8;
+    color: #fff;
+}
+.task-actions a.btn-worn{
+    background-color: #359551;
+    color: #fff;
+}
+.task-actions a.btn-secondary {
+    background-color: #6b7280;
+    color: #fff;
+}

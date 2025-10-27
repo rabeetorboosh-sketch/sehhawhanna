@@ -1,0 +1,118 @@
+body {
+    margin: 0;
+    font-family: "Cairo", sans-serif;
+}
+
+.sidebar {
+    width: 260px;
+    background: linear-gradient(to bottom, #2c4766, #0c1a26);
+    color: white;
+    height: 100vh;
+    padding: 20px 10px;
+    position: relative;
+    right: 0;
+    top: 0;
+    overflow-y: auto;
+    transition: transform 0.8s ease;
+    z-index: 1000;
+
+}
+
+.sidebar.hidden {
+    transform: translateX(100%);
+}
+
+.logo {
+    margin: 0 0 20px 0;
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+}
+
+.menu-item {
+    margin-bottom: 10px;
+}
+
+.dropdown-btn {
+    width: 100%;
+    background: none;
+    border: none;
+    color: white;
+    text-align: right;
+    font-size: 16px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+}
+
+.submenu {
+    list-style: none;
+    padding: 0 15px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.submenu li a {
+    display: block;
+    color: #ddd;
+    padding: 8px 0;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.submenu li a:hover {
+    color: #fff;
+}
+
+.menu-item.active .submenu {
+    max-height: 500px;
+}
+
+/* 🚀 الزر (الهامبورجر) */
+.toggle-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: #2c4766;
+    color: white;
+    border: none;
+    font-size: 22px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 1100;
+}
+
+/* 🚀 المحتوى يتحرك حسب السايدبار */
+.content {
+    margin-right: 260px;
+    padding: 20px;
+    width: 100%;
+    transition: margin-right 0.3s ease;
+}
+
+/* 📱 موبايل */
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        transform: translateX(100%);
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .content {
+        margin-right: 0;
+    }
+}

@@ -1,0 +1,67 @@
+
+@font-face {
+    font-family: 'Cairo', sans-serif;
+    font-weight: normal;
+    font-style: normal;
+}
+
+*{
+    font-family: 'Cairo', sans-serif;
+}
+
+.btn{
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 34px; padding: 0 12px;
+    background: var(--bg);
+    font-weight: 600; font-size: 13px;
+    cursor: pointer;
+    transition: transform .08s ease, background .2s ease, border-color .2s ease;
+    color: black;
+    border: 2px outset #d4d1d1;
+    border-radius: 8px;
+
+}
+  .btn-danger{
+    background: radial-gradient(#873014a6, #aa1c07fc);
+}
+  .btn-primary{
+    background: radial-gradient(#0c6774a6, #118695e0);
+}
+.btn-secondary{
+    background: radial-gradient(#4ac692, #1fa56e);
+}
+  .btn-worn{
+    background: radial-gradient(#8d8236a6, #aca314);
+}
+  .btn-save{
+    background: radial-gradient(#47710da6, #0b6b13e0);
+}
+  button:hover{
+    background: #989a9f;
+}
+.upNav {
+    display: flex;
+    gap: 10px; /* تباعد بين الروابط */
+    background-color: #f9f9f9; /* خلفية فاتحة */
+    padding: 8px 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+    flex-wrap: wrap; /* لتفادي كسر التصميم على الشاشات الصغيرة */
+}
+
+.upNav a {
+    text-decoration: none;
+    color: #333; /* لون النص */
+    background-color: #e0e0e0; /* خلفية خفيفة للروابط */
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.upNav a:hover {
+    background-color: #4a5f77;; /* لون عند المرور بالفأرة */
+    color: #fff;
+    transform: translateY(-2px); /* تأثير رفع خفيف */
+}

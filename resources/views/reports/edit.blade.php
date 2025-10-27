@@ -1,0 +1,155 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            تعديل تقرير
+        </h2>
+    </x-slot>
+
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
+
+    <div class="py-12">
+        <form class="smart-form" action="{{ route('reports.update', $report->id) }}" method="post" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+
+            <div class="row-2">
+                <div class="form-group">
+                    <label>نوع البلاغ</label>
+                    <select name="report_type_id" required>
+                        @foreach($issueTypes as $type)
+                            <option value="{{ $type->id }}" {{ $report->issue_type_id == $type->id ? 'selected' : '' }}>
+                                {{ $type->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>القسم</label>
+                    <select name="section_id" id="sectionSelect"  >
+                        @foreach($departments as $department)
+                            <option value="{{ $department->id }}" {{ $report->department_id == $department->id ? 'selected' : '' }}>
+                                {{ $department->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>المجموعة الرئيسية</label>
+                    <select name="mainGroup" id="mainGroupSelect">
+                        <option value="">اختر المجموعة الرئيسية</option>
+                        @foreach($mainGroups as $mainGroup)
+                            <option value="{{ $mainGroup->id }}" data-section="{{ $mainGroup->department->id }}"
+                                {{ $report->main_group_id == $mainGroup->id ? 'selected' : '' }}>
+                                {{ $mainGroup->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>المجموعة الفرعية</label>
+                    <select name="subGroup" id="subGroupSelect">
+                        <option value="">اختر المجموعة الفرعية</option>
+                        @foreach($subGroups as $subGroup)
+                            <option value="{{ $subGroup->id }}" data-main-group="{{ $subGroup->main_group_id }}"
+                                {{ $report->sub_group_id == $subGroup->id ? 'selected' : '' }}>
+                                {{ $subGroup->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <input type="hidden" name="status" value="{{ $report->status }}">
+            </div>
+
+            <div class="form-group" style="border:1px solid gray; border-radius:10px; padding:5px">
+                <h3>بنود التقرير</h3>
+                <div id="items-wrapper">
+                    @foreach($report->items as $index => $item)
+                        <div class="item-row" data-index="{{ $index }}">
+                            <div class="row-2" style="padding: 5px; box-shadow: 0 0 4px gray; border-radius: 5px; position: relative;">
+                                <div class="form-group">
+                                    <label>البند</label>
+                                    <select name="items[{{ $index }}][item_no]" class="itemsSelect">
+                                        <option value="">اختر البند</option>
+
+
+                                        @foreach($items as $itm)
+                                            <option value="{{ $itm->id . '-' . ($itm->department_id ?? '') }}"
+                                                    data-section="{{$itm->department_id}}"
+                                                    data-main="{{ $itm->main_group_id }}"
+                                                {{ $itm->id == $item->item_no && ($itm->department_id ?? '') == $item->item_type ? 'selected' : '' }}
+                                                    data-sub="{{ $itm->sub_group_id }}">
+                                                {{ $itm->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>الوحدة الرقابية</label>
+                                    <select name="items[{{ $index }}][control_unit_id]" class="control-unit-select">
+                                        <option value="" data-photo="1">وحدة رقابية يدوية</option>
+                                        @foreach($controlUnits as $unit)
+                                            <option value="{{ $unit->id }}"
+                                                    data-photo="{{ $unit->has_photos }}"
+                                                    data-department="{{ $unit->department_id }}"
+                                                    data-main-group="{{ $unit->main_group_id }}"
+                                                    data-sub-group="{{ $unit->sub_group_id }}"
+                                                {{ $item->control_unit_id == $unit->id ? 'selected' : '' }}>
+                                                {{ $unit->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group user-control-group" style="{{ $item->user_control_unit ? '' : 'display: none;' }}">
+                                    <label>اضف الوحدة رقابية</label>
+                                    <input type="text" name="items[{{ $index }}][user_control_unit]" value="{{ $item->user_control_unit }}">
+                                </div>
+
+                                <div class="form-group photo-control" style="display: none;">
+                                    <label>الصور</label>
+                                    <input type="file" name="items[{{ $index }}][control_unit_photo]">
+                                </div>
+
+                                <div class="form-group multi-photo-control" style="display: none;">
+                                    <label>الصور المتعددة</label>
+                                    <div class="photo-container">
+                                        <input type="file" name="items[{{ $index }}][control_unit_photos][]">
+                                    </div>
+                                    <button type="button" class="add-photo-btn btn btn-primary">+ إضافة </button>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>المتسبب</label>
+                                    <select name="items[{{ $index }}][causer_id]">
+                                        <option value="">لا يوجد متسبب</option>
+                                        @foreach($employees as $emp)
+                                            <option value="{{ $emp->id }}" {{ $item->causer_id == $emp->id ? 'selected' : '' }}>
+                                                {{ $emp->item->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>الوصف</label>
+                                    <textarea name="items[{{ $index }}][issue_description]">{{ $item->issue_description }}</textarea>
+                                </div>
+
+                                <input type="hidden" name="items[{{ $index }}][response_status]" value="{{ $item->response_status }}">
+                                <button type="button" class="btn btn-danger btn-sm remove-item">×</button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <button type="button" class="btn btn-worn add-item">+</button>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn-save">تحديث</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="{{ asset('js/report-form.js') }}"></script>
+</x-app-layout>

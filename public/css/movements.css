@@ -1,0 +1,268 @@
+
+.sections-bar {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+    gap: 15px;
+}
+
+.sections-container, .groups-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.section-lbl {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.section-lbl:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.group-lbl {
+    background-color: #2196F3;  /* Blue color for groups */
+    color: white;
+    padding: 10px 20px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.group-lbl:hover {
+    background-color: #1976D2;
+    transform: scale(1.05);
+}
+
+/* Form Styles */
+form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    width: 100%;
+}
+
+/* Input Fields */
+input[type="text"], input[type="number"], select, textarea {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 8px 0;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+/* Buttons */
+button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+/* Red button (for deleting) */
+.bg-red-500 {
+    background-color: #ff4433;
+    color: white;
+}
+
+.bg-red-500:hover {
+    background-color: #ff3b2f;
+}
+
+/* Green button (for submit) */
+.bg-green-500 {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.bg-green-500:hover {
+    background-color: #45a049;
+}
+
+/* Product fields */
+#product-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.item-container {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 300px;
+    height: 36px;
+    justify-content: space-between;
+    margin: 0;
+}
+
+.searchable-select input {
+    padding: 10px;
+    width: 100%;
+    font-size: 12px;
+
+}
+
+/* Aligning quantity and button side by side */
+.flex {
+    display: flex;
+    gap: 10px;
+}
+
+.space-x-4 {
+    gap: 16px;
+}
+
+/* Customizing Select Box */
+select {
+    appearance: none;
+    background-color: #f9f9f9;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+}
+.unit-select{
+    font-size: 12px;
+    padding: 1px;
+    line-height: 1;
+    height: 30px;
+    margin: 4px;
+    width: 50% !important;
+    border: none !important;
+}
+select:focus {
+    border-color: #4CAF50;
+}
+
+/* File Input */
+input[type="file"] {
+    background-color: #f9f9f9;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+}
+
+/* Labels */
+label {
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+/* Textarea */
+textarea {
+    resize: vertical;
+}
+
+/* Optional - To add spacing between form elements */
+.mb-4 {
+    margin-bottom: 20px;
+    width: 30%;
+}
+.group-lbl{
+
+    display: none;
+}
+.forPC{
+
+    display: block;
+    .emp-input{
+
+        display: inline-block;
+
+    }
+}
+.forPhone{
+    display: none;
+}
+.group-header{
+    font-weight: 800
+}
+
+@media screen and (max-width: 768px) {
+    .sections-bar {
+        flex-direction: column;
+        align-items: center;
+    }
+    .forPC{
+
+        display: none;
+    }
+    .forPhone{
+        display: block;
+    }
+
+    .section-lbl, .group-lbl {
+        width: 40%;
+        max-height: 60px;
+        font-size: 14px;
+        font-weight: bolder;
+    }
+
+    #product-fields {
+        flex-direction: column;
+    }
+
+    .item-container {
+        width: 100%;
+    }
+    .mb-4 {
+
+        width: 100%;
+    }
+}
+
+.vlue-lbl,.item-container{
+
+    display: none;
+}
+
+.sections-container, .groups-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: 100%;
+    overflow: hidden;
+}
+
+
+.searchable-select select {
+    width: 100%;
+    height: auto;
+    overflow-y: auto;
+    border-radius: 4px;
+
+}.count {
+
+     width: 40%;
+ }

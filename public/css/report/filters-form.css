@@ -1,0 +1,228 @@
+
+.smart-form select{
+
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+.smart-form{
+    direction: rtl;
+    display: grid;
+    gap: 10px;
+    padding: 20px;
+    max-width: 90%;
+    margin: auto;
+    background: #fffffffc;
+    border-radius: 10px;
+}
+.form-group.filter {
+    border: 1px inset;
+    border-radius: 10px;
+    padding: 10px;
+}
+/* كل عنصر داخل الفورم */
+.smart-form .form-group{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* اللابل */
+.smart-form label{
+    font-size: 18px;
+    color: #555;
+    font-weight: 500;
+}
+
+/* الحقول */
+.smart-form input,
+.smart-form select,
+.smart-form textarea{
+    width: 100%;
+    padding: 10px 5px;
+    border: 1px solid #022027;
+    border-radius: 4px;
+    font-size: 15px;
+    background: #00000000;
+    transition: 0.2s;
+}
+
+.smart-form .checkbox  {
+    appearance: none;
+    width: 26px;
+    height: 24px;
+    border: 2px solid #022027;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    background-color: #fff;
+}
+.smart-form .checkbox.radio{
+    border-radius: 50%;
+}
+
+.smart-form .checkbox:checked {
+    background-color: #103943;
+    border-color: #022027;
+}
+
+.smart-form .checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 9px;
+    width: 6px;
+    height: 12px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+
+.smart-form input:focus,
+.smart-form select:focus,
+.smart-form textarea:focus{
+    border-color: #C6C6C60D;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 1px #2563EB1F;
+}
+
+/* textarea */
+.smart-form textarea{
+    min-height: 60px;
+    resize: vertical;
+}
+
+.row-2,.row-3{
+    display: grid;
+    gap: 16px;
+}
+.row-5{
+    display: grid;
+    gap: 16px;
+
+}
+.search-filter {
+    background: #e6e6e6;
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    border-radius: 5px;
+    border: 2px inset;
+    overflow-y: auto;
+    max-height: 300px;
+    input.name-searcher{
+        background: white;
+    }
+}
+.tab
+{
+    background: #cbcbcb;
+    padding: 1px 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-wrap: nowrap;
+}
+.tab.active{
+    background: #5c5454;
+
+}
+@media(min-width: 640px){
+    .row-2{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .row-3{
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .row-5{
+        grid-template-columns: repeat(5, 1fr);
+    }
+    .smart-form{
+
+        max-width:70%;
+
+    }
+}
+
+@media(max-width: 640px){
+    .row-2{
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .row-3{
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .row-5{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+/* الأزرار */
+.smart-form .actions{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.smart-form button{
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 34px; padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    font-weight: 600; font-size: 13px;
+    cursor: pointer;
+    text-wrap: nowrap;
+    transition: transform .08s ease, background .2s ease, border-color .2s ease;
+}
+div#success-alert {
+    color: white;
+    background: linear-gradient(149deg, #1296048f, #46850fa1);
+    height: 45px;
+    text-align: center;
+    align-content: center;
+    border-radius: 9px;
+    position: absolute;
+    padding: 0 20px;
+    left: 3%;
+    animation: fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px);}
+    to   { opacity: 1; transform: translateY(0);}
+}
+input.color{
+    width: 200px;
+    height: 200px;
+}
+
+.smart-form .btn{
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 34px; padding: 0 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    font-weight: 600; font-size: 13px;
+    cursor: pointer;
+    text-wrap: nowrap;
+    transition: transform .08s ease, background .2s ease, border-color .2s ease;
+
+}
+.smart-form .btn-danger{
+    background: radial-gradient(#873014a6, #aa1c07fc);
+}
+.smart-form  .btn-primary{
+    background: radial-gradient(#0c6774a6, #118695e0);
+}
+.smart-form  .btn-worn{
+    background: radial-gradient(#8d8236a6, #aca314);
+}
+.smart-form  .btn-save{
+    background: radial-gradient(#47710da6, #0b6b13e0);
+}
+.smart-form button:hover{
+    background: #989a9f;
+}
+.smart-form .btn-secondary{
+    background: radial-gradient(#6d7376, #292c2e);
+}
