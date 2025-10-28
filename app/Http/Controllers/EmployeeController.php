@@ -8,6 +8,7 @@ use App\Models\MainGroup;
 use App\Models\SubGroup;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
@@ -44,7 +45,7 @@ class EmployeeController extends Controller
 
             Employee::create([
                 'item_id' => $item->id,
-                'user_id' => $request['user_id'],
+                'user_id' => Auth::id(),
                 'nationality' => $request['nationality'],
                 'age' => $request['age'],
                 'phone' => $request['phone'],
@@ -87,7 +88,6 @@ class EmployeeController extends Controller
 
                 'nationality' => $request['nationality'],
                 'age' => $request['age'],
-                'user_id' => $request['user_id'],
                 'phone' => $request['phone'],
                 'email' => $request['email'],
                 'id_number' => $request['id_number'],

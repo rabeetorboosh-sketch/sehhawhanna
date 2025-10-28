@@ -54,13 +54,14 @@
 
             <div>
 
-                <div class="mb-4" style="display:inline-block;">
-                    <label for="customer_id_pc">العميل</label>
-                    <select name="customer_id" id="customer_id_pc" class="emp-input" required>
-                        <option value="">اختر العميل</option>
-                        @foreach($customers as $customer)
-                            <option value="{{ $customer->id }}" {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
-                                {{ $customer->item?->name }}
+                <div class="form-group">
+                    <label><i class="fa-solid fa-user-tag"></i> اسم العميل</label>
+                    <input type="text" class="searcher" placeholder="ابحث عن العميل">
+                    <select name="customer_id" id="clientSelect" size="5" class="client-search">
+                        @foreach($customers as $clnt)
+                            <option value="{{ $clnt->id }}"
+                                    @if(request('customer_id') == $clnt->id || (isset($issue) && $issue->client_id == $clnt->id)) selected @endif>
+                                {{ $clnt->item->name }}
                             </option>
                         @endforeach
                     </select>

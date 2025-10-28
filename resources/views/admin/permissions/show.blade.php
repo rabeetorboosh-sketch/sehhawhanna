@@ -45,6 +45,11 @@ $modelTranslations = [
     'exp'   => 'التوالف',
     'ret'   => '  المرتجعات',
     'load'   => '  التحميل',
+     'ratingUnits'   => ' وحدات التقييم',
+    'ratings'   => '   التقييم',
+    'sales_routs'   => '   الخطوط',
+    'customersRequests'   => '   طلبات العملاء',
+
 ];
 @endphp
 

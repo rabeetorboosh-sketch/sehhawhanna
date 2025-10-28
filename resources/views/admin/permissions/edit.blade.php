@@ -285,6 +285,17 @@
                             </ul>
                         </li>
                         <li>
+                            <strong>الخطوط</strong>
+                            <input type="checkbox" class="checkbox parent" name="8[insertions][sales_routs]" value="1"
+                                   @if(isset($permissions['8']['insertions']['sales_routs'])) checked @endif >
+                            <ul>
+                                <li><strong>إضافة </strong> <input type="checkbox" name="8[insertions][sales_routs][create]" value="1" class="checkbox" @if(isset($permissions['8']['insertions']['sales_routs']['create']) && $permissions['8']['insertions']['sales_routs']['create'] == 1) checked @endif></li>
+                                <li><strong>عرض</strong> <input type="checkbox" name="8[insertions][sales_routs][view]" value="1" class="checkbox" @if(isset($permissions['8']['insertions']['sales_routs']['view']) && $permissions['8']['insertions']['sales_routs']['view'] == 1) checked @endif></li>
+                                <li><strong>تعديل</strong> <input type="checkbox" name="8[insertions][sales_routs][edit]" value="1" class="checkbox" @if(isset($permissions['8']['insertions']['sales_routs']['edit']) && $permissions['8']['insertions']['sales_routs']['edit'] == 1) checked @endif></li>
+                                <li><strong>حذف</strong> <input type="checkbox" name="8[insertions][sales_routs][delete]" value="1" class="checkbox" @if(isset($permissions['8']['insertions']['sales_routs']['delete']) && $permissions['8']['insertions']['sales_routs']['delete'] == 1) checked @endif></li>
+                            </ul>
+                        </li>
+                        <li>
                             <strong>الوحدات الرقابية</strong>
                             <input type="checkbox" class="checkbox parent" name="8[insertions][controlUnits]" value="1"
                                    @if(isset($permissions['8']['insertions']['controlUnits'])) checked @endif >
@@ -345,6 +356,17 @@
                                 <li><strong>عرض</strong> <input type="checkbox" name="8[operations][supervises][view]" value="1" class="checkbox" @if(isset($permissions['8']['operations']['supervises']['view']) && $permissions['8']['operations']['supervises']['view'] == 1) checked @endif></li>
                                 <li><strong>تعديل</strong> <input type="checkbox" name="8[operations][supervises][edit]" value="1" class="checkbox" @if(isset($permissions['8']['operations']['supervises']['edit']) && $permissions['8']['operations']['supervises']['edit'] == 1) checked @endif></li>
                                 <li><strong>حذف</strong> <input type="checkbox" name="8[operations][supervises][delete]" value="1" class="checkbox" @if(isset($permissions['8']['operations']['supervises']['delete']) && $permissions['8']['operations']['supervises']['delete'] == 1) checked @endif></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>طلبات العملاء </strong>
+                            <input type="checkbox" class="checkbox parent" name="8[operations][customersRequests]" value="1"
+                                   @if(isset($permissions['8']['operations']['customersRequests'])) checked @endif >
+                            <ul>
+                                <li><strong>إضافة</strong> <input type="checkbox" name="8[operations][customersRequests][create]" value="1" class="checkbox" @if(isset($permissions['8']['operations']['customersRequests']['create']) && $permissions['8']['operations']['customersRequests']['create'] == 1) checked @endif></li>
+                                <li><strong>عرض</strong> <input type="checkbox" name="8[operations][customersRequests][view]" value="1" class="checkbox" @if(isset($permissions['8']['operations']['customersRequests']['view']) && $permissions['8']['operations']['customersRequests']['view'] == 1) checked @endif></li>
+                                <li><strong>تعديل</strong> <input type="checkbox" name="8[operations][customersRequests][edit]" value="1" class="checkbox" @if(isset($permissions['8']['operations']['customersRequests']['edit']) && $permissions['8']['operations']['customersRequests']['edit'] == 1) checked @endif></li>
+                                <li><strong>حذف</strong> <input type="checkbox" name="8[operations][customersRequests][delete]" value="1" class="checkbox" @if(isset($permissions['8']['operations']['customersRequests']['delete']) && $permissions['8']['operations']['customersRequests']['delete'] == 1) checked @endif></li>
                             </ul>
                         </li>
                     </ul>
@@ -655,14 +677,15 @@
 
 
             <div class="actions">
-                <button type="submit" class="btn btn-save">
-                    <i class="fas fa-save" style="margin-left: 8px;"></i>
-                    حفظ التعديلات
-                </button>
                 <a href="{{ route('users.index') }}" class="btn btn-worn">
                     <i class="fas fa-times" style="margin-left: 8px;"></i>
                     إلغاء
                 </a>
+
+                <button type="submit" class="btn btn-save">
+                    <i class="fas fa-save" style="margin-left: 8px;"></i>
+                    حفظ التعديلات
+                </button>
             </div>
         </form>
     </div>

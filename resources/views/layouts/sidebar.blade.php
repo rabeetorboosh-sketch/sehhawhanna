@@ -382,6 +382,17 @@
                                         </ul>
                                     </li>
                                 @endif
+                                @if(Auth::user()->permissions('8-insertions-sales_routs')?->can_show == 1)
+                                    <li class="menu-item">
+                                        <button class="dropdown-btn">الخطوط</button>
+                                        <ul class="submenu">
+                                            @if(Auth::user()->permissions('8-insertions-sales_routs')?->can_create == 1)
+                                                <li><a href="{{ route('sales_routs.create') }}">إضافة خط</a></li>
+                                            @endif
+                                            <li><a href="{{ route('sales_routs.index') }}">قائمة الخطوط</a></li>
+                                        </ul>
+                                    </li>
+                                @endif
 
                                 {{-- الوحدات الرقابية --}}
                                 @if(Auth::user()->permissions('8-insertions-controlUnits')?->can_show == 1)
@@ -454,6 +465,17 @@
                                                 <li><a href="{{ route('supervises.create') }}">إضافة عملية اشراف</a></li>
                                             @endif
                                             <li><a href="{{ route('supervises.index') }}">قائمة عمليات الإشراف</a></li>
+                                        </ul>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->permissions('8-operations-customersRequests')?->can_show == 1)
+                                    <li class="menu-item">
+                                        <button class="dropdown-btn">طلبات العملاء</button>
+                                        <ul class="submenu">
+                                            @if(Auth::user()->permissions('8-operations-customersRequests')?->can_create == 1)
+                                                <li><a href="{{ route('customersRequests.create') }}">إضافة طلب عميل</a></li>
+                                            @endif
+                                            <li><a href="{{ route('customersRequests.index') }}">قائمة طلبات العملاء</a></li>
                                         </ul>
                                     </li>
                                 @endif
