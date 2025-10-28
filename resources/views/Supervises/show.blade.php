@@ -66,26 +66,19 @@
                 {{-- الموقع --}}
                 <h3 class="section-title">الموقع على الخريطة</h3>
                 @if($supervise->location)
-                    <div id="map" style="height:400px;"></div>
+                    <div class="location-map" style="max-width: 100% ">
 
-                    <script>
-                        function initMap() {
-                            const loc = "{{ $supervise->location }}".split(',');
-                            const position = { lat: parseFloat(loc[0]), lng: parseFloat(loc[1]) };
+                        <iframe
+                            class="mapshow"
+                            id="mapFrame"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            location-data="{{ $supervise->location }}"
+                        ></iframe>
+                    </div>
 
-                            const map = new google.maps.Map(document.getElementById("map"), {
-                                zoom: 15,
-                                center: position
-                            });
 
-                            new google.maps.Marker({
-                                position: position,
-                                map: map
-                            });
-                        }
-                    </script>
-
-                    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
                 @else
                     <span>لم يتم تحميل الموقع</span>
                 @endif
@@ -112,20 +105,14 @@
     </div>
 
     @if($supervise->location)
-        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>
-        <script>
-            const locationString = "{{ $supervise->location }}";
-            const [lat, lng] = locationString.split(',').map(Number);
+         <script>
+            const iframe = document.getElementById("mapFrame");
 
-            const map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat: lat, lng: lng },
-                zoom: 16
-            });
+            // Get coordinates from the custom attribute
+            const coordinates = iframe.getAttribute("location-data");
 
-            new google.maps.Marker({
-                position: { lat: lat, lng: lng },
-                map: map
-            });
+            // Set the iframe src using the coordinates
+            iframe.src = `https://maps.google.com/maps?q=${coordinates}&z=15&output=embed`;
         </script>
     @endif
 </x-app-layout>
