@@ -24,7 +24,7 @@ class SuperviseController extends Controller
             $Supervises = Supervise::latest()->paginate(10);
         else
         $Supervises = Supervise::where('user_id', Auth::id())->latest()->paginate(10);
-        return view('supervises.index', compact('Supervises'));
+        return view('Supervises.index', compact('Supervises'));
     }
 
     public function create()
@@ -33,7 +33,7 @@ class SuperviseController extends Controller
         $selectedClient =Customer::all();
         $clients =  Customer::all();
 
-        return view('supervises.create', compact('clients','selectedClient','employees'));
+        return view('Supervises.create', compact('clients','selectedClient','employees'));
     }
 
     public function store(Request $request)
@@ -114,7 +114,7 @@ class SuperviseController extends Controller
         $selectedClient = Customer::all();
         $clients = Customer::all();
 
-        return view('supervises.edit', compact('supervise', 'clients', 'selectedClient', 'employees'));
+        return view('Supervises.edit', compact('supervise', 'clients', 'selectedClient', 'employees'));
     }
 
     public function update(Request $request, $id)
@@ -186,7 +186,7 @@ class SuperviseController extends Controller
 
         $supervise = Supervise::with('customer')->findOrFail($id);
         $client = Client::find($supervise->client_id);
-        return view('supervises.show', compact('supervise','client'));
+        return view('Supervises.show', compact('supervise','client'));
     }
 
     public function  destroy($id)
@@ -204,7 +204,7 @@ class SuperviseController extends Controller
         $employees=Employee::all();
         $selectedClient =Customer::all();
         $clients =  Customer::all(); // جلب كل العملاء
-        return view('supervises.create', compact('clients','selectedClient','employees','issue'));
+        return view('Supervises.create', compact('clients','selectedClient','employees','issue'));
 
     }
 }
