@@ -63,4 +63,8 @@ class StoreTransaction extends Model
     {
         return $this->hasMany(StoreTransactionItem::class, 'store_transactions_id');
     }
+    public function media()
+    {
+        return $this->hasMany(Media::class, 'item_id') ->where('type', 'transaction');
+    }
 }

@@ -266,3 +266,39 @@ textarea {
 
      width: 40%;
  }
+.btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 34px; padding: 0 12px;
+    background: var(--bg);
+    font-weight: 600; font-size: 13px;
+    cursor: pointer;
+    text-wrap: nowrap;
+    transition: transform .08s ease, background .2s ease, border-color .2s ease;
+
+    color: black;
+    border: 2px outset #d4d1d1;
+    border-radius: 8px;
+    max-width: 100px;
+    text-align: center;
+}
+ .btn-danger{
+    background: radial-gradient(#873014a6, #aa1c07fc);
+}
+ .btn-primary{
+    background: radial-gradient(#0c6774a6, #118695e0);
+}
+ .btn-worn{
+    background: radial-gradient(#8d8236a6, #aca314);
+}
+  .btn-save{
+    background: radial-gradient(#47710da6, #0b6b13e0);
+}
+button:hover{
+    background: #989a9f;
+}
+ .btn-secondary{
+    background: radial-gradient(#6d7376, #292c2e);
+}
+.btn-additional{
+    background: radial-gradient(#27966d, #148f6e);
+}

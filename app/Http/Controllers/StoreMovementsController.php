@@ -6,6 +6,7 @@ use App\Models\Branch;
 use App\Models\DefaultVal;
 use App\Models\Employee;
 use App\Models\MainGroup;
+use App\Models\Media;
 use App\Models\Movement;
 use App\Models\Product;
 use App\Models\Store;
@@ -85,11 +86,6 @@ class StoreMovementsController extends Controller
                 'user_id' => 'nullable|integer'
             ]);
 
-            // Handle the image upload
-            $imagePath = null;
-            if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('images', 'public');
-            }
 
             // Start Transaction (to prevent partial inserts)
             DB::beginTransaction();
@@ -152,6 +148,19 @@ class StoreMovementsController extends Controller
                 }
             }
 
+
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $path = $image->store('uploads/transactions', 'public');
+
+                    Media::create([
+                        'item_id' => $report->id,
+                        'url'     => $path,
+                        'type'    => 'transaction',
+                    ]);
+                }
+            }
+
             // Commit transaction
             DB::commit();
 
@@ -169,14 +178,19 @@ class StoreMovementsController extends Controller
             return redirect()->back()
                 ->withInput()
                 ->withErrors(['error' => 'An error occurred while saving. Please try again.']);
+
+
+
         }
+
+
     }
 
 
 
     public function show( $id)
     {
-        $transaction=StoreTransaction::with('items.unit.unit')->findOrFail($id);
+        $transaction=StoreTransaction::with('items.unit.unit','media')->findOrFail($id);
 
         return view('store.storeMovements.show', compact('transaction'));
     }
@@ -239,11 +253,6 @@ class StoreMovementsController extends Controller
                 'user_id' => 'nullable|integer'
             ]);
 
-            // Handle image upload
-            $imagePath = null;
-            if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('images', 'public');
-            }
 
             DB::beginTransaction();
 
@@ -287,10 +296,21 @@ class StoreMovementsController extends Controller
                     ]);
                 }
             }
+            if ($request->hasFile('images')) {
+                $report->media()->delete();
+                foreach ($request->file('images') as $image) {
+                    $path = $image->store('uploads/transactions', 'public');
 
+                    Media::create([
+                        'item_id' => $report->id,
+                        'url'     => $path,
+                        'type'    => 'transaction',
+                    ]);
+                }
+            }
             DB::commit();
 
-            return redirect()->route('storeMovements.index')->with('success', 'تم تعديل الحركة بنجاح.');
+            return redirect()->route('storeMovements.index',$request->movement_id)->with('success', 'تم تعديل الحركة بنجاح.');
 
         } catch (\Exception $e) {
             DB::rollBack();

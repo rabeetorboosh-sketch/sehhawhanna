@@ -27,4 +27,9 @@ class StoreMovement extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function media()
+    {
+        return $this->hasMany(Media::class, 'item_id') ->where('type', 'transaction');
+    }
 }

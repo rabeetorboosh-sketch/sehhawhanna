@@ -130,7 +130,7 @@
 
             <div class="mb-4">
                 <label for="image" class="block text-sm font-medium text-gray-700">الصورة</label>
-                <input type="file" accept="image/*" name="image" id="image" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                <input type="file" accept="image/*" name="images[]" id="image" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
             </div>
 
 

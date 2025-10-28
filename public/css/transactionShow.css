@@ -65,7 +65,13 @@
 .btn-back:hover {
     background: #2779bd;
 }
-
+.media-grid{
+    display: flex;
+    flex-wrap: wrap;
+    img{
+        max-width: 300px;
+    }
+}
 /* Responsive */
 @media (max-width: 768px) {
     .transaction-card {

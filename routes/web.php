@@ -447,14 +447,37 @@ Route::middleware('auth')->group(function () {
 
 
 
-    Route::get('storeMovements/create/{movement?}', [StoreMovementsController::class,'create'])->name('storeMovements.create');
-    Route::get('storeMovements/operation/{movement?}', [StoreMovementsController::class,'index'])->name('storeMovements.index');
-    Route::post('storeMovements/store', [StoreMovementsController::class,'store'])->name('storeMovements.store');
-    Route::get('/storeMovements/{id}', [StoreMovementsController::class, 'show'])->name('storeMovements.show');
-    Route::get('storeMovements/edit/{id}', [StoreMovementsController::class, 'edit'])->name('storeMovements.edit');
-    Route::put('storeMovements/{id}', [StoreMovementsController::class, 'update'])->name('storeMovements.update');
-    Route::delete('storeMovements/{id}', [StoreMovementsController::class, 'destroy'])->name('storeMovements.destroy');
+    // صفحة الإنشاء
+    Route::get('store-movements/create/{movement?}', [StoreMovementsController::class, 'create'])
+        ->name('storeMovements.create');
+
+// صفحة العمليات أو الفلترة
+    Route::get('store-movements/operation/{movement?}', [StoreMovementsController::class, 'index'])
+        ->name('storeMovements.index');
+
+// تخزين جديد
+    Route::post('store-movements/store', [StoreMovementsController::class, 'store'])
+        ->name('storeMovements.store');
+
+// عرض تفاصيل
+    Route::get('store-movements/view/{id}', [StoreMovementsController::class, 'show'])
+        ->name('storeMovements.show');
+
+// تعديل
+    Route::get('store-movements/edit/{id}', [StoreMovementsController::class, 'edit'])
+        ->name('storeMovements.edit');
+
+// تحديث
+    Route::put('store-movements/update/{id}', [StoreMovementsController::class, 'update'])
+        ->name('storeMovements.update');
+
+// حذف
+    Route::delete('store-movements/delete/{id}', [StoreMovementsController::class, 'destroy'])
+        ->name('storeMovements.destroy');
+
+
     Route::resource('rating_units', RatingUnitsController::class);
+
 
     Route::get('ratings/filter/{id?}', [App\Http\Controllers\RatingController::class, 'index'])
         ->name('ratings.filter');

@@ -23,6 +23,20 @@
                 <p><strong>الوصف:</strong> {{ $transaction->description ?? '-' }}</p>
                 <p><strong>الحالة:</strong> {{ $transaction->status }}</p>
                 <p><strong>تاريخ الإنشاء:</strong> {{ $transaction->created_at }}</p>
+                <div>
+
+                    @if(isset($transaction->media) && $transaction->media->isNotEmpty())
+                        <h3 class="section-title">الصور</h3>
+                        <div class="media-grid">
+
+                            @foreach($transaction->media as $media)
+                                <a href="{{ asset($media->url) }}" target="_blank">
+                                    <img src="{{ asset($media->url) }}" alt="صورة التقرير" class="media-thumb">
+                                </a>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
 
@@ -58,7 +72,7 @@
 
         <!-- زر العودة -->
         <div class="actions">
-            <a href="{{ route('storeMovements.index') }}" class="btn-back">
+            <a href="{{ url()->previous() }}" class="btn-back">
                 <i class="fa-solid fa-arrow-right"></i> عودة للقائمة
             </a>
         </div>
