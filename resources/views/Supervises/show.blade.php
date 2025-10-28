@@ -66,10 +66,30 @@
                 {{-- الموقع --}}
                 <h3 class="section-title">الموقع على الخريطة</h3>
                 @if($supervise->location)
-                    <div id="map" class="map-card"></div>
+                    <div id="map" style="height:400px;"></div>
+
+                    <script>
+                        function initMap() {
+                            const loc = "{{ $supervise->location }}".split(',');
+                            const position = { lat: parseFloat(loc[0]), lng: parseFloat(loc[1]) };
+
+                            const map = new google.maps.Map(document.getElementById("map"), {
+                                zoom: 15,
+                                center: position
+                            });
+
+                            new google.maps.Marker({
+                                position: position,
+                                map: map
+                            });
+                        }
+                    </script>
+
+                    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
                 @else
                     <span>لم يتم تحميل الموقع</span>
                 @endif
+
 
                 {{-- الصور --}}
                 @if(isset($supervise->media) && $supervise->media->isNotEmpty())
