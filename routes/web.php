@@ -448,7 +448,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('storeMovements/create/{movement?}', [StoreMovementsController::class,'create'])->name('storeMovements.create');
-    Route::get('storeMovements/{movement?}', [StoreMovementsController::class,'index'])->name('storeMovements.index');
+    Route::get('storeMovements/operation/{movement?}', [StoreMovementsController::class,'index'])->name('storeMovements.index');
     Route::post('storeMovements/store', [StoreMovementsController::class,'store'])->name('storeMovements.store');
     Route::get('/storeMovements/{id}', [StoreMovementsController::class, 'show'])->name('storeMovements.show');
     Route::get('storeMovements/edit/{id}', [StoreMovementsController::class, 'edit'])->name('storeMovements.edit');
