@@ -170,3 +170,58 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+
+document.querySelectorAll('form').forEach(form => {
+    const input = form.querySelector('.searcher');
+    const select = form.querySelector('.client-search');
+    if (!input || !select) return;
+
+    const originalOptions = Array.from(select.options);
+
+    input.addEventListener('input', function () {
+        const keyword = input.value.toLowerCase();
+        select.value = '';
+        select.style.maxHeight = '300px';
+        select.style.border = '1px inset';
+
+        select.innerHTML = '';
+        originalOptions.forEach(option => {
+            if (option.text.toLowerCase().includes(keyword)) {
+                select.appendChild(option);
+            }
+        });
+
+        if (select.options.length === 0) {
+            const emptyOption = document.createElement('option');
+            emptyOption.text = 'لا يوجد نتائج';
+            emptyOption.disabled = true;
+            select.appendChild(emptyOption);
+        }
+    });
+
+    select.addEventListener('change', function () {
+        const selectedOption = select.options[select.selectedIndex];
+        input.value = selectedOption.text;
+        select.style.maxHeight = '0';
+        select.style.padding = '0';
+        select.style.border = 'none';
+    });
+});
+
+document.querySelectorAll('form').forEach(form => {
+    const clientSelect = form.querySelector('.client-search');
+    const employeeSelect = form.querySelector('.employee-select');
+    const routeSelect = form.querySelector('select[name="sales_rout_id"]');
+
+    if (!clientSelect || !employeeSelect || !routeSelect) return;
+
+    clientSelect.addEventListener('change', () => {
+        const selected = clientSelect.options[clientSelect.selectedIndex];
+        const empId = selected.dataset.emp || '';
+        const routeId = selected.dataset.route || '';
+
+        // تعبئة الحقول في نفس الفورم
+        if (empId) employeeSelect.value = empId;
+        if (routeId) routeSelect.value = routeId;
+    });
+});

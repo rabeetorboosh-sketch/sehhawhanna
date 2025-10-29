@@ -52,22 +52,23 @@
 
             <div class="summaryPC">الإجمالي: 0</div>
 
-            <div>
+            <div class="row-3">
 
-                <div class="form-group">
+                <div class="form-group npt">
                     <label><i class="fa-solid fa-user-tag"></i> اسم العميل</label>
                     <input type="text" class="searcher" placeholder="ابحث عن العميل">
                     <select name="customer_id" id="clientSelect" size="5" class="client-search">
                         @foreach($customers as $clnt)
                             <option value="{{ $clnt->id }}"
-                                    @if(request('customer_id') == $clnt->id || (isset($issue) && $issue->client_id == $clnt->id)) selected @endif>
+                                    data-emp="{{ $clnt->employee_id }}"
+                                    data-route="{{ $clnt->sales_rout_id }}">
                                 {{ $clnt->item->name }}
                             </option>
                         @endforeach
                     </select>
-                </div>
+            </div>
 
-                <div class="mb-4" style="display:inline-block;">
+                <div   style="display:inline-block;">
                     <label for="employee_id_pc">الموظف</label>
                     <select name="employee_id" id="employee_id_pc" class="emp-input employee-select" required>
                         <option value="">اختر الموظف</option>
@@ -80,7 +81,7 @@
                 </div>
 
 
-                <div class="mb-4" style="display:inline-block;">
+                <div   style="display:inline-block;">
                     <label for="sales_rout_id_pc">خط السير</label>
                     <select name="sales_rout_id" id="sales_rout_id_pc" class="emp-input" required>
                         <option value="">اختر خط السير</option>
@@ -155,25 +156,21 @@
             </div>
 
             <div class="row-2">
-                <div class="mb-4 form-group" style="display: inline-block;">
-                    <label for="employee_id_phone">الموظف</label>
-                    <select name="employee_id" id="employee_id_phone" class="emp-input employee-select" required>
-                        <option value="">اختر الموظف</option>
-                        @foreach($employees as $emp)
-                            <option value="{{ $emp->id }}" {{ old('employee_id') == $emp->id ? 'selected' : '' }}>
-                                {{ $emp->item?->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
 
-                <div class="mb-4 form-group" style="display: inline-block;">
-                    <label for="customer_id_phone">العميل</label>
-                    <select name="customer_id" id="customer_id_phone" class="emp-input" required>
-                        <option value="">اختر العميل</option>
-                        @foreach($customers as $customer)
-                            <option value="{{ $customer->id }}" {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
-                                {{ $customer->item?->name }}
+
+
+                <div class="form-group npt" style="display: inline-block;">
+                    <label><i class="fa-solid fa-user-tag"></i> اسم العميل</label>
+                    <input type="text" class="searcher" placeholder="ابحث عن العميل">
+                </div>
+                <div class="form-group npt">
+
+                    <select name="customer_id" id="clientSelect" size="5" class="client-search">
+                        @foreach($customers as $clnt)
+                            <option value="{{ $clnt->id }}"
+                                    data-emp="{{ $clnt->employee_id }}"
+                                    data-route="{{ $clnt->sales_rout_id }}">
+                                {{ $clnt->item->name }}
                             </option>
                         @endforeach
                     </select>
@@ -186,6 +183,19 @@
                         @foreach($salesRouts as $route)
                             <option value="{{ $route->id }}" {{ old('sales_rout_id') == $route->id ? 'selected' : '' }}>
                                 {{ $route->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+
+                <div class="mb-4 form-group" style="display: inline-block;">
+                    <label for="employee_id_phone">الموظف</label>
+                    <select name="employee_id" id="employee_id_phone" class="emp-input employee-select" required>
+                        <option value="">اختر الموظف</option>
+                        @foreach($employees as $emp)
+                            <option value="{{ $emp->id }}" {{ old('employee_id') == $emp->id ? 'selected' : '' }}>
+                                {{ $emp->item?->name }}
                             </option>
                         @endforeach
                     </select>

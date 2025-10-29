@@ -96,16 +96,16 @@
                 <button class="btn btn-primary" type="button" onclick="addImageInput()">+ إضافة صورة</button>
             </div>
 
-            {{-- الموقع --}}
+
             <div class="form-group">
                 <label><i class="fas fa-map-marker-alt"></i> الموقع</label>
                 <input type="text" name="location" class="location" readonly>
             </div>
 
             <div class="actions">
-                <button type="submit" class="btn-save">حفظ</button>
-                <button type="reset" class="btn-primary">إعادة تعيين</button>
                 <a href="{{ route('supervises.index') }}" class="btn-cancel">إلغاء</a>
+                <button type="reset" class="btn-primary">إعادة تعيين</button>
+                <button type="submit" class="btn-save">حفظ</button>
             </div>
         </form>
 

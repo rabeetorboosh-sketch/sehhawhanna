@@ -114,7 +114,7 @@ $issueType=IssueType::find($request->id);
         else
             $departments =Department::where('id',$department??'')->get();
 
-        return view('admin.mainGroup.Edit',compact('mainGroup','departments'));
+        return view('admin.mainGroup.edit',compact('mainGroup','departments'));
     }
     public function MainGroupUpdate(Request $request,$id)
     {
