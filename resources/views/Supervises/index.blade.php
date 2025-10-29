@@ -36,7 +36,7 @@
                         <tr>
                             <td>{{ $sup->id }}</td>
                             <td>{{ $sup->name }} </td>
-                            <td>{{ $sup->employee->item->name }} </td>
+                            <td>{{ $sup->employee?->item?->name }} </td>
                             <td>{{ $sup->phone }}</td>
                             <td>{{ $sup->issue }}</td>
                             <td>{{ $sup->solution_method }}</td>

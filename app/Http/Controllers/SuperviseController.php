@@ -21,9 +21,11 @@ class SuperviseController extends Controller
 
 
         if (Auth::user()->isAdmin())
-            $Supervises = Supervise::latest()->paginate(10);
+            $Supervises = Supervise::with('employee')->latest()->paginate(10);
         else
-        $Supervises = Supervise::where('user_id', Auth::id())->latest()->paginate(10);
+        $Supervises = Supervise::with('employee')->where('user_id', Auth::id())->latest()->paginate(10);
+
+
         return view('Supervises.index', compact('Supervises'));
     }
 

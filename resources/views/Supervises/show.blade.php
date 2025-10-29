@@ -97,7 +97,7 @@
                 @endif
 
                 <div class="mt-6">
-                    <a href="{{ route('supervises.index') }}" class="btn-back">العودة للتقارير</a>
+                    <a href="{{ url()->previous() }}" class="btn-back">العودة للتقارير</a>
                 </div>
 
             </div>
