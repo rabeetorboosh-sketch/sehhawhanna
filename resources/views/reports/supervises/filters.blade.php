@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="{{ asset('css/report/monitoring.css') }}">
 
     <div class="py-12">
-        <form class="smart-form" action="{{ route('reportSupervisors.'.($url??'index')) }}" method="get" enctype="multipart/form-data">
+
+        <form class="smart-form" action="{{ route('reportSupervisors.'.($urlreport??'index')) }}" method="get" enctype="multipart/form-data">
             <div class="row-5">
                 <div class="form-group">
                     <label><i class="fa-solid fa-user-tag"></i> اسم العميل</label>

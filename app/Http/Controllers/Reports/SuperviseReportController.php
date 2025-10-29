@@ -12,6 +12,7 @@ class SuperviseReportController extends Controller
 {
     public function index(Request $request)
     {
+
         $customers=Customer::all();
         $users=User::all();
         $query = Supervise::with(['customer', 'user']);
@@ -140,9 +141,9 @@ class SuperviseReportController extends Controller
         $supervises = $query->latest()->get()->groupBy('user_id');
 
 
-$url='byUserDetail';
+$urlreport='byUserDetail';
         $urlPrint='byUserDetailPrint';
-        return view('reports.supervises.by_user_detail', compact('supervises', 'users','customers','url','urlPrint'));
+        return view('reports.supervises.by_user_detail', compact('supervises', 'users','customers','urlreport','urlPrint'));
     }
     public function byUserDetailPrint(Request $request)
     {
@@ -195,10 +196,10 @@ $url='byUserDetail';
         }
 
         $users = User::all();
-        $url='byUserDetail';
+        $urlreport='byUserDetail';
         $urlPrint='byUserDetailPrint';
 
-        return view('reports.supervises.by_user_summary', compact('stats', 'users','customers','url','urlPrint'));
+        return view('reports.supervises.by_user_summary', compact('stats', 'users','customers','urlreport','urlPrint'));
     }
 
     private function byUserSummaryPrint($query)
@@ -219,10 +220,10 @@ $url='byUserDetail';
         }
 
         $users = User::all();
-        $url='byUserDetail';
+        $urlreport='byUserDetail';
         $urlPrint='byUserDetailPrint';
 
-        return view('reports.supervises.printing.by_user_summary', compact('stats', 'users','url','urlPrint'));
+        return view('reports.supervises.printing.by_user_summary', compact('stats', 'users','urlreport','urlPrint'));
 
     }
 
