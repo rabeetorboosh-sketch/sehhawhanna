@@ -95,9 +95,6 @@ class EmployeeController extends Controller
 
             ]);
         });
-
-
-
         return redirect()->route('employees.index')->with('success','تم تعديل الموظف ✅');
     }
 

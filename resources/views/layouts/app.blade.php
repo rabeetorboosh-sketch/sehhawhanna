@@ -69,7 +69,7 @@
             </li>
         </ul>
         @php
-            $shorts= Short::all();
+            $shorts= Short::where('user_id',\Illuminate\Support\Facades\Auth::id())->get();
         @endphp
 
         @if($shorts->isNotEmpty())
