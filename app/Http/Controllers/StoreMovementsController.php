@@ -50,7 +50,7 @@ class StoreMovementsController extends Controller
         $stores=Store::all();
         $users=User::all();
             $movement=Movement::find($move??3);
-        $default = DefaultVal::where('item', 'main_store')->first();
+        $default = DefaultVal::where('item', 'main_store')->where('user_id',Auth::id())->first();
 
         if ($default) {
             $defaults = $default->toArray();
@@ -66,10 +66,16 @@ class StoreMovementsController extends Controller
     {
 
         if(isset($request->set_default) &&$request->set_default==1 ){
-            $defult=DefaultVal::where('item','main_store')->first();
+            $defult=DefaultVal::where('item','main_store')->where('user_id',Auth::id())->first();
             if ($defult){
                 $defult->value=$request->store_id;
                 $defult->save();
+            }else{
+                DefaultVal::create([
+                    'item'=>'main_store',
+                    'user_id'=>Auth::id(),
+                    'value'=>$request->store_id
+                ]);
             }
 
         }
@@ -164,7 +170,7 @@ class StoreMovementsController extends Controller
             // Commit transaction
             DB::commit();
 
-            return redirect()->route('storeMovements.index')->with('success', 'Report created successfully.');
+            return redirect()->route('storeMovements.index',$request->movement_id)->with('success', 'Report created successfully.');
 
         } catch (\Exception $e) {
             // Rollback if there's an error
@@ -226,7 +232,7 @@ class StoreMovementsController extends Controller
         $stores = Store::all();
         $users = User::all();
         $movement = $transaction->movement;
-        $default = DefaultVal::where('item', 'main_store')->first();
+        $default = DefaultVal::where('item', 'main_store')->where('user_id',Auth::id())->first();
 
         if ($default) {
             $defaults = $default->toArray();
