@@ -40,7 +40,8 @@ class StoreMovementsController extends Controller
             return redirect(url()->previous());
         }
 
-        $employees = (Auth::user()->isAdmin())?Employee::all():Employee::where('user_id',Auth::id()) ->get();
+//        $employees = (Auth::user()->isAdmin())?Employee::all():Employee::where('user_id',Auth::id())->get();
+        $employees = Employee::all();
         $products = Product::with(['item.subGroup', 'item.mainGroup'])->get();
         $sections = MainGroup::where('department_id',1)->get();
         $groups = SubGroup::whereHas('mainGroup', function($q) {
