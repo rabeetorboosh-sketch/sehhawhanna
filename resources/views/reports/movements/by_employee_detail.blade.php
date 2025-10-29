@@ -44,6 +44,7 @@
                             <th>من المخزن</th>
                             <th>إلى المخزن</th>
                             <th>الصنف</th>
+                            <th>الكود</th>
                             <th>الوحدة</th>
                             <th>الكمية</th>
                             <th>المستخدم</th>
@@ -58,6 +59,7 @@
                                     <td>{{ $transaction->FromStore?->name ?? '-' }}</td>
                                     <td>{{ $transaction->ToStore?->name ?? '-' }}</td>
                                     <td>{{ $item->product?->item?->name ?? '-' }}</td>
+                                    <td>{{ $item->product?->code ?? '-' }}</td>
                                     <td>{{ $item->unit?->unit?->name ?? '-' }}</td>
                                     <td>{{ $item->count }}</td>
                                     <td>{{ $transaction->user?->name ?? '-' }}</td>

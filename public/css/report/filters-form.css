@@ -226,3 +226,24 @@ input.color{
 .smart-form .btn-secondary{
     background: radial-gradient(#6d7376, #292c2e);
 }
+button.restore-btn {
+    background: #f3f4f6;
+    padding: 0 3px;
+    border: 2px outset #ffffff;
+    margin: 0 1px;
+}
+.hide-row {
+    margin: 2px;
+    font-size: 10px;
+    background: #8f0909;
+    display: inline-block;
+    height: 10px;
+    align-self: center;
+    align-items: center;
+    line-height: 1;
+    width: 10px;
+    border-radius: 3px;
+    color: white;
+}
+
+*

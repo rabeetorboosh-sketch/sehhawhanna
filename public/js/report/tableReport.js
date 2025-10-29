@@ -1,45 +1,72 @@
-
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const tables = document.querySelectorAll("table.sortable");
 
     tables.forEach((table) => {
-    table.querySelectorAll("th").forEach((header, columnIndex) => {
-    header.style.cursor = "pointer";
-    header.addEventListener("click", () => {
+        // إنشاء منطقة للأعمدة المخفية
+        const hiddenContainer = document.createElement("div");
+        hiddenContainer.classList.add("hidden-cols");
+        table.parentNode.insertBefore(hiddenContainer, table);
 
-    const rows = Array.from(table.querySelectorAll("tbody tr"));
-    const isAsc = header.classList.contains("asc");
+        table.querySelectorAll("th").forEach((header, columnIndex) => {
+            // زر إخفاء العمود
+            const hideBtn = document.createElement("span");
+            hideBtn.textContent = "×";
+            hideBtn.classList.add("hide-row");
+            hideBtn.title = "إخفاء العمود";
+            header.appendChild(hideBtn);
 
-    // مسح علامات الفرز من كل العناوين
-    table.querySelectorAll("th").forEach(th => th.classList.remove("asc", "desc"));
+            hideBtn.addEventListener("click", (e) => {
+                e.stopPropagation();
 
-    // إضافة العلامة للعمود الحالي
-    header.classList.toggle("asc", !isAsc);
-    header.classList.toggle("desc", isAsc);
+                // إخفاء الخلايا في هذا العمود
+                table.querySelectorAll("tr").forEach((row) => {
+                    const cell = row.children[columnIndex];
+                    if (cell) cell.style.display = "none";
+                });
 
-    // الترتيب
-        rows.sort((a, b) => {
-            let aText = a.children[columnIndex].innerText.trim();
-            let bText = b.children[columnIndex].innerText.trim();
+                // إنشاء زر لإعادة إظهار العمود
+                const restoreBtn = document.createElement("button");
+                restoreBtn.textContent = header.textContent.replace("×", "").trim();
+                restoreBtn.classList.add("restore-btn");
+                hiddenContainer.appendChild(restoreBtn);
 
-            // إعطاء قيمة خاصة للخلايا الفارغة
-            if (aText === "" && bText === "") return 0;
-            if (aText === "") return isAsc ? 1 : -1; // الفارغ يجي تحت لو تصاعدي
-            if (bText === "") return isAsc ? -1 : 1; // الفارغ يجي تحت لو تنازلي
+                restoreBtn.addEventListener("click", () => {
+                    table.querySelectorAll("tr").forEach((row) => {
+                        const cell = row.children[columnIndex];
+                        if (cell) cell.style.display = "";
+                    });
+                    restoreBtn.remove();
+                });
+            });
 
-            // إذا كان رقم قارن كأرقام، غير كذا كـ نص
-            const aVal = isNaN(aText) ? aText.toLowerCase() : parseFloat(aText);
-            const bVal = isNaN(bText) ? bText.toLowerCase() : parseFloat(bText);
+            // فرز الأعمدة
+            header.style.cursor = "pointer";
+            header.addEventListener("click", () => {
+                const rows = Array.from(table.querySelectorAll("tbody tr"));
+                const isAsc = header.classList.contains("asc");
 
-            if (aVal < bVal) return isAsc ? -1 : 1;
-            if (aVal > bVal) return isAsc ? 1 : -1;
-            return 0;
+                table.querySelectorAll("th").forEach(th => th.classList.remove("asc", "desc"));
+                header.classList.toggle("asc", !isAsc);
+                header.classList.toggle("desc", isAsc);
+
+                rows.sort((a, b) => {
+                    let aText = a.children[columnIndex].innerText.trim();
+                    let bText = b.children[columnIndex].innerText.trim();
+
+                    if (aText === "" && bText === "") return 0;
+                    if (aText === "") return isAsc ? 1 : -1;
+                    if (bText === "") return isAsc ? -1 : 1;
+
+                    const aVal = isNaN(aText) ? aText.toLowerCase() : parseFloat(aText);
+                    const bVal = isNaN(bText) ? bText.toLowerCase() : parseFloat(bText);
+
+                    if (aVal < bVal) return isAsc ? -1 : 1;
+                    if (aVal > bVal) return isAsc ? 1 : -1;
+                    return 0;
+                });
+
+                rows.forEach(row => table.querySelector("tbody").appendChild(row));
+            });
         });
-
-        // إعادة إدخال الصفوف بالترتيب الجديد
-    rows.forEach(row => table.querySelector("tbody").appendChild(row));
+    });
 });
-});
-});
-});
-
