@@ -99,3 +99,11 @@ document.addEventListener("DOMContentLoaded", function() {
         customMenu.style.display = "none";
     });
 });
+document.addEventListener("DOMContentLoaded", function () {
+    const sidebar = document.getElementById("sidebar");
+    if (window.innerWidth > 768) {
+        sidebar.classList.add("show");
+    } else {
+        sidebar.classList.remove("show");
+    }
+});

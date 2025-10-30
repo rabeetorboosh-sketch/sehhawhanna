@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
 
-<aside class="sidebar show">
+<aside class="sidebar show" id="sidebar">
     <h2 class="logo">نظام الرقابة</h2>
 
     <ul id="customMenu" class="custom-menu">
