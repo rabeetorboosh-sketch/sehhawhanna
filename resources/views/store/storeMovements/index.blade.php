@@ -10,7 +10,7 @@
 
     <div class="py-12">
         <div class="filter-box" style="margin:20px 0; text-align:center;">
-            <form method="GET" action="{{ route('storeMovements.index', $movement) }}" style="display:flex; gap:10px; justify-content:center;">
+            <form method="GET" action="{{ route('storeMovements.index', $movement) }}" style="display:flex; gap:10px;flex-wrap: wrap;justify-content:center;">
                 <select name="employee_id" style="padding:8px; border:1px solid #ccc; border-radius:6px; min-width:200px;">
                     <option value="">كل الموظفين</option>
                     @foreach($employees as $emp)
