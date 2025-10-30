@@ -34,7 +34,7 @@ class MainController extends Controller
                    'name' => $name,
                    'type' => 'Customer',
                    'department_id' => 1,
-                   'main_group_id' => 1,
+                   'main_group_id' => 3,
                    'sub_group_id' => null,
                    'branch_id' => 1,
                    'created_at' => now(),
