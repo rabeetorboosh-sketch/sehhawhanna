@@ -20,17 +20,32 @@ use Illuminate\Support\Facades\Log;
 
 class StoreMovementsController extends Controller
 {
-    public function index($movement='')
+
+
+    public function index(Request $request, $movement = '')
     {
-        $query = StoreTransaction::with('items')->orderByDesc('id');
+        $query = StoreTransaction::with('items', 'user', 'employee', 'fromStore', 'toStore', 'movement')
+            ->orderByDesc('id');
 
         if ($movement) {
             $query->where('movement_id', $movement);
         }
 
+        // فلترة بالموظف
+        if ($request->filled('employee_id')) {
+            $query->where('employee_id', $request->employee_id);
+        }
+
+        // فلترة بالتاريخ (اليوم إذا لم يُحدد)
+        $date = $request->input('date', now()->toDateString());
+        $query->whereDate('created_at', $date);
+
         $storeTransactions = $query->paginate(20);
-        return view('store.storeMovements.index', compact('storeTransactions','movement'));
+        $employees = Employee::with('item')->get();
+
+        return view('store.storeMovements.index', compact('storeTransactions', 'movement', 'date', 'employees'));
     }
+
 
     // Show the form for creating a new report
     public function create($move='')

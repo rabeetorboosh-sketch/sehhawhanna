@@ -7,7 +7,23 @@
 
     <link rel="stylesheet" href="{{ asset('css/table.css') }}">
 
+
     <div class="py-12">
+        <div class="filter-box" style="margin:20px 0; text-align:center;">
+            <form method="GET" action="{{ route('storeMovements.index', $movement) }}" style="display:flex; gap:10px; justify-content:center;">
+                <select name="employee_id" style="padding:8px; border:1px solid #ccc; border-radius:6px; min-width:200px;">
+                    <option value="">كل الموظفين</option>
+                    @foreach($employees as $emp)
+                        <option value="{{ $emp->id }}" {{ request('employee_id') == $emp->id ? 'selected' : '' }}>
+                            {{ $emp->item?->name }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <input type="date" name="date" value="{{ $date }}" style="padding:8px; border:1px solid #ccc; border-radius:6px;">
+                <button type="submit" class="btn btn-primary">بحث</button>
+            </form>
+        </div>
         <div class="add btn">
             <a href="{{ route('storeMovements.create',$movement) }}">إضافة <i class="fa-solid fa-plus"></i></a>
         </div>
