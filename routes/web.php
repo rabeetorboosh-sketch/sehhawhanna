@@ -19,6 +19,7 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RatingUnitsController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Reports\AssetsMovementsReportsController;
+use App\Http\Controllers\Reports\CustomersRequestsReportController;
 use App\Http\Controllers\Reports\MonitoringReportController;
 use App\Http\Controllers\Reports\RatingsReportsController;
 use App\Http\Controllers\Reports\StoreMovementsReportsController;
@@ -409,6 +410,7 @@ Route::middleware('auth')->group(function () {
      Route::get('requests', [CustomerRequestController::class, 'index'])->name('customersRequests.index');
      Route::get('requests/create', [CustomerRequestController::class, 'create'])->name('customersRequests.create');
      Route::post('requests', [CustomerRequestController::class, 'store'])->name('customersRequests.store');
+     Route::post('requests/change/{id}', [CustomerRequestController::class, 'changStatus'])->name('customersRequests.changStatus');
      Route::get('requests/{id}', [CustomerRequestController::class, 'show'])->name('customersRequests.show');
      Route::get('requests/{id}/edit', [CustomerRequestController::class, 'edit'])->name('customersRequests.edit');
      Route::put('requests/{id}', [CustomerRequestController::class, 'update'])->name('customersRequests.update');
@@ -433,6 +435,13 @@ Route::middleware('auth')->group(function () {
     Route::get('report/ratingReport/byOperation', [RatingsReportsController::class, 'byOperationDetail'])->name('ratingReport.byOperationDetail');
 
 
+    Route::get('report/customerRequest', [CustomersRequestsReportController::class, 'index'])->name('customerRequests.index');
+    Route::get('report/customerRequest/byEmployee/detail', [CustomersRequestsReportController::class, 'byEmployeeDetail'])->name('customerRequests.byEmployeeDetail');
+    Route::get('report/customerRequest/byProduct/detail', [CustomersRequestsReportController::class, 'byProductDetail'])->name('customerRequests.byProductDetail');
+    Route::get('report/customerRequest/byOperation/detail', [CustomersRequestsReportController::class, 'byOperationDetail'])->name('customerRequests.byOperationDetail');
+    Route::get('report/customerRequest/byCustomer/detail', [CustomersRequestsReportController::class, 'byCustomerDetail'])->name('customerRequests.byCustomerDetail');
+
+
 
     Route::get('report/monitoring/print', [MonitoringReportController::class,'print'])->name('reportMonitoring.print');
     Route::get('report/tasks/print', [TaskReportController::class,'print'])->name('reportTasks.print');
@@ -445,6 +454,11 @@ Route::middleware('auth')->group(function () {
     Route::get('report/assetsMovements/print/byOperation', [AssetsMovementsReportsController::class, 'byOperationPrint'])->name('assetsMovements.byOperationPrint');
     Route::get('report/ratingReport/print/byOperation', [RatingsReportsController::class, 'byOperationDetailPrint'])->name('ratingReport.byOperationDetailPrint');
 
+
+    Route::get('report/customerRequests/print/byEmployee/detail', [CustomersRequestsReportController::class, 'byEmployeeDetailPrint'])->name('customerRequests.byEmployeeDetailPrint');
+    Route::get('report/customerRequests/print/byProduct/detail', [CustomersRequestsReportController::class, 'byProductDetailPrint'])->name('customerRequests.byProductDetailPrint');
+    Route::get('report/customerRequests/print/byOperation/detail', [CustomersRequestsReportController::class, 'byOperationDetailPrint'])->name('customerRequests.byOperationDetailPrint');
+    Route::get('report/customerRequests/print/byCustomer/detail', [CustomersRequestsReportController::class, 'byCustomerDetailPrint'])->name('customerRequests.byCustomerDetailPrint');
 
 
     // صفحة الإنشاء

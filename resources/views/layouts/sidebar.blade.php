@@ -904,14 +904,16 @@
                     @endif
                 @if(Auth::user()->sectionsPermissions('8-operations-supervises'))
                         <li class="menu-item">
-                            <button class="dropdown-btn">تقارير الاشراف   </button>
+                            <button class="dropdown-btn">تقارير العملاء   </button>
                             <ul class="submenu">
                                 <li class="menu-item">
-                                    <button class="dropdown-btn"> تقارير  عمليات الاشراف </button>
-                                    <ul class="submenu">
 
-                                        <li><a href="{{ route('reportSupervisors.index') }}"> جميع التقارير </a></li>
-                                    </ul>
+
+                                     <a href="{{ route('reportSupervisors.index') }}"> تقارير عمليات الاشراف </a>
+
+                                </li>
+                                <li class="menu-item">
+                                    <a href="{{ route('customerRequests.index') }}"> تقارير طلبات العملاء  </a>
                                 </li>
 
 

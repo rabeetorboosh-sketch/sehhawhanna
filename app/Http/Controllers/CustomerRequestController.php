@@ -189,4 +189,17 @@ class CustomerRequestController extends Controller
         $request->delete();
         return redirect()->route('customersRequests.index')->with('success', 'تم حذف الطلب بنجاح.');
     }
+
+    public function changStatus($id)
+    {
+
+        $customerRequest=CustomerRequest::findOrFail($id);
+        if ($customerRequest->status=='approved')
+            $customerRequest->status='pending';
+        else
+            $customerRequest->status='approved';
+
+        $customerRequest->save();
+        return redirect(url()->previous());
+    }
 }

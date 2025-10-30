@@ -58,6 +58,17 @@
                                             حذف
                                         </button>
                                     </form>
+                                    <form  action="{{ route('customersRequests.changStatus', $req->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+
+                                        <button type="submit" class="btn btn-secondary" >
+                                            @switch($req->status)
+                                                @case('pending') اعتماد   @break
+                                                @case('approved') الغاء الاعتماد @break
+                                                @default -
+                                            @endswitch
+                                        </button>
+                                    </form>
 
                                     <a href="{{ route('customersRequests.show', $req->id) }}" class="btn btn-primary">عرض</a>
                                 </div>
