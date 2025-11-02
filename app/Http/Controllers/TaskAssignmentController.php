@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Console\Commands\GenerateTaskOccurrences;
 use App\Models\ControlUnit;
 use App\Models\DailyControl;
+use App\Models\DailyControlItem;
 use App\Models\Department;
 use App\Models\Item;
 use App\Models\Report;
@@ -188,7 +189,7 @@ class TaskAssignmentController extends Controller
             foreach ($validated['reports'] as $task){
                 $assignment = TaskAssignment::create([
                     'task_id'        => $task,
-                    'task_type'        => \App\Models\ReportItem::class,
+                    'task_type'        => ReportItem::class,
                     'user_id'    => Auth::user()->id,
                     'employee_id'    => $validated['employee_id'],
                     'assigned_at'    => $validated['assigned_at'],
@@ -202,7 +203,7 @@ class TaskAssignmentController extends Controller
             foreach ($validated['monitorings'] as $task){
                 $assignment = TaskAssignment::create([
                     'task_id'        => $task,
-                    'task_type'        => \App\Models\DailyControlItem::class,
+                    'task_type'        => DailyControlItem::class,
                     'user_id'    => Auth::user()->id,
                     'employee_id'    => $validated['employee_id'],
                     'assigned_at'    => $validated['assigned_at'],
@@ -342,6 +343,8 @@ class TaskAssignmentController extends Controller
      */
     public function destroy(TaskAssignment $taskAssignment)
     {
+        $taskAssignment->days()->delete();
+        $taskAssignment->occurrences()->delete();
         $taskAssignment->delete();
         return redirect()->route('task_assignments.index')->with('success', 'تم حذف إسناد المهمة ✅');
     }
