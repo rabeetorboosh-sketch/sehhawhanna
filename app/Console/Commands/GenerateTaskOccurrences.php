@@ -18,7 +18,8 @@ class GenerateTaskOccurrences extends Command
     public function handle()
     {
         $today = Carbon::today();
-        $dayOfWeek =$today->dayOfWeekIso==6?0: $today->dayOfWeekIso+1; // نعدلها بحيث: الأحد=0 ... السبت=6
+        $iso = $today->dayOfWeekIso; // 1..7 (الإثنين..الأحد)
+        $dayOfWeek = $iso == 6 ? 0 : ($iso == 7 ? 1 : $iso + 1);
         $dayOfMonth = $today->day; // 1 - 31
 
         $this->info("توليد مهام لليوم: {$today->toDateString()}");
