@@ -511,6 +511,17 @@
                             <ul class="submenu">
 
                                 {{-- الموظفين --}}
+                                @if(Auth::user()->permissions('4-insertions-employeesTypes')?->can_show == 1)
+                                    <li class="menu-item">
+                                        <button class="dropdown-btn">انواع الموظفين</button>
+                                        <ul class="submenu">
+                                            @if(Auth::user()->permissions('4-insertions-employeesTypes')?->can_create == 1)
+                                                <li><a href="{{ route('employeeType.add') }}">إضافة نوع وظيفي</a></li>
+                                            @endif
+                                            <li><a href="{{ route('employeeType.index') }}">قائمة الانواع الوظيفية</a></li>
+                                        </ul>
+                                    </li>
+                                @endif
                                 @if(Auth::user()->permissions('4-insertions-employees')?->can_show == 1)
                                     <li class="menu-item">
                                         <button class="dropdown-btn">الموظفين</button>
