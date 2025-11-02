@@ -460,42 +460,33 @@ Route::middleware('auth')->group(function () {
     Route::get('report/customerRequests/print/byOperation/detail', [CustomersRequestsReportController::class, 'byOperationDetailPrint'])->name('customerRequests.byOperationDetailPrint');
     Route::get('report/customerRequests/print/byCustomer/detail', [CustomersRequestsReportController::class, 'byCustomerDetailPrint'])->name('customerRequests.byCustomerDetailPrint');
 
-
-    // صفحة الإنشاء
     Route::get('store-movements/create/{movement?}', [StoreMovementsController::class, 'create'])
         ->name('storeMovements.create');
-
-// صفحة العمليات أو الفلترة
     Route::get('store-movements/operation/{movement?}', [StoreMovementsController::class, 'index'])
         ->name('storeMovements.index');
-
-// تخزين جديد
     Route::post('store-movements/store', [StoreMovementsController::class, 'store'])
         ->name('storeMovements.store');
-
-// عرض تفاصيل
     Route::get('store-movements/view/{id}', [StoreMovementsController::class, 'show'])
         ->name('storeMovements.show');
-
-// تعديل
     Route::get('store-movements/edit/{id}', [StoreMovementsController::class, 'edit'])
         ->name('storeMovements.edit');
-
-// تحديث
     Route::put('store-movements/update/{id}', [StoreMovementsController::class, 'update'])
         ->name('storeMovements.update');
-
-// حذف
     Route::delete('store-movements/delete/{id}', [StoreMovementsController::class, 'destroy'])
         ->name('storeMovements.destroy');
-
-
     Route::resource('rating_units', RatingUnitsController::class);
-
-
     Route::get('ratings/filter/{id?}', [App\Http\Controllers\RatingController::class, 'index'])
         ->name('ratings.filter');
     Route::resource('ratings', RatingController::class);
+
+
+    Route::get('/employeeTypes', [MainInsertionController::class, 'EmployeeTypeIndex'])->name('employeeType.index');
+    Route::get('/employeeTypes/add', [MainInsertionController::class, 'EmployeeTypeAdd'])->name('employeeType.add');
+    Route::post('/employeeTypes/create', [MainInsertionController::class, 'EmployeeTypeCreate'])->name('employeeType.create');
+    Route::get('/employeeTypes/edit/{employeeType}', [MainInsertionController::class, 'EmployeeTypeEdit'])->name('employeeType.edit');
+    Route::post('/employeeTypes/update', [MainInsertionController::class, 'EmployeeTypeUpdate'])->name('employeeType.update');
+    Route::DELETE('/employeeTypes/delete/{id}', [MainInsertionController::class, 'EmployeeTypeDelete'])->name('employeeType.delete');
+
 });
 
 require __DIR__.'/auth.php';

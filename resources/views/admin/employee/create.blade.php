@@ -20,6 +20,15 @@
                     <input name="name" type="text" autocomplete="off">
                 </div>
                 <div class="form-group">
+                    <label>   الــنــوع الــوظــيــفـي</label>
+                    <select name="type_id" id="type_id">
+                        <option disabled >اختر نوع </option>
+                        @foreach( $employeeTypes as $employeeType)
+                            <option value="{{$employeeType->id}}">{{$employeeType->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
                     <label>الــجـــنـــســـيــــة</label>
                     <input name="nationality" type="text" autocomplete="off">
                 </div>

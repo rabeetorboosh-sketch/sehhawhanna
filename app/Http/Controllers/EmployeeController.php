@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\EmployeeType;
 use App\Models\Item;
 use App\Models\MainGroup;
 use App\Models\SubGroup;
@@ -27,7 +28,8 @@ class EmployeeController extends Controller
             $q->where('department_id', 4);
         })->get();;
         $users = User::all();
-        return view('admin.employee.create', compact('mainGroups','subGroups','users'));
+        $employeeTypes=EmployeeType::all();
+        return view('admin.employee.create', compact('mainGroups','subGroups','users','employeeTypes'));
     }
 
     public function store(Request $request) {
@@ -52,7 +54,8 @@ class EmployeeController extends Controller
                 'email' => $request['email'],
                 'id_number' => $request['id_number'],
                 'id_expiry_date'=> $request['id_expiry_date'],
-                'branch_id'=>1
+                'branch_id'=>1,
+                'type_id'=>$request['type_id']
             ]);
         });
 
@@ -70,7 +73,9 @@ class EmployeeController extends Controller
             $q->where('department_id', 4);
         })->get();
         $users = User::all();
-        return view('admin.employee.edit', compact('employee','mainGroups','subGroups','users'));
+        $employeeTypes=EmployeeType::all();
+
+        return view('admin.employee.edit', compact('employee','mainGroups','subGroups','users','employeeTypes'));
     }
 
     public function update(Request $request, $id) {
@@ -92,6 +97,7 @@ class EmployeeController extends Controller
                 'email' => $request['email'],
                 'id_number' => $request['id_number'],
                 'id_expiry_date'=> $request['id_expiry_date'],
+                'type_id'=>$request['type_id'],
 
             ]);
         });

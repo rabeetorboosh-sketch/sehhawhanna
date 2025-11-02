@@ -392,6 +392,17 @@
                             </ul>
                         </li>
                         <li>
+                            <strong>انواع الموظفين</strong>
+                            <input type="checkbox" class="checkbox parent" name="4[insertions][employeesTypes]" value="1"
+                                   @if(isset($permissions['4']['insertions']['employeesTypes'])) checked @endif >
+                            <ul>
+                                <li><strong>إضافة </strong> <input type="checkbox" name="4[insertions][employeesTypes][create]" value="1" class="checkbox" @if(isset($permissions['4']['insertions']['employeesTypes']['create']) && $permissions['4']['insertions']['employeesTypes']['create'] == 1) checked @endif></li>
+                                <li><strong>عرض</strong> <input type="checkbox" name="4[insertions][employeesTypes][view]" value="1" class="checkbox" @if(isset($permissions['4']['insertions']['employeesTypes']['view']) && $permissions['4']['insertions']['employeesTypes']['view'] == 1) checked @endif></li>
+                                <li><strong>تعديل</strong> <input type="checkbox" name="4[insertions][employeesTypes][edit]" value="1" class="checkbox" @if(isset($permissions['4']['insertions']['employeesTypes']['edit']) && $permissions['4']['insertions']['employeesTypes']['edit'] == 1) checked @endif></li>
+                                <li><strong>حذف</strong> <input type="checkbox" name="4[insertions][employeesTypes][delete]" value="1" class="checkbox" @if(isset($permissions['4']['insertions']['employeesTypes']['delete']) && $permissions['4']['insertions']['employeesTypes']['delete'] == 1) checked @endif></li>
+                            </ul>
+                        </li>
+                        <li>
                             <strong> وحدات  التقييم  </strong>
                             <input type="checkbox" class="checkbox parent" name="4[insertions][ratingUnits]" value="1"
                                    @if(isset($permissions['4']['insertions']['ratingUnits'])) checked @endif >

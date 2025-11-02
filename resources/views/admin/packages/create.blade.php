@@ -390,6 +390,15 @@
                         </ul>
                     </li>
                     <li>
+                        <strong>انواع الموظفين</strong> <input type="checkbox" class="checkbox parent" name="4[insertions][employeesTypes]" value="1"  >
+                        <ul>
+                            <li><strong>إضافة </strong> <input type="checkbox" name="4[insertions][employeesTypes][create]" value="1" class="checkbox"></li>
+                            <li><strong>عرض</strong> <input type="checkbox" name="4[insertions][employeesTypes][view]" value="1" class="checkbox"></li>
+                            <li><strong>تعديل</strong> <input type="checkbox" name="4[insertions][employeesTypes][edit]" value="1" class="checkbox"></li>
+                            <li><strong>حذف</strong> <input type="checkbox" name="4[insertions][employeesTypes][delete]" value="1" class="checkbox"></li>
+                        </ul>
+                    </li>
+                    <li>
                         <strong>وحدات  التقييم </strong> <input type="checkbox" class="checkbox parent" name="4[insertions][ratingUnits]" value="1"   >
                         <ul>
                             <li><strong>إضافة </strong> <input type="checkbox" name="4[insertions][ratingUnits][create]" value="1" class="checkbox"></li>

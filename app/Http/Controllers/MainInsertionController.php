@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Department;
+use App\Models\EmployeeType;
 use App\Models\IssueType;
 use App\Models\MainGroup;
 use App\Models\SubGroup;
@@ -68,6 +69,65 @@ $issueType=IssueType::find($request->id);
 
 
 
+    ////-////-////-///-/-/-/-/-/-/-//-/-/-/-/
+    ///
+
+
+
+    public function EmployeeTypeIndex()
+    {
+        $employeeTypes = EmployeeType::all();
+        return view('admin.employeeType.index', compact('employeeTypes'));
+    }
+
+    public function EmployeeTypeAdd()
+    {
+        return view('admin.employeeType.add');
+    }
+
+    public function EmployeeTypeCreate(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        EmployeeType::create([
+            'name' => $validated['name'],
+        ]);
+
+        return redirect()->route('employeeType.add')->with('success', 'تمت الإضافة بنجاح ✅');
+    }
+
+    public function EmployeeTypeEdit(EmployeeType $employeeType)
+    {
+        return view('admin.employeeType.edit', compact('employeeType'));
+    }
+
+    public function EmployeeTypeUpdate(Request $request)
+    {
+        $employeeType = EmployeeType::findOrFail($request->id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $employeeType->update([
+            'name' => $validated['name'],
+        ]);
+
+        return redirect()->route('employeeType.edit', $request->id)->with('success', 'تم التعديل بنجاح ✅');
+    }
+
+    public function EmployeeTypeDelete(int $id)
+    {
+        $employeeType = EmployeeType::findOrFail($id);
+        $employeeType->delete();
+
+        return redirect()->route('employeeType.index')->with('success', 'تم الحذف بنجاح ✅');
+    }
+
+
+    ///
     ////-////-////-///-/-/-/-/-/-/-//-/-/-/-/
 
 
