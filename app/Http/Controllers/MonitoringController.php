@@ -103,7 +103,7 @@ class MonitoringController extends Controller
        $mainGroups=MainGroup::with('department')->get();
        $subGroups=SubGroup::all();
 
-       $items = Item::with('mainGroup')->get();
+       $items = Item::with('mainGroup')->where('type','!=','Customer')->get();
 
 
        $employees=Employee::with('item')->get();
