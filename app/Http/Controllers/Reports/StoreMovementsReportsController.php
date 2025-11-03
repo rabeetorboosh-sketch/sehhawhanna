@@ -69,9 +69,12 @@ class StoreMovementsReportsController extends Controller
 
 
         $transactions = $query->get();
+        if (request('summary')) {
+            return $this->byOperationSummary($transactions);
+        }
         $operation = Movement::findOrFail($id ?? 2);
         $urlPrint='byOperationDetailPrint';
-        $title= '-> حسب العملية - '.$operation->name;
+        $title= '-> حسب العملية -تحليلي '.$operation->name;
 
         return view('reports.movements.by_operation_detail', compact(
             'operation',
@@ -236,6 +239,57 @@ $url='byStoreDetail';
             'products'
         ));
     }
+
+    public function byOperationSummary($transactions)
+    {
+        $users = User::all();
+        $employees = Employee::all();
+        $products = Product::all();
+        $stores = Store::all();
+
+        $summary = $transactions->flatMap(function ($transaction) {
+            return $transaction->items->map(function ($item) use ($transaction) {
+                return [
+                    'product_id' => $item->product_id,
+                    'product_name' => $item->product?->item?->name ?? '-',
+                    'store_from' => $transaction->FromStore?->id,
+                    'store_to' => $transaction->ToStore?->id,
+                    'count' => $item->count,
+                ];
+            });
+        })
+            ->groupBy('product_id')
+            ->map(function ($items) {
+                $productName = $items->first()['product_name'];
+                $totalCount = $items->sum('count');
+                $storeCount = collect($items)->pluck('store_from')
+                    ->merge(collect($items)->pluck('store_to'))
+                    ->filter()
+                    ->unique()
+                    ->count();
+
+                return [
+                    'product_name' => $productName,
+                    'total_count' => $totalCount,
+                    'store_count' => $storeCount,
+                ];
+            })
+            ->values();
+
+        $operation = Movement::findOrFail($id ?? 2);
+        $urlPrint='byOperationDetailPrint';
+        $title= '-> حسب العملية - اجمالي '.$operation->name;
+        return view('reports.movements.by_operation_summary', compact('summary'  ,'operation',
+            'stores',
+            'transactions',
+            'users',
+            'urlPrint',
+            'employees',
+            'products',
+            'title',
+             ));
+    }
+
     public function byStoreDetailPrint($id = 3)
     {
 
