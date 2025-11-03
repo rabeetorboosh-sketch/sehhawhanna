@@ -55,7 +55,7 @@ class MonitoringController extends Controller
        $mainGroups=MainGroup::with('department')->get();
        $subGroups=SubGroup::all();
 
-       $items = Item::with('mainGroup')->get();
+       $items = Item::with('mainGroup')->where('type','!=','Customer')->get();
        $employees=Employee::with('item')->get();
        $controlUnit =ControlUnit::with('section')->where('daily_control',1)->get();
     if ($existingReport){
@@ -256,7 +256,7 @@ class MonitoringController extends Controller
         $departments = Department::whereIn('id',$permittedDepartments)->get();
 
         $controlUnits = ControlUnit::all();
-        $items = Item::all();
+        $items = Item::where('type','!=','Customer')->get();
         $mainGroups =MainGroup::all();
         $subGroups = SubGroup::all();
         $employees = Employee::all();
