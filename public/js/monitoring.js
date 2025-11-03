@@ -1,71 +1,54 @@
 document.querySelectorAll('.section-lbl').forEach(button => {
     button.addEventListener('click', function (e) {
+        const dep = e.target.value;
 
-        var inp = document.querySelectorAll('.item-container');
-        var mingroup = document.querySelectorAll('.mainGroup-lbl');
+        // إخفاء كل شيء
+        document.querySelectorAll('.item-container, .mainGroup-lbl, .subGroup-lbl')
+            .forEach(el => el.style.display = 'none');
 
-        inp.forEach(input => {
-            input.style.display = 'none';
+        // عرض المجموعات الرئيسية للقسم
+        document.querySelectorAll(`.maingrp${dep}`)
+            .forEach(el => el.style.display = 'flex');
+
+        // عرض الوحدات التابعة للقسم فقط والتي لا تنتمي لأي جروب أو سب جروب
+        document.querySelectorAll(`.grp${dep}.item-container`).forEach(el => {
+            if (!el.className.match(/minGrb\d+/) && !el.className.match(/subGroup\d+/)) {
+                el.style.display = 'flex';
+            }
         });
-        mingroup.forEach(input => {
-            input.style.display = 'none';
-        });
-
-
-        var inpt = document.querySelectorAll(`.grp${e.target.value}`);
-        var mnGrp = document.querySelectorAll(`.maingrp${e.target.value}`);
-
-        inpt.forEach(input => {
-            input.style.display = 'flex';  // تصحيح "disbly" إلى "display"
-        });
-        mnGrp.forEach(input => {
-            input.style.display = 'flex';  // تصحيح "disbly" إلى "display"
-        });
-
     });
 });
+
 document.querySelectorAll('.mainGroup-lbl').forEach(button => {
     button.addEventListener('click', function (e) {
+        const main = e.target.value;
 
-        var inp = document.querySelectorAll('.item-container');
-        var subgroup = document.querySelectorAll('.subGroup-lbl');
+        document.querySelectorAll('.item-container, .subGroup-lbl')
+            .forEach(el => el.style.display = 'none');
 
-        inp.forEach(input => {
-            input.style.display = 'none';
+        // عرض المجموعات الفرعية التابعة للمجموعة
+        document.querySelectorAll(`.subgrp${main}`)
+            .forEach(el => el.style.display = 'flex');
+
+        // عرض الوحدات التابعة للمجموعة فقط (بدون سب جروب)
+        document.querySelectorAll(`.minGrb${main}.item-container`).forEach(el => {
+            if (!el.className.match(/subGroup\d+/)) {
+                el.style.display = 'flex';
+            }
         });
-        subgroup.forEach(input => {
-            input.style.display = 'none';
-        });
-
-
-        var inpt = document.querySelectorAll(`.minGrb${e.target.value}`);
-        var sbGrp = document.querySelectorAll(`.subgrp${e.target.value}`);
-
-        inpt.forEach(input => {
-            input.style.display = 'flex';  // تصحيح "disbly" إلى "display"
-        });
-        sbGrp.forEach(input => {
-            input.style.display = 'flex';  // تصحيح "disbly" إلى "display"
-        });
-
     });
 });
+
 document.querySelectorAll('.subGroup-lbl').forEach(button => {
     button.addEventListener('click', function (e) {
+        const sub = e.target.value;
 
-        var inp = document.querySelectorAll('.item-container');
+        document.querySelectorAll('.item-container')
+            .forEach(el => el.style.display = 'none');
 
-        inp.forEach(input => {
-            input.style.display = 'none';
-        });
-
-
-        var inpt = document.querySelectorAll(`.subGroup${e.target.value}`);
-        inpt.forEach(input => {
-            input.style.display = 'flex';  // تصحيح "disbly" إلى "display"
-        });
-
-
+        // عرض الوحدات التابعة للسب جروب
+        document.querySelectorAll(`.subGroup${sub}.item-container`)
+            .forEach(el => el.style.display = 'flex');
     });
 });
 

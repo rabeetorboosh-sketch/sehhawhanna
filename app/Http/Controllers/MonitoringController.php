@@ -129,13 +129,14 @@ class MonitoringController extends Controller
         DB::beginTransaction();
 
         try {
+
         $items = collect($request->input('items')); // الأصناف لكل وحدة
         $items_ids = collect($request->input('item_id')); // الأصناف لكل وحدة
         $causers = $request->input('causer_id');    // المتسبب لكل وحدة
         $descriptions = $request->input('issue_text'); // الملاحظات لكل وحدة
         $is_correct = $request->input('is_correct'); // الملاحظات لكل وحدة
         $image = $request->file('image'); // الملاحظات لكل وحدة
-        $images = $request->file('images'); // الملاحظات لكل وحدة
+        $images = $request->file('images');  // الملاحظات لكل وحدة
         $branchId = auth()->user()->branch_id ?? 1;   // مثال: فرع المستخدم الحالي
 
         $daylyControl =DailyControl::create([

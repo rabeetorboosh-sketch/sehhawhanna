@@ -61,7 +61,9 @@ class AssetsMovementsReportsController extends Controller
         } elseif (request('from_date')) {
             $query->whereDate('created_at', request('from_date'));
         }
-
+        if (!request('from_date') && !request('to_date')) {
+            $query->whereDate('created_at', now()->toDateString());
+        }
         // تنفيذ الاستعلام
         $movements = $query->orderBy('movement_datetime', 'desc')->get();
 
@@ -115,14 +117,6 @@ class AssetsMovementsReportsController extends Controller
           $query->where('asset_number', request('asset_id'));
       }
 
-      // فلترة حسب التاريخ
-      if (request('from_date')) {
-          $query->whereDate('movement_datetime', '>=', request('from_date'));
-      }
-
-      if (request('to_date')) {
-          $query->whereDate('movement_datetime', '<=', request('to_date'));
-      }
 
 
       if (request('from_date') && request('to_date')) {
@@ -133,7 +127,9 @@ class AssetsMovementsReportsController extends Controller
       } elseif (request('from_date')) {
           $query->whereDate('created_at', request('from_date'));
       }
-
+      if (!request('from_date') && !request('to_date')) {
+          $query->whereDate('created_at', now()->toDateString());
+      }
       // تنفيذ الاستعلام
       $movements = $query->orderBy('movement_datetime', 'desc')->get();
 

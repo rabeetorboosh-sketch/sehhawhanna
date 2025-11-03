@@ -109,8 +109,8 @@
             </div>
 
             <div class="actions">
-                <button type="submit" class="btn-save">تحديث</button>
-                <a href="{{ route('controlUnit.index') }}" class="btn-primary">إلغاء</a>
+                <a href="{{ route('controlUnit.index') }}" class="btn btn-primary">إلغاء</a>
+                <button type="submit" class="btn btn-save">تحديث</button>
             </div>
         </form>
     </div>

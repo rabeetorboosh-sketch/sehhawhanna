@@ -53,14 +53,19 @@ class StoreMovementsReportsController extends Controller
 
 
 
-        // فلترة حسب التاريخ
-        if (request('from_date')) {
-            $query->whereDate('created_at', '>=', request('from_date'));
+
+        if (request('from_date') && request('to_date')) {
+            $query->whereBetween('created_at', [
+                request('from_date'),
+                request('to_date') . ' 23:59:59'
+            ]);
+        } elseif (request('from_date')) {
+            $query->whereDate('created_at', request('from_date'));
+        }
+        if (!request('from_date') && !request('to_date')) {
+            $query->whereDate('created_at', now()->toDateString());
         }
 
-        if (request('to_date')) {
-            $query->whereDate('created_at', '<=', request('to_date'));
-        }
 
         $transactions = $query->get();
         $operation = Movement::findOrFail($id ?? 2);
@@ -114,13 +119,17 @@ class StoreMovementsReportsController extends Controller
 
 
 
-        // فلترة حسب التاريخ
-        if (request('from_date')) {
-            $query->whereDate('created_at', '>=', request('from_date'));
-        }
 
-        if (request('to_date')) {
-            $query->whereDate('created_at', '<=', request('to_date'));
+        if (request('from_date') && request('to_date')) {
+            $query->whereBetween('created_at', [
+                request('from_date'),
+                request('to_date') . ' 23:59:59'
+            ]);
+        } elseif (request('from_date')) {
+            $query->whereDate('created_at', request('from_date'));
+        }
+        if (!request('from_date') && !request('to_date')) {
+            $query->whereDate('created_at', now()->toDateString());
         }
 
         $transactions = $query->get();
@@ -188,12 +197,17 @@ class StoreMovementsReportsController extends Controller
         }
 
         // فلترة حسب التاريخ
-        if (request('from_date')) {
-            $query->whereDate('created_at', '>=', request('from_date'));
-        }
 
-        if (request('to_date')) {
-            $query->whereDate('created_at', '<=', request('to_date'));
+        if (request('from_date') && request('to_date')) {
+            $query->whereBetween('created_at', [
+                request('from_date'),
+                request('to_date') . ' 23:59:59'
+            ]);
+        } elseif (request('from_date')) {
+            $query->whereDate('created_at', request('from_date'));
+        }
+        if (!request('from_date') && !request('to_date')) {
+            $query->whereDate('created_at', now()->toDateString());
         }
         $filterstores=Store::all();
         $transactions = $query->get();
@@ -269,12 +283,17 @@ $url='byStoreDetail';
         }
 
         // فلترة حسب التاريخ
-        if (request('from_date')) {
-            $query->whereDate('created_at', '>=', request('from_date'));
-        }
 
-        if (request('to_date')) {
-            $query->whereDate('created_at', '<=', request('to_date'));
+        if (request('from_date') && request('to_date')) {
+            $query->whereBetween('created_at', [
+                request('from_date'),
+                request('to_date') . ' 23:59:59'
+            ]);
+        } elseif (request('from_date')) {
+            $query->whereDate('created_at', request('from_date'));
+        }
+        if (!request('from_date') && !request('to_date')) {
+            $query->whereDate('created_at', now()->toDateString());
         }
         $filterstores=Store::all();
         $transactions = $query->get();
@@ -473,7 +492,8 @@ $url='byStoreDetail';
         if (request('movement_id')) {
             $query->where('movement_id', request('movement_id'));
         }
-        // فلترة حسب التاريخ
+
+
         if (request('from_date') && request('to_date')) {
             $query->whereBetween('created_at', [
                 request('from_date'),
@@ -481,6 +501,9 @@ $url='byStoreDetail';
             ]);
         } elseif (request('from_date')) {
             $query->whereDate('created_at', request('from_date'));
+        }
+        if (!request('from_date') && !request('to_date')) {
+            $query->whereDate('created_at', now()->toDateString());
         }
 
         $transactions = $query->get();
@@ -567,6 +590,7 @@ $url='byProductDetail';
             $query->where('movement_id', request('movement_id'));
         }
         // فلترة حسب التاريخ
+
         if (request('from_date') && request('to_date')) {
             $query->whereBetween('created_at', [
                 request('from_date'),
@@ -574,6 +598,9 @@ $url='byProductDetail';
             ]);
         } elseif (request('from_date')) {
             $query->whereDate('created_at', request('from_date'));
+        }
+        if (!request('from_date') && !request('to_date')) {
+            $query->whereDate('created_at', now()->toDateString());
         }
 
         $transactions = $query->get();
@@ -728,6 +755,7 @@ $url='byProductDetail';
             $query->where('movement_id', request('movement_id'));
         }
         // فلترة حسب التاريخ
+
         if (request('from_date') && request('to_date')) {
             $query->whereBetween('created_at', [
                 request('from_date'),
@@ -735,6 +763,9 @@ $url='byProductDetail';
             ]);
         } elseif (request('from_date')) {
             $query->whereDate('created_at', request('from_date'));
+        }
+        if (!request('from_date') && !request('to_date')) {
+            $query->whereDate('created_at', now()->toDateString());
         }
 
         $transactions = $query->get();
@@ -796,6 +827,7 @@ $url='byProductDetail';
         if (request('movement_id')) {
             $query->where('movement_id', request('movement_id'));
         }
+
         if (request('from_date') && request('to_date')) {
             $query->whereBetween('created_at', [
                 request('from_date'),
@@ -803,6 +835,9 @@ $url='byProductDetail';
             ]);
         } elseif (request('from_date')) {
             $query->whereDate('created_at', request('from_date'));
+        }
+        if (!request('from_date') && !request('to_date')) {
+            $query->whereDate('created_at', now()->toDateString());
         }
 
         $transactions = $query->get();
