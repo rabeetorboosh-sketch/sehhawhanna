@@ -28,6 +28,7 @@
 
 
 @endif
+    @if(($url??'byOperationDetail')!='byOperationDetail')
     <div class="form-group">
         <label>العملية </label>
         <select name="move_id">
@@ -39,6 +40,7 @@
             @endforeach
         </select>
     </div>
+    @endif
                 <div class="form-group">
                     <label>المستخدم </label>
                     <select name="user_id">

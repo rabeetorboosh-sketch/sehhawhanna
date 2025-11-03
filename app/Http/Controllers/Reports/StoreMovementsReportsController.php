@@ -176,8 +176,8 @@ class StoreMovementsReportsController extends Controller
         if (request('employee_id')) {
             $query->where('employee_id', request('employee_id'));
         }
-        if (request('movement_id')) {
-            $query->where('movement_id', request('movement_id'));
+         if (request('move_id')) {
+            $query->where('movement_id', request('move_id'));
         }
 
         // فلترة حسب الصنف
@@ -272,8 +272,8 @@ $url='byStoreDetail';
                 $q->where('id', request('product_id'));
             });
         }
-        if (request('movement_id')) {
-            $query->where('movement_id', request('movement_id'));
+         if (request('move_id')) {
+            $query->where('movement_id', request('move_id'));
         }
         // فلترة حسب المخزن (من أو إلى)
         if (request('store_id')) {
@@ -494,8 +494,8 @@ $url='byStoreDetail';
         if (request('employee_id')) {
             $query->where('employee_id', request('employee_id'));
         }
-        if (request('movement_id')) {
-            $query->where('movement_id', request('movement_id'));
+         if (request('move_id')) {
+            $query->where('movement_id', request('move_id'));
         }
 
 
@@ -593,8 +593,8 @@ $url='byProductDetail';
         if (request('employee_id')) {
             $query->where('employee_id', request('employee_id'));
         }
-        if (request('movement_id')) {
-            $query->where('movement_id', request('movement_id'));
+         if (request('move_id')) {
+            $query->where('movement_id', request('move_id'));
         }
         // فلترة حسب التاريخ
 
@@ -760,8 +760,8 @@ $url='byProductDetail';
                 $q->where('id', request('product_id'));
             });
         }
-        if (request('movement_id')) {
-            $query->where('movement_id', request('movement_id'));
+         if (request('move_id')) {
+            $query->where('movement_id', request('move_id'));
         }
         // فلترة حسب التاريخ
 
@@ -835,8 +835,8 @@ $url='byProductDetail';
                 $q->where('id', request('product_id'));
             });
         }
-        if (request('movement_id')) {
-            $query->where('movement_id', request('movement_id'));
+         if (request('move_id')) {
+            $query->where('movement_id', request('move_id'));
         }
 
         if (request('from_date') && request('to_date')) {
