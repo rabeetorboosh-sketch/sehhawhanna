@@ -28,6 +28,10 @@ class Employee extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
 
+    }    public  function type()
+    {
+        return $this->belongsTo(EmployeeType::class, 'type_id');
+
     }
     public  function store()
     {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EmployeeType;
 use App\Models\RatingUnit;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,8 @@ class RatingUnitsController extends Controller
      */
     public function create()
     {
-        return view('admin.rating_units.create');
+        $employeeTypes=EmployeeType::all();
+        return view('admin.rating_units.create',compact('employeeTypes'));
     }
 
     /**
@@ -32,9 +34,10 @@ class RatingUnitsController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'multiply' => 'required|numeric',
+            'type_id' => 'nullable',
         ]);
 
-        RatingUnit::create($request->only('name', 'multiply'));
+        RatingUnit::create($request->only('name', 'multiply','type_id'));
 
         return redirect()->route('rating_units.index')->with('success', 'تمت إضافة الوحدة بنجاح');
     }
@@ -45,7 +48,8 @@ class RatingUnitsController extends Controller
     public function edit($id)
     {
         $unit = RatingUnit::findOrFail($id);
-        return view('admin.rating_units.edit', compact('unit'));
+        $employeeTypes=EmployeeType::all();
+        return view('admin.rating_units.edit', compact('unit','employeeTypes'));
     }
 
     /**
@@ -56,10 +60,11 @@ class RatingUnitsController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'multiply' => 'required|numeric',
+            'type_id' => 'type_id',
         ]);
 
         $unit = RatingUnit::findOrFail($id);
-        $unit->update($request->only('name', 'multiply'));
+        $unit->update($request->only('name', 'multiply'.'type_id'));
 
         return redirect()->route('rating_units.index')->with('success', 'تم تحديث الوحدة بنجاح');
     }

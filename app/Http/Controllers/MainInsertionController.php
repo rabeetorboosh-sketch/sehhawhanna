@@ -125,6 +125,13 @@ $issueType=IssueType::find($request->id);
 
         return redirect()->route('employeeType.index')->with('success', 'تم الحذف بنجاح ✅');
     }
+    public function EmployeeTypeShow(int $id)
+    {
+
+        $employeeType = EmployeeType::findOrFail($id);
+
+        return view('admin.employeeType.show',compact('employeeType'));
+    }
 
 
     ///

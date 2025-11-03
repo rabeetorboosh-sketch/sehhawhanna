@@ -65,11 +65,14 @@ class RatingController extends Controller
 ]);
 
         foreach ($request->rating_unit_id as $i => $unitId) {
-            RatingItem::create([
-                'rating_id' => $rating->id,
-                'rating_unit_id' => $unitId,
-                'percentage' => $request->percentage[$i],
-            ]);
+            if ($request->percentage[$i]!=null){
+                RatingItem::create([
+                    'rating_id' => $rating->id,
+                    'rating_unit_id' => $unitId,
+                    'percentage' => $request->percentage[$i],
+                ]);
+            }
+
         }
 
         return redirect()->route('ratings.index')->with('success', 'تمت إضافة التقييم بنجاح');
@@ -106,11 +109,15 @@ class RatingController extends Controller
         RatingItem::where('rating_id', $rating->id)->delete();
 
         foreach ($request->rating_unit_id as $i => $unitId) {
-            RatingItem::create([
-                'rating_id' => $rating->id,
-                'rating_unit_id' => $unitId,
-                'percentage' => $request->percentage[$i],
-            ]);
+
+            if ($request->percentage[$i]!=null){
+                RatingItem::create([
+                    'rating_id' => $rating->id,
+                    'rating_unit_id' => $unitId,
+                    'percentage' => $request->percentage[$i],
+                ]);
+            }
+
         }
 
         return redirect()->route('ratings.index')->with('success', 'تم تحديث التقييم بنجاح');

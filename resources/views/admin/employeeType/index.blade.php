@@ -29,6 +29,7 @@
                             <td>{{ $employeeType->name }}</td>
                             <td>
                                 <div class="actions">
+                                    <a href="{{ route('employeeType.show', $employeeType->id) }}" class="btn btn-primary">عرض</a>
                                     @if(Auth::user()->permissions('4-insertions-employeesTypes')?->can_update == 1)
                                         <a href="{{ route('employeeType.edit', $employeeType->id) }}" class="btn btn-worn">تعديل</a>
                                     @endif

@@ -32,4 +32,8 @@ class Item extends Model
     {
         return $this->hasMany(ItemUnit::class, 'item_id');
     }
+    public function employee()
+    {
+        return $this->hasOne(Employee::class, 'item_id');
+    }
 }

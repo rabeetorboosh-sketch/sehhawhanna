@@ -23,6 +23,10 @@
                         <span class="info-title">الموظف</span>
                         <span class="info-content">{{ $rating->item->name ?? 'غير محدد' }}</span>
                     </div>
+                    <div class="info-card">
+                        <span class="info-title">النوع الوظيفي</span>
+                        <span class="info-content">{{ $rating->item?->employee?->type?->name ?? 'غير محدد' }}</span>
+                    </div>
 
                     <div class="info-card">
                         <span class="info-title">التاريخ</span>

@@ -485,7 +485,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/employeeTypes/create', [MainInsertionController::class, 'EmployeeTypeCreate'])->name('employeeType.create');
     Route::get('/employeeTypes/edit/{employeeType}', [MainInsertionController::class, 'EmployeeTypeEdit'])->name('employeeType.edit');
     Route::post('/employeeTypes/update', [MainInsertionController::class, 'EmployeeTypeUpdate'])->name('employeeType.update');
-    Route::DELETE('/employeeTypes/delete/{id}', [MainInsertionController::class, 'EmployeeTypeDelete'])->name('employeeType.delete');
+    Route::get('/employeeTypes/{id}', [MainInsertionController::class, 'EmployeeTypeShow'])->name('employeeType.show');
+    Route::delete('/employeeTypes/delete/{id}', [MainInsertionController::class, 'EmployeeTypeDelete'])->name('employeeType.delete');
+
 
 });
 
