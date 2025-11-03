@@ -179,7 +179,7 @@
                                     <input name="product_id[{{ $pro->id }}][id]" value="{{ $pro->id }}" class=" vlue-lbl">
                                    <select name="product_id[{{ $pro->id }}][unit]" class="unit-select">
                                     @foreach($pro->item->units as $unit)
-                                        <option value="{{$unit->unit_id}}">{{$unit->unit?->name}}</option>
+                                        <option value="{{$unit->id}}">{{$unit->unit?->name}}</option>
                                     @endforeach
                                    </select>
                                     <div class="flex space-x-4">
