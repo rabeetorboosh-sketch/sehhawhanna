@@ -25,7 +25,20 @@
                         </select>
                     </div>
 
+
+
 @endif
+    <div class="form-group">
+        <label>العملية </label>
+        <select name="move_id">
+            <option value="">الكل</option>
+            @foreach($movements as $move)
+                <option value="{{ $move->id }}" {{ request('move_id')==$move->id ? 'selected':'' }}>
+                    {{ $move->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
                 <div class="form-group">
                     <label>المستخدم </label>
                     <select name="user_id">

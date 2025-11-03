@@ -258,7 +258,9 @@ $url='byStoreDetail';
         if (request('user_id')) {
             $query->where('user_id', request('user_id'));
         }
-
+        if (request('move_id')) {
+            $query->where('movement_id', request('move_id'));
+        }
         // فلترة حسب الموظف
         if (request('employee_id')) {
             $query->where('employee_id', request('employee_id'));
@@ -480,6 +482,9 @@ $url='byStoreDetail';
             $query->where('movement_id', $id);
         }
 
+        if (request('move_id')) {
+            $query->where('movement_id', request('move_id'));
+        }
         // فلترة حسب المستخدم
         if (request('user_id')) {
             $query->where('user_id', request('user_id'));
@@ -576,7 +581,9 @@ $url='byProductDetail';
         if ($id) {
             $query->where('movement_id', $id);
         }
-
+        if (request('move_id')) {
+            $query->where('movement_id', request('move_id'));
+        }
         // فلترة حسب المستخدم
         if (request('user_id')) {
             $query->where('user_id', request('user_id'));
@@ -739,7 +746,9 @@ $url='byProductDetail';
         if (request('user_id')) {
             $query->where('user_id', request('user_id'));
         }
-
+        if (request('move_id')) {
+            $query->where('movement_id', request('move_id'));
+        }
         // فلترة حسب الموظف
         if (request('employee_id')) {
             $query->where('employee_id', request('employee_id'));
@@ -812,7 +821,9 @@ $url='byProductDetail';
         if (request('user_id')) {
             $query->where('user_id', request('user_id'));
         }
-
+        if (request('move_id')) {
+            $query->where('movement_id', request('move_id'));
+        }
         // فلترة حسب الموظف
         if (request('employee_id')) {
             $query->where('employee_id', request('employee_id'));
@@ -933,7 +944,6 @@ $url='byProductDetail';
         'stores',
         'title',
         'movements',
-
         'urlPrint',
         'products'));
 }
