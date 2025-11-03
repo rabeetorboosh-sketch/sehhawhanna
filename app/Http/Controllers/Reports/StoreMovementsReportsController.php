@@ -35,6 +35,10 @@ class StoreMovementsReportsController extends Controller
             'items.unit.unit'
         ])->where('movement_id', $id ?? 2);
 
+        if (!request('from_date') && !request('to_date')) {
+            request()->merge(['from_date' => now()->toDateString()]);
+        }
+
         // فلترة حسب المستخدم
         if (request('user_id')) {
             $query->where('user_id', request('user_id'));
@@ -61,9 +65,6 @@ class StoreMovementsReportsController extends Controller
             ]);
         } elseif (request('from_date')) {
             $query->whereDate('created_at', request('from_date'));
-        }
-        if (!request('from_date') && !request('to_date')) {
-            $query->whereDate('created_at', now()->toDateString());
         }
 
 
@@ -101,6 +102,10 @@ class StoreMovementsReportsController extends Controller
             'items.unit.unit'
         ])->where('movement_id', $id ?? 2);
 
+        if (!request('from_date') && !request('to_date')) {
+            request()->merge(['from_date' => now()->toDateString()]);
+        }
+
         // فلترة حسب المستخدم
         if (request('user_id')) {
             $query->where('user_id', request('user_id'));
@@ -128,9 +133,7 @@ class StoreMovementsReportsController extends Controller
         } elseif (request('from_date')) {
             $query->whereDate('created_at', request('from_date'));
         }
-        if (!request('from_date') && !request('to_date')) {
-            $query->whereDate('created_at', now()->toDateString());
-        }
+
 
         $transactions = $query->get();
         $operation = Movement::findOrFail($id ?? 2);
@@ -166,6 +169,9 @@ class StoreMovementsReportsController extends Controller
             },
 
         ]);
+        if (!request('from_date') && !request('to_date')) {
+            request()->merge(['from_date' => now()->toDateString()]);
+        }
 
         // فلترة حسب المستخدم
         if (request('user_id')) {
@@ -206,9 +212,7 @@ class StoreMovementsReportsController extends Controller
         } elseif (request('from_date')) {
             $query->whereDate('created_at', request('from_date'));
         }
-        if (!request('from_date') && !request('to_date')) {
-            $query->whereDate('created_at', now()->toDateString());
-        }
+
         $filterstores=Store::all();
         $transactions = $query->get();
         if (request('summary')) {
@@ -294,9 +298,7 @@ $url='byStoreDetail';
         } elseif (request('from_date')) {
             $query->whereDate('created_at', request('from_date'));
         }
-        if (!request('from_date') && !request('to_date')) {
-            $query->whereDate('created_at', now()->toDateString());
-        }
+
         $filterstores=Store::all();
         $transactions = $query->get();
         if (request('summary')) {
@@ -476,6 +478,9 @@ $url='byStoreDetail';
                 $q->with(['product.item', 'unit.unit']);
             },
         ]);
+        if (!request('from_date') && !request('to_date')) {
+            request()->merge(['from_date' => now()->toDateString()]);
+        }
 
         // فلترة حسب العملية
         if ($id) {
@@ -507,9 +512,7 @@ $url='byStoreDetail';
         } elseif (request('from_date')) {
             $query->whereDate('created_at', request('from_date'));
         }
-        if (!request('from_date') && !request('to_date')) {
-            $query->whereDate('created_at', now()->toDateString());
-        }
+
 
         $transactions = $query->get();
         if (request('summary')) {
@@ -576,6 +579,9 @@ $url='byProductDetail';
                 $q->with(['product.item', 'unit.unit']);
             },
         ]);
+        if (!request('from_date') && !request('to_date')) {
+            request()->merge(['from_date' => now()->toDateString()]);
+        }
 
         // فلترة حسب العملية
         if ($id) {
@@ -606,9 +612,7 @@ $url='byProductDetail';
         } elseif (request('from_date')) {
             $query->whereDate('created_at', request('from_date'));
         }
-        if (!request('from_date') && !request('to_date')) {
-            $query->whereDate('created_at', now()->toDateString());
-        }
+
 
         $transactions = $query->get();
         if (request('summary')) {
@@ -741,6 +745,9 @@ $url='byProductDetail';
             'items.product.item',
             'items.unit.unit'
         ]);
+        if (!request('from_date') && !request('to_date')) {
+            request()->merge(['from_date' => now()->toDateString()]);
+        }
 
         // فلترة حسب المستخدم
         if (request('user_id')) {
@@ -773,9 +780,7 @@ $url='byProductDetail';
         } elseif (request('from_date')) {
             $query->whereDate('created_at', request('from_date'));
         }
-        if (!request('from_date') && !request('to_date')) {
-            $query->whereDate('created_at', now()->toDateString());
-        }
+
 
         $transactions = $query->get();
 
@@ -816,6 +821,9 @@ $url='byProductDetail';
             'items.product.item',
             'items.unit.unit'
         ]);
+        if (!request('from_date') && !request('to_date')) {
+            request()->merge(['from_date' => now()->toDateString()]);
+        }
 
         // فلترة حسب المستخدم
         if (request('user_id')) {
@@ -847,9 +855,7 @@ $url='byProductDetail';
         } elseif (request('from_date')) {
             $query->whereDate('created_at', request('from_date'));
         }
-        if (!request('from_date') && !request('to_date')) {
-            $query->whereDate('created_at', now()->toDateString());
-        }
+
 
         $transactions = $query->get();
 
