@@ -47,7 +47,7 @@
     <form action="{{ route('monitoring.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-4">
-            <label    >الاقسام</label>
+
             <div id="product-fields">
                 <div class="flex items-center mb-4" id="product-field-1" style="width: 100%">
                     <div class="searchable-select " >

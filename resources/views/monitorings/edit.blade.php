@@ -48,7 +48,7 @@
         @method('PUT')
 
         <div class="mb-4">
-            <label for="products" class="block text-sm font-medium text-gray-700 productlpl">الاقسام</label>
+
             <div id="product-fields">
                 <div class="flex items-center mb-4" id="product-field-1" style="width: 100%">
                     <div class="searchable-select">

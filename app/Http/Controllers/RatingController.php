@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class RatingController extends Controller
 {
@@ -57,25 +58,33 @@ class RatingController extends Controller
             'rating_unit_id' => 'required|array',
             'percentage' => 'required|array',
         ]);
+        DB::beginTransaction();
 
-        $rating = Rating::create([
-    'user_id'=>Auth::id(),
-    'item_id'=>$request->item_id,
-    'date'=>$request->date,
-]);
+        try {
+            $rating = Rating::create([
+                'user_id' => Auth::id(),
+                'item_id' => $request->item_id,
+                'date' => $request->date,
+            ]);
 
-        foreach ($request->rating_unit_id as $i => $unitId) {
-            if ($request->percentage[$i]!=null){
-                RatingItem::create([
-                    'rating_id' => $rating->id,
-                    'rating_unit_id' => $unitId,
-                    'percentage' => $request->percentage[$i],
-                ]);
+            foreach ($request->rating_unit_id as $i => $unitId) {
+                if (!empty($request->percentage[$i])) {
+                    RatingItem::create([
+                        'rating_id' => $rating->id,
+                        'rating_unit_id' => $unitId,
+                        'percentage' => $request->percentage[$i],
+                    ]);
+                }
             }
 
+            DB::commit();
+
+            return redirect()->route('ratings.index')->with('success', 'تمت إضافة التقييم بنجاح');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
         }
 
-        return redirect()->route('ratings.index')->with('success', 'تمت إضافة التقييم بنجاح');
     }
 
     /**
