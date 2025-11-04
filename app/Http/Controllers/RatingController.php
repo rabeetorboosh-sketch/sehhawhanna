@@ -8,6 +8,7 @@ use App\Models\RatingItem;
 use App\Models\RatingUnit;
 use App\Models\User;
 use App\Models\Item;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -80,7 +81,7 @@ class RatingController extends Controller
             DB::commit();
 
             return redirect()->route('ratings.index')->with('success', 'تمت إضافة التقييم بنجاح');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             dd($e->getMessage());
         }
