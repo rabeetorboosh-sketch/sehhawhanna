@@ -201,6 +201,7 @@ class StoreMovementsReportsController extends Controller
             'employees',
             'products',
             'title',
+            'id',
         ));
     }
     public function byStoreDetail($id = 3)
@@ -340,6 +341,7 @@ $url='byStoreDetail';
             'employees',
             'products',
             'title',
+            'id',
              ));
     }
 
