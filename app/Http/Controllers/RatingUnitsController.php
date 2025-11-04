@@ -60,7 +60,7 @@ class RatingUnitsController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'multiply' => 'required|numeric',
-            'type_id' => 'type_id',
+            'type_id' => 'nullable',
         ]);
 
         $unit = RatingUnit::findOrFail($id);
