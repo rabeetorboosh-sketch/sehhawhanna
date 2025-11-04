@@ -141,6 +141,7 @@ class StoreMovementsReportsController extends Controller
         $transactions = $query->get();
 
         if (request('summary')) {
+
             return $this->byOperationSummaryPrint($transactions,$id);
         }
         $operation = Movement::findOrFail($id ?? 2);
@@ -156,6 +157,7 @@ class StoreMovementsReportsController extends Controller
     }
 
     public function byOperationSummaryPrint($transactions,$id =null){
+
         $users = User::all();
         $employees = Employee::all();
         $products = Product::all();
@@ -193,6 +195,7 @@ class StoreMovementsReportsController extends Controller
         $operation = Movement::findOrFail($id ?? 2);
         $urlPrint='byOperationDetailPrint';
         $title= '-> حسب العملية - اجمالي '.$operation->name;
+
         return view('reports.movements.print.by_operation_summary', compact('summary'  ,'operation',
             'stores',
             'transactions',

@@ -71,6 +71,15 @@
             box-shadow: 0 0 5px -2px gray;
             padding: 3px;border-radius: 5px;
         }
+        .total-box {
+            background: #f7f7f7;
+            border: 1px solid #ddd;
+            padding: 8px 15px;
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -104,56 +113,38 @@
 
 
 {{-- لكل حركة، نعرض المعاملات الخاصة بها --}}
-@foreach($transactions as $transaction)
-    <div class=" dtl-group   ">
-        <div class="dtl">
-            {{ $transaction->FromStore?->name }} -> {{ $transaction->ToStore?->name }}
-        </div>
-        @if($transaction->employee)
-            <div class="dtl">
-                <span style="color: #777;"> الموظف: {{ $transaction->employee?->item?->name ?? $transaction->employee?->name }} </span>
-            </div>
-        @endif
-        <div class="dtl">
-            المستخدم : {{$transaction->user->name}}
-        </div>
-        <div class="dtl">
-            <strong>التاريخ : {{$transaction->created_at}}</strong>
-        </div>
+<div class="summary-title">ملخص العمليات حسب الأصناف</div>
 
-    </div>
-
-    <div class="table-wrap">
-        <div class="table-scroll">
-            <table class="table sortable">
-                <thead>
+<div class="table-wrap">
+    <div class="table-scroll">
+        <table class="table sortable">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>الصنف</th>
+                <th>عدد المخازن المشاركة</th>
+                <th>إجمالي الكمية</th>
+            </tr>
+            </thead>
+            <tbody>
+            @php $grandTotal = 0; @endphp
+            @foreach($summary as $index => $row)
+                @php $grandTotal += $row['total_count']; @endphp
                 <tr>
-                    <th>#</th>
-                    <th>الصنف</th>
-                    <th>عدد المخازن المشاركة</th>
-                    <th>إجمالي الكمية</th>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $row['product_name'] }}</td>
+                    <td>{{ $row['store_count'] }}</td>
+                    <td>{{ $row['total_count'] }}</td>
                 </tr>
-                </thead>
-                <tbody>
-                @php $grandTotal = 0; @endphp
-                @foreach($summary as $index => $row)
-                    @php $grandTotal += $row['total_count']; @endphp
-                    <tr>
-                        <td>{{ $index + 1 }}</td>
-                        <td>{{ $row['product_name'] }}</td>
-                        <td>{{ $row['store_count'] }}</td>
-                        <td>{{ $row['total_count'] }}</td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </div>
+            @endforeach
+            </tbody>
+        </table>
     </div>
+</div>
 
-    <div class="total-box">
-        الإجمالي العام لجميع الأصناف: <span>{{ $grandTotal }}</span>
-    </div>
-@endforeach
+<div class="total-box">
+    الإجمالي العام لجميع الأصناف: <span>{{ $grandTotal }}</span>
+</div>
 
 
 
