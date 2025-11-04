@@ -64,7 +64,7 @@ class RatingUnitsController extends Controller
         ]);
 
         $unit = RatingUnit::findOrFail($id);
-        $unit->update($request->only('name', 'multiply'.'type_id'));
+        $unit->update($request->only('name', 'multiply','type_id'));
 
         return redirect()->route('rating_units.index')->with('success', 'تم تحديث الوحدة بنجاح');
     }
