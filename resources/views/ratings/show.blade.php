@@ -23,6 +23,7 @@
                         <span class="info-title">الموظف</span>
                         <span class="info-content">{{ $rating->item->name ?? 'غير محدد' }}</span>
                     </div>
+
                     <div class="info-card">
                         <span class="info-title">النوع الوظيفي</span>
                         <span class="info-content">{{ $rating->item?->employee?->type?->name ?? 'غير محدد' }}</span>
@@ -54,15 +55,16 @@
                         @endphp
                         @foreach($rating->items as $index => $item)
                             @php
-                                $weighted = $item->percentage * $item->ratingUnit->multiply;
+                                $multiply = optional($item->ratingUnit)->multiply ?? 0;
+                                $weighted = $item->percentage * $multiply;
                                 $totalWeighted += $weighted;
-                                $totalMultiply += $item->ratingUnit->multiply;
+                                $totalMultiply += $multiply;
                             @endphp
                             <tr class="hover:bg-gray-50">
                                 <td class="py-2 px-4 border">{{ $index + 1 }}</td>
                                 <td class="py-2 px-4 border">{{ $item->ratingUnit->name ?? '-' }}</td>
                                 <td class="py-2 px-4 border">{{ $item->percentage }}%</td>
-                                <td class="py-2 px-4 border">{{ $item->ratingUnit->multiply }}</td>
+                                <td class="py-2 px-4 border">{{ $multiply }}</td>
                             </tr>
                         @endforeach
                         </tbody>

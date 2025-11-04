@@ -21,7 +21,7 @@
                         <th>الموظف</th>
                         <th>المستخدم</th>
                         <th>التاريخ</th>
-                        <th>التقييم العام </th>
+                        <th>التقييم العام</th>
                         <th>العمليات</th>
                     </tr>
                     </thead>
@@ -34,29 +34,32 @@
                             <td>{{ $rating->date }}</td>
                             <td>
                                 @php
-                                    $itemsNum=0;
-                                    $itemVal=0;
+                                    $itemsNum = 0;
+                                    $itemVal = 0;
                                 @endphp
                                 @foreach($rating->items as $item)
-                                    @php($itemsNum+=$item->percentage * $item->ratingUnit->multiply)
-                                    @php($itemVal+= $item->ratingUnit->multiply)
+                                    @php
+                                        $multiply = optional($item->ratingUnit)->multiply ?? 0;
+                                        $itemsNum += $item->percentage * $multiply;
+                                        $itemVal += $multiply;
+                                    @endphp
                                 @endforeach
-                                    <div> {{ $itemsNum/ $itemVal}}%</div>
+                                <div>{{ $itemVal > 0 ? round($itemsNum / $itemVal, 2) : 0 }}%</div>
                             </td>
                             <td>
                                 <div class="actions">
                                     <a href="{{ route('ratings.show', $rating->id) }}" class="btn btn-primary">عرض</a>
+
                                     @if(Auth::user()->permissions('4-operations-ratings')?->can_update == 1)
-
-                                    <a href="{{ route('ratings.edit', $rating->id) }}" class="btn btn-worn">تعديل</a>
+                                        <a href="{{ route('ratings.edit', $rating->id) }}" class="btn btn-worn">تعديل</a>
                                     @endif
-                                    @if(Auth::user()->permissions('4-operations-ratings')?->can_delete == 1)
 
-                                    <form id="delete-form-{{ $rating->id }}" action="{{ route('ratings.destroy', $rating->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="btn btn-danger" onclick="confirmDelete({{ $rating->id }})">حذف</button>
-                                    </form>
+                                    @if(Auth::user()->permissions('4-operations-ratings')?->can_delete == 1)
+                                        <form id="delete-form-{{ $rating->id }}" action="{{ route('ratings.destroy', $rating->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ $rating->id }})">حذف</button>
+                                        </form>
                                     @endif
                                 </div>
                             </td>
@@ -68,6 +71,5 @@
         </div>
     </div>
 
-    <script src="{{asset('js/table.js')}}"></script>
-
+    <script src="{{ asset('js/table.js') }}"></script>
 </x-app-layout>
