@@ -70,7 +70,8 @@
                                         $totalMultiply += $item->ratingUnit->multiply;
                                     @endphp
                                 @endforeach
-                                {{ $totalMultiply > 0 ? $totalWeighted / $totalMultiply : 0}}%
+
+                                {{ $totalMultiply > 0 ?   round($totalWeighted / $totalMultiply , 2) : 0}}%
                             </td>
                         </tr>
 
