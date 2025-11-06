@@ -1680,78 +1680,65 @@ class StoreMovementsReportsController extends Controller
 
 
 
-    public function bySubGroupSummaryPrint($transactions, $id = null)
+    public function bySubGroupSummaryPrint($transactions)
     {
-        $users = User::all();
-        $employees = Employee::all();
-        $products = Product::all();
-        $stores = Store::all();
-        $main_groups = MainGroup::where('department_id', 1)->get();
-        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
-            $q->where('department_id', 1);
-        })->get();
-
-        // تصفية داخلية للعناصر قبل التجميع
-        $transactions->each(function ($transaction) {
-            $transaction->setRelation('items', $transaction->items->filter(function ($item) {
-                $ok = true;
-
-                if (request('main_group_id')) {
-                    $ok = $ok && $item->product?->item?->main_group_id == request('main_group_id');
-                }
-
-                if (request('sub_group_id')) {
-                    $ok = $ok && $item->product?->item?->sub_group_id == request('sub_group_id');
-                }
-
-                if (request('product_id')) {
-                    $ok = $ok && $item->product_id == request('product_id');
-                }
-
-                return $ok;
-            }));
-        });
-
-        // تجاهل أي عملية لم يبق فيها عناصر بعد الفلترة
-        $transactions = $transactions->filter(fn($t) => $t->items->isNotEmpty());
-
-        // حساب الإجماليات حسب المجموعة الفرعية
         $summary = [];
 
         foreach ($transactions as $transaction) {
-            foreach ($transaction->items as $item) {
-                $subGroupName = $item->product?->item?->sub_group?->name ?? 'غير محدد';
-                $mainGroupName = $item->product?->item?->main_group?->name ?? '-';
-                $count = $item->count;
+            // تحديد نوع الحركة
+            $isIn = !empty($transaction->to_store_id) && empty($transaction->from_store_id);
 
-                if (!isset($summary[$subGroupName])) {
-                    $summary[$subGroupName] = [
-                        'main_group' => $mainGroupName,
-                        'total_count' => 0,
+            foreach ($transaction->items as $item) {
+                $main = $item->product?->item?->mainGroup?->name ?? 'غير محدد';
+                $sub  = $item->product?->item?->subGroup?->name ?? 'غير محدد';
+                $qty  = $item->count ?? 0;
+
+                if (!isset($summary[$main])) {
+                    $summary[$main] = [
+                        'subGroups' => [],
+                        'total' => 0,
+
                     ];
                 }
 
-                $summary[$subGroupName]['total_count'] += $count;
+                if (!isset($summary[$main]['subGroups'][$sub])) {
+                    $summary[$main]['subGroups'][$sub] = [
+                        'total' => 0,
+
+                    ];
+                }
+
+
+                $summary[$main]['subGroups'][$sub]['total'] += $qty;
+                $summary[$main]['total'] += $qty;
+
             }
         }
 
+        $operation = Movement::find(request('move_id'));
         $url = 'bySubGroupDetail';
         $urlPrint = 'bySubGroupDetailPrint';
-        $title = '-> حسب المجموعة الفرعية - اجمالي';
+        $title = '-> حسب المجموعة الفرعية - إجمالي';
+        $stores = Store::all();
+        $users = User::all();
+        $employees = Employee::all();
+        $products = Product::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', fn($q) => $q->where('department_id', 1))->get();
         $movements = Movement::all();
 
         return view('reports.movements.print.by_sub_group_summary', compact(
             'summary',
+            'operation',
             'stores',
-            'transactions',
             'users',
             'employees',
             'products',
             'main_groups',
             'sub_groups',
-            'title',
             'url',
             'urlPrint',
+            'title',
             'movements'
         ));
     }

@@ -3,55 +3,76 @@
 @section('tbl')
     <link rel="stylesheet" href="{{ asset('css/table.css') }}">
     <style>
-        .main-title {font-size:1.3rem;font-weight:bold;color:#2c3e50;margin-top:20px;}
-        .sub-table {margin-right:25px;margin-top:10px;}
-        .total-row {background:#f8f8f8;font-weight:bold;}
+        .subgroup-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #34495e;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            padding: 8px 15px;
+            background-color: #f3f4f6;
+            border-right: 3px solid #b8bcc1;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .table-wrap { margin-bottom: 25px; }
+        .total-row {
+            font-weight: bold;
+            background-color: #f9f9f9;
+        }
     </style>
 
     @php
-        $grandIn = $grandOut = $grandNet = 0;
+        $grandTotal = 0;
     @endphp
 
+    {{-- عرض التجميع حسب المجموعات --}}
     @foreach($summary as $mainName => $mainData)
-        <div class="main-title">{{ $mainName }}</div>
-        <div class="sub-table">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>المجموعة الفرعية</th>
-                    <th> الكمية   </th>
-
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($mainData['subGroups'] as $subName => $subData)
-                    <tr>
-                        <td>{{ $subName }}</td>
-                        <td>{{ number_format($subData['total'], 2) }}</td>
-                    </tr>
-                @endforeach
-                <tr class="total-row">
-                    <td>إجمالي {{ $mainName }}</td>
-                    <td>{{ number_format($mainData['total'], 2) }}</td>
-
-                </tr>
-                </tbody>
-            </table>
+        <div class="subgroup-title table-title">
+            {{ $mainName }}
         </div>
 
-        @php
-            $grandIn += $mainData['total'];
+        <div class="table-wrap">
+            <div class="table-scroll">
+                <table class="table sortable">
+                    <thead>
+                    <tr>
+                        <th>المجموعة الفرعية</th>
+                        <th>إجمالي الكمية</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($mainData['subGroups'] as $subName => $subData)
+                        <tr>
+                            <td>{{ $subName }}</td>
+                            <td>{{ number_format($subData['total'], 2) }}</td>
+                        </tr>
+                    @endforeach
+                    <tr class="total-row">
+                        <td style="text-align:right;">إجمالي {{ $mainName }}</td>
+                        <td>{{ number_format($mainData['total'], 2) }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-        @endphp
+        @php $grandTotal += $mainData['total']; @endphp
     @endforeach
 
-    <table class="table" style="margin-top:30px">
-        <thead>
-        <tr class="total-row">
-            <th>الإجمالي العام</th>
-            <th>{{ number_format($grandIn, 2) }}</th>
 
-        </tr>
-        </thead>
-    </table>
+    <div class="table-wrap">
+        <div class="table-scroll">
+            <table class="table sortable">
+                <thead>
+                <tr class="total-row">
+                    <th>الإجمالي العام</th>
+                    <th>{{ number_format($grandTotal, 2) }}</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <script src="{{ asset('js/table.js') }}"></script>
 @endsection
