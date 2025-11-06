@@ -74,6 +74,32 @@
                         @endforeach
                     </select>
                 </div>
+    @if($main_groups)
+        <div class="form-group">
+            <label  >المجموعة الرئيسية</label>
+            <select name="main_group_id" id="mainGroupSelect">
+                <option selected value=""> الكل </option>
+                @foreach($main_groups as $mainGroup)
+                    <option value="{{ $mainGroup->id }}" data-section="{{ $mainGroup->department->id }}" {{ request('main_group_id')==$mainGroup->id ? 'selected':'' }}>
+                        {{ $mainGroup->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    @endif
+    @if($sub_groups)
+        <div class="form-group">
+            <label>المجموعة الفرعية</label>
+            <select name="sub_group_id" id="subGroupSelect">
+                <option value="" selected> الكل </option>
+                @foreach($sub_groups as $subGroup)
+                    <option value="{{ $subGroup->id }}" data-main-group="{{ $subGroup->main_group_id }}" {{ request('sub_group_id')==$subGroup->id ? 'selected':'' }}>
+                        {{ $subGroup->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    @endif
                 <div class="form-group">
                     <label>من تاريخ</label>
                     <input type="date" name="from_date" value="{{ request('from_date') }}">

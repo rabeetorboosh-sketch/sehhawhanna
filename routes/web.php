@@ -430,6 +430,7 @@ Route::middleware('auth')->group(function () {
     Route::get('report/movements/byStore/detail', [StoreMovementsReportsController::class, 'byStoreDetail'])->name('storeMovements.byStoreDetail');
     Route::get('report/movements/byProduct/detail/{id?}', [StoreMovementsReportsController::class, 'byProductDetail'])->name('storeMovements.byProductDetail');
     Route::get('report/movements/byEmployee/detail', [StoreMovementsReportsController::class, 'byEmployeeDetail'])->name('storeMovements.byEmployeeDetail');
+    Route::get('report/movements/bySubGroup/detail', [StoreMovementsReportsController::class, 'bySubGroupDetail'])->name('storeMovements.bySubGroupDetail');
     Route::get('report/movements/index', [StoreMovementsReportsController::class, 'index'])->name('storeMovements.ReportIndex');
     Route::get('report/assetsMovements/byOperation', [AssetsMovementsReportsController::class, 'byOperation'])->name('assetsMovements.byOperation');
     Route::get('report/ratingReport/byOperation', [RatingsReportsController::class, 'byOperationDetail'])->name('ratingReport.byOperationDetail');
@@ -451,6 +452,8 @@ Route::middleware('auth')->group(function () {
     Route::get('report/movements/print/byStore/detail', [StoreMovementsReportsController::class, 'byStoreDetailPrint'])->name('storeMovements.byStoreDetailPrint');
     Route::get('report/movements/print/byProduct/detail/{id?}', [StoreMovementsReportsController::class, 'byProductDetailPrint'])->name('storeMovements.byProductDetailPrint');
     Route::get('report/movements/print/byEmployee/detail', [StoreMovementsReportsController::class, 'byEmployeeDetailPrint'])->name('storeMovements.byEmployeeDetailPrint');
+    Route::get('report/movements/print/bySubGroup/detail', [StoreMovementsReportsController::class, 'bySubGroupDetailPrint'])->name('storeMovements.bySubGroupDetailPrint');
+
     Route::get('report/assetsMovements/print/byOperation', [AssetsMovementsReportsController::class, 'byOperationPrint'])->name('assetsMovements.byOperationPrint');
     Route::get('report/ratingReport/print/byOperation', [RatingsReportsController::class, 'byOperationDetailPrint'])->name('ratingReport.byOperationDetailPrint');
 

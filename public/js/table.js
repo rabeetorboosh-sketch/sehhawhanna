@@ -11,6 +11,7 @@ function confirmDelete(id) {
 document.querySelectorAll('.table-title').forEach(title => {
     title.addEventListener('click', function() {
         const tableWrap = this.nextElementSibling;
+
         tableWrap.classList.toggle('collapsed'); // يطي الجدول أو يفتحه
         this.classList.toggle('collapsed');      // يغير اتجاه السهم
     });

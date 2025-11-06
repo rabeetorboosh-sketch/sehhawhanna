@@ -118,6 +118,7 @@
                 <div class="options">
 
                         <a href="{{ route('storeMovements.byStoreDetail')}}" class="option-btn">المستودع </a>
+                        <a href="{{ route('storeMovements.bySubGroupDetail')}}" class="option-btn">المجموعة </a>
                         <a href="{{ route('storeMovements.byProductDetail')}}" class="option-btn">الصنف </a>
                         <a href="{{ route('storeMovements.byEmployeeDetail')}}" class="option-btn">الموظف </a>
 

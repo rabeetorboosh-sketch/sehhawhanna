@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Reports;
 
 use App\Http\Controllers\Controller;
 use App\Models\Employee;
+use App\Models\MainGroup;
 use App\Models\Movement;
 use App\Models\Product;
 use App\Models\Store;
 use App\Models\StoreTransaction;
+use App\Models\SubGroup;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -25,7 +27,10 @@ class StoreMovementsReportsController extends Controller
         $employees = Employee::all();
         $products = Product::all();
         $stores = Store::all();
-
+        $main_groups = MainGroup::where('department_id',1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
         $query = StoreTransaction::with([
             'user',
             'employee',
@@ -55,7 +60,17 @@ class StoreMovementsReportsController extends Controller
             });
         }
 
+        if (request('main_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('main_group_id', request('main_group_id'));
+            });
+        }
 
+        if (request('sub_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('sub_group_id', request('sub_group_id'));
+            });
+        }
 
 
         if (request('from_date') && request('to_date')) {
@@ -86,6 +101,8 @@ class StoreMovementsReportsController extends Controller
             'products',
             'title',
             'id',
+            'main_groups',
+            'sub_groups',
         ));
     }
     public function byOperationDetailPrint($id =null)
@@ -125,7 +142,17 @@ class StoreMovementsReportsController extends Controller
             });
         }
 
+        if (request('main_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('main_group_id', request('main_group_id'));
+            });
+        }
 
+        if (request('sub_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('sub_group_id', request('sub_group_id'));
+            });
+        }
 
 
         if (request('from_date') && request('to_date')) {
@@ -155,13 +182,82 @@ class StoreMovementsReportsController extends Controller
             'products'
         ));
     }
+    public function byOperationSummary($transactions,$id)
+    {
+        $users = User::all();
+        $employees = Employee::all();
+        $products = Product::all();
+        $stores = Store::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
 
+        $summary = $transactions->flatMap(function ($transaction) {
+            return $transaction->items->map(function ($item) use ($transaction) {
+                return [
+                    'product_id'   => $item->product_id,
+                    'product_name' => $item->product?->item?->name ?? '-',
+                    'main_group_id' => $item->product?->item?->main_group_id,
+                    'sub_group_id'  => $item->product?->item?->sub_group_id,
+                    'store_from'   => $transaction->FromStore?->id,
+                    'store_to'     => $transaction->ToStore?->id,
+                    'count'        => $item->count,
+                ];
+            });
+        })
+            ->groupBy('product_id')
+            ->map(function ($items) {
+                $productName = $items->first()['product_name'];
+                $totalCount = $items->sum('count');
+                $storeCount = collect($items)->pluck('store_from')
+                    ->merge(collect($items)->pluck('store_to'))
+                    ->filter()
+                    ->unique()
+                    ->count();
+                $mainGroup = $items->first()['main_group_id'];
+                $subGroup = $items->first()['sub_group_id'];
+
+                return [
+                    'product_name' => $productName,
+                    'main_group_id' => $mainGroup,
+                    'sub_group_id' => $subGroup,
+                    'total_count' => $totalCount,
+                    'store_count' => $storeCount,
+                ];
+            })
+            ->values();
+
+        $operation = Movement::findOrFail($id ?? 2);
+        $urlPrint = 'byOperationDetailPrint';
+        $title = '-> حسب العملية - اجمالي ' . $operation->name;
+
+        return view('reports.movements.by_operation_summary', compact(
+            'summary',
+            'operation',
+            'stores',
+            'transactions',
+            'users',
+            'urlPrint',
+            'employees',
+            'products',
+            'title',
+            'id',
+            'main_groups',
+            'sub_groups',
+        ));
+
+    }
     public function byOperationSummaryPrint($transactions,$id =null){
 
         $users = User::all();
         $employees = Employee::all();
         $products = Product::all();
         $stores = Store::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
 
         $summary = $transactions->flatMap(function ($transaction) {
             return $transaction->items->map(function ($item) use ($transaction) {
@@ -193,10 +289,12 @@ class StoreMovementsReportsController extends Controller
             ->values();
 
         $operation = Movement::findOrFail($id ?? 2);
-        $urlPrint='byOperationDetailPrint';
-        $title= '-> حسب العملية - اجمالي '.$operation->name;
+        $urlPrint = 'byOperationDetailPrint';
+        $title = '-> حسب العملية - اجمالي ' . $operation->name;
 
-        return view('reports.movements.print.by_operation_summary', compact('summary'  ,'operation',
+        return view('reports.movements.print.by_operation_summary', compact(
+            'summary',
+            'operation',
             'stores',
             'transactions',
             'users',
@@ -205,16 +303,20 @@ class StoreMovementsReportsController extends Controller
             'products',
             'title',
             'id',
+            'main_groups',
+            'sub_groups',
         ));
+
     }
     public function byStoreDetail($id = 3)
-    {
-
-
-        $users = User::all();
+    {$users = User::all();
         $employees = Employee::all();
         $products = Product::all();
-        $stores = request('store_id')? Store::where('id',request('store_id'))->get():Store::all();
+        $stores = request('store_id') ? Store::where('id', request('store_id'))->get() : Store::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
 
         $query = StoreTransaction::with([
             'user',
@@ -227,33 +329,48 @@ class StoreMovementsReportsController extends Controller
                 }
                 $q->with(['product.item', 'unit.unit']);
             },
-
         ]);
+
         if (!request('from_date') && !request('to_date')) {
             request()->merge(['from_date' => now()->toDateString()]);
         }
 
-        // فلترة حسب المستخدم
+// فلترة حسب المستخدم
         if (request('user_id')) {
             $query->where('user_id', request('user_id'));
         }
 
-        // فلترة حسب الموظف
+// فلترة حسب الموظف
         if (request('employee_id')) {
             $query->where('employee_id', request('employee_id'));
         }
-         if (request('move_id')) {
+
+// فلترة حسب نوع الحركة
+        if (request('move_id')) {
             $query->where('movement_id', request('move_id'));
         }
 
-        // فلترة حسب الصنف
+// فلترة حسب الصنف
         if (request('product_id')) {
             $query->whereHas('items.product', function ($q) {
                 $q->where('id', request('product_id'));
             });
         }
 
-        // فلترة حسب المخزن (من أو إلى)
+// فلترة حسب المجموعات
+        if (request('main_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('main_group_id', request('main_group_id'));
+            });
+        }
+
+        if (request('sub_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('sub_group_id', request('sub_group_id'));
+            });
+        }
+
+// فلترة حسب المخزن (من أو إلى)
         if (request('store_id')) {
             $storeId = request('store_id');
             $query->where(function ($q) use ($storeId) {
@@ -262,8 +379,7 @@ class StoreMovementsReportsController extends Controller
             });
         }
 
-        // فلترة حسب التاريخ
-
+// فلترة حسب التاريخ
         if (request('from_date') && request('to_date')) {
             $query->whereBetween('created_at', [
                 request('from_date'),
@@ -273,15 +389,17 @@ class StoreMovementsReportsController extends Controller
             $query->whereDate('created_at', request('from_date'));
         }
 
-        $filterstores=Store::all();
+        $filterstores = Store::all();
         $transactions = $query->get();
+
         if (request('summary')) {
             return $this->byStoreSummary($transactions);
         }
+
         $operation = Movement::findOrFail($id ?: 2);
-$url='byStoreDetail';
-        $title='-> حسب المستودع - تحليلي';
-        $movements=Movement::all();
+        $url = 'byStoreDetail';
+        $title = '-> حسب المستودع - تحليلي';
+        $movements = Movement::all();
 
         return view('reports.movements.by_store_detail', compact(
             'operation',
@@ -293,67 +411,25 @@ $url='byStoreDetail';
             'employees',
             'movements',
             'title',
-            'products'
-        ));
-    }
-
-    public function byOperationSummary($transactions,$id)
-    {
-        $users = User::all();
-        $employees = Employee::all();
-        $products = Product::all();
-        $stores = Store::all();
-
-        $summary = $transactions->flatMap(function ($transaction) {
-            return $transaction->items->map(function ($item) use ($transaction) {
-                return [
-                    'product_id' => $item->product_id,
-                    'product_name' => $item->product?->item?->name ?? '-',
-                    'store_from' => $transaction->FromStore?->id,
-                    'store_to' => $transaction->ToStore?->id,
-                    'count' => $item->count,
-                ];
-            });
-        })
-            ->groupBy('product_id')
-            ->map(function ($items) {
-                $productName = $items->first()['product_name'];
-                $totalCount = $items->sum('count');
-                $storeCount = collect($items)->pluck('store_from')
-                    ->merge(collect($items)->pluck('store_to'))
-                    ->filter()
-                    ->unique()
-                    ->count();
-
-                return [
-                    'product_name' => $productName,
-                    'total_count' => $totalCount,
-                    'store_count' => $storeCount,
-                ];
-            })
-            ->values();
-
-        $operation = Movement::findOrFail($id ?? 2);
-        $urlPrint='byOperationDetailPrint';
-        $title= '-> حسب العملية - اجمالي '.$operation->name;
-        return view('reports.movements.by_operation_summary', compact('summary'  ,'operation',
-            'stores',
-            'transactions',
-            'users',
-            'urlPrint',
-            'employees',
             'products',
-            'title',
-            'id',
-             ));
+            'main_groups',
+            'sub_groups'
+        ));
+
     }
+
+
 
     public function byStoreDetailPrint($id = 3)
     {
         $users = User::all();
         $employees = Employee::all();
         $products = Product::all();
-        $stores = request('store_id')? Store::where('id',request('store_id'))->get():Store::all();
+        $stores = request('store_id') ? Store::where('id', request('store_id'))->get() : Store::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
 
         $query = StoreTransaction::with([
             'user',
@@ -372,9 +448,12 @@ $url='byStoreDetail';
         if (request('user_id')) {
             $query->where('user_id', request('user_id'));
         }
+
+        // فلترة حسب نوع الحركة
         if (request('move_id')) {
             $query->where('movement_id', request('move_id'));
         }
+
         // فلترة حسب الموظف
         if (request('employee_id')) {
             $query->where('employee_id', request('employee_id'));
@@ -386,9 +465,20 @@ $url='byStoreDetail';
                 $q->where('id', request('product_id'));
             });
         }
-         if (request('move_id')) {
-            $query->where('movement_id', request('move_id'));
+
+        // فلترة حسب المجموعات
+        if (request('main_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('main_group_id', request('main_group_id'));
+            });
         }
+
+        if (request('sub_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('sub_group_id', request('sub_group_id'));
+            });
+        }
+
         // فلترة حسب المخزن (من أو إلى)
         if (request('store_id')) {
             $storeId = request('store_id');
@@ -399,7 +489,6 @@ $url='byStoreDetail';
         }
 
         // فلترة حسب التاريخ
-
         if (request('from_date') && request('to_date')) {
             $query->whereBetween('created_at', [
                 request('from_date'),
@@ -409,13 +498,16 @@ $url='byStoreDetail';
             $query->whereDate('created_at', request('from_date'));
         }
 
-        $filterstores=Store::all();
+        $filterstores = Store::all();
         $transactions = $query->get();
+
         if (request('summary')) {
             return $this->byStoreSummaryPrint($transactions);
         }
+
         $operation = Movement::findOrFail($id ?: 2);
-$url='byStoreDetail';
+        $url = 'byStoreDetail';
+
         return view('reports.movements.print.by_store_detail', compact(
             'operation',
             'stores',
@@ -424,71 +516,72 @@ $url='byStoreDetail';
             'url',
             'filterstores',
             'employees',
-            'products'
+            'products',
+            'main_groups',
+            'sub_groups'
         ));
     }
-    public function byStoreSummary($transactions,$id=null)
-    {
 
+    public function byStoreSummary($transactions, $id = null)
+    {
         $users = User::all();
         $employees = Employee::all();
         $products = Product::all();
         $stores = request('store_id')
             ? Store::where('id', request('store_id'))->get()
             : Store::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
 
         // تجميع الإجماليات حسب المخزن والصنف والوحدة
         $summary = [];
         foreach ($transactions as $transaction) {
-
-
             foreach ($transaction->items as $item) {
                 $productName = $item->product?->item?->name ?? 'غير محدد';
                 $unitName = $item->unit?->unit?->name ?? '-';
+                $mainGroupId = $item->product?->item?->main_group_id;
+                $subGroupId = $item->product?->item?->sub_group_id;
 
-                // 1️⃣ من مخزن (خارج)
+                // من مخزن (خارج)
                 if ($transaction->FromStore) {
                     $storeName = $transaction->FromStore->name;
                     if (!isset($summary[$storeName][$productName][$unitName])) {
                         $summary[$storeName][$productName][$unitName] = [
                             'in' => 0,
-                            'out' => 0
+                            'out' => 0,
+                            'main_group_id' => $mainGroupId,
+                            'sub_group_id' => $subGroupId,
                         ];
                     }
                     $summary[$storeName][$productName][$unitName]['out'] += $item->count;
                 }
 
-                // 2️⃣ إلى مخزن (داخل)
+                // إلى مخزن (داخل)
                 if ($transaction->ToStore) {
-
-
                     $storeName = $transaction->ToStore->name;
                     if (!isset($summary[$storeName][$productName][$unitName])) {
-
                         $summary[$storeName][$productName][$unitName] = [
                             'in' => 0,
-                            'out' => 0
+                            'out' => 0,
+                            'main_group_id' => $mainGroupId,
+                            'sub_group_id' => $subGroupId,
                         ];
-
                     }
                     $summary[$storeName][$productName][$unitName]['in'] += $item->count;
-
-
                 }
-
-
             }
-
         }
 
-        $url='byStoreDetail';
-        $title='-> حسب المستودع - اجمالي';
-        $filterstores=Store::all();
-        $movements=Movement::all();
+        $url = 'byStoreDetail';
+        $title = '-> حسب المستودع - اجمالي';
+        $filterstores = Store::all();
+        $movements = Movement::all();
+
         return view('reports.movements.by_store_summary', compact(
             'stores',
             'summary',
-            'stores',
             'transactions',
             'users',
             'filterstores',
@@ -496,12 +589,14 @@ $url='byStoreDetail';
             'employees',
             'title',
             'movements',
-            'products'
+            'products',
+            'main_groups',
+            'sub_groups'
         ));
     }
-    public function byStoreSummaryPrint($transactions,$id=null)
-    {
 
+    public function byStoreSummaryPrint($transactions, $id = null)
+    {
         $users = User::all();
         $employees = Employee::all();
         $products = Product::all();
@@ -509,72 +604,78 @@ $url='byStoreDetail';
             ? Store::where('id', request('store_id'))->get()
             : Store::all();
 
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
+
         // تجميع الإجماليات حسب المخزن والصنف والوحدة
         $summary = [];
         foreach ($transactions as $transaction) {
-
-
             foreach ($transaction->items as $item) {
                 $productName = $item->product?->item?->name ?? 'غير محدد';
                 $unitName = $item->unit?->unit?->name ?? '-';
+                $mainGroupId = $item->product?->item?->main_group_id;
+                $subGroupId = $item->product?->item?->sub_group_id;
 
-                // 1️⃣ من مخزن (خارج)
+                // من مخزن (خارج)
                 if ($transaction->FromStore) {
                     $storeName = $transaction->FromStore->name;
                     if (!isset($summary[$storeName][$productName][$unitName])) {
                         $summary[$storeName][$productName][$unitName] = [
                             'in' => 0,
-                            'out' => 0
+                            'out' => 0,
+                            'main_group_id' => $mainGroupId,
+                            'sub_group_id' => $subGroupId,
                         ];
                     }
                     $summary[$storeName][$productName][$unitName]['out'] += $item->count;
                 }
 
-                // 2️⃣ إلى مخزن (داخل)
+                // إلى مخزن (داخل)
                 if ($transaction->ToStore) {
-
-
                     $storeName = $transaction->ToStore->name;
                     if (!isset($summary[$storeName][$productName][$unitName])) {
-
                         $summary[$storeName][$productName][$unitName] = [
                             'in' => 0,
-                            'out' => 0
+                            'out' => 0,
+                            'main_group_id' => $mainGroupId,
+                            'sub_group_id' => $subGroupId,
                         ];
-
                     }
                     $summary[$storeName][$productName][$unitName]['in'] += $item->count;
-
-
                 }
-
-
             }
-
         }
 
-        $url='byStoreDetail';
-        $filterstores=Store::all();
+        $url = 'byStoreDetail';
+        $filterstores = Store::all();
+
         return view('reports.movements.print.by_store_summary', compact(
             'stores',
             'summary',
-            'stores',
             'transactions',
             'users',
             'filterstores',
             'url',
             'employees',
-            'products'
+            'products',
+            'main_groups',
+            'sub_groups'
         ));
     }
 
-    public function byProductDetail( $id = null)
-    {
 
+    public function byProductDetail($id = null)
+    {
         $users = User::all();
         $employees = Employee::all();
         $products = Product::all();
         $stores = Store::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
 
         $query = StoreTransaction::with([
             'user',
@@ -588,6 +689,7 @@ $url='byStoreDetail';
                 $q->with(['product.item', 'unit.unit']);
             },
         ]);
+
         if (!request('from_date') && !request('to_date')) {
             request()->merge(['from_date' => now()->toDateString()]);
         }
@@ -600,6 +702,7 @@ $url='byStoreDetail';
         if (request('move_id')) {
             $query->where('movement_id', request('move_id'));
         }
+
         // فلترة حسب المستخدم
         if (request('user_id')) {
             $query->where('user_id', request('user_id'));
@@ -609,11 +712,22 @@ $url='byStoreDetail';
         if (request('employee_id')) {
             $query->where('employee_id', request('employee_id'));
         }
-         if (request('move_id')) {
-            $query->where('movement_id', request('move_id'));
+
+        // فلترة حسب المجموعة الرئيسية
+        if (request('main_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('main_group_id', request('main_group_id'));
+            });
         }
 
+        // فلترة حسب المجموعة الفرعية
+        if (request('sub_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('sub_group_id', request('sub_group_id'));
+            });
+        }
 
+        // فلترة حسب التاريخ
         if (request('from_date') && request('to_date')) {
             $query->whereBetween('created_at', [
                 request('from_date'),
@@ -623,18 +737,17 @@ $url='byStoreDetail';
             $query->whereDate('created_at', request('from_date'));
         }
 
-
         $transactions = $query->get();
+
         if (request('summary')) {
             return $this->byProductSummary($transactions);
         }
+
         $grouped = [];
         $filterProductId = request('product_id');
 
         foreach ($transactions as $transaction) {
             foreach ($transaction->items as $item) {
-
-                // إذا تم تمرير صنف معين، نعرضه فقط
                 if ($filterProductId && $item->product_id != $filterProductId) {
                     continue;
                 }
@@ -648,12 +761,10 @@ $url='byStoreDetail';
         }
 
         $operation = Movement::find($id);
-
-
-$url='byProductDetail';
-        $urlPrint='byProductDetailPrint';
-        $title='-> حسب الصنف - تحليلي';
-        $movements=Movement::all();
+        $url = 'byProductDetail';
+        $urlPrint = 'byProductDetailPrint';
+        $title = '-> حسب الصنف - تحليلي';
+        $movements = Movement::all();
 
         return view('reports.movements.by_item_detail', compact(
             'operation',
@@ -666,16 +777,22 @@ $url='byProductDetail';
             'urlPrint',
             'title',
             'movements',
-            'grouped'
+            'grouped',
+            'main_groups',
+            'sub_groups'
         ));
     }
-    public function byProductDetailPrint( $id = null)
-    {
 
+    public function byProductDetailPrint($id = null)
+    {
         $users = User::all();
         $employees = Employee::all();
         $products = Product::all();
         $stores = Store::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
 
         $query = StoreTransaction::with([
             'user',
@@ -689,6 +806,7 @@ $url='byProductDetail';
                 $q->with(['product.item', 'unit.unit']);
             },
         ]);
+
         if (!request('from_date') && !request('to_date')) {
             request()->merge(['from_date' => now()->toDateString()]);
         }
@@ -697,9 +815,11 @@ $url='byProductDetail';
         if ($id) {
             $query->where('movement_id', $id);
         }
+
         if (request('move_id')) {
             $query->where('movement_id', request('move_id'));
         }
+
         // فلترة حسب المستخدم
         if (request('user_id')) {
             $query->where('user_id', request('user_id'));
@@ -709,11 +829,21 @@ $url='byProductDetail';
         if (request('employee_id')) {
             $query->where('employee_id', request('employee_id'));
         }
-         if (request('move_id')) {
-            $query->where('movement_id', request('move_id'));
-        }
-        // فلترة حسب التاريخ
 
+        // فلترة حسب المجموعات
+        if (request('main_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('main_group_id', request('main_group_id'));
+            });
+        }
+
+        if (request('sub_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('sub_group_id', request('sub_group_id'));
+            });
+        }
+
+        // فلترة حسب التاريخ
         if (request('from_date') && request('to_date')) {
             $query->whereBetween('created_at', [
                 request('from_date'),
@@ -723,18 +853,17 @@ $url='byProductDetail';
             $query->whereDate('created_at', request('from_date'));
         }
 
-
         $transactions = $query->get();
+
         if (request('summary')) {
             return $this->byProductSummaryPrint($transactions);
         }
+
         $grouped = [];
         $filterProductId = request('product_id');
 
         foreach ($transactions as $transaction) {
             foreach ($transaction->items as $item) {
-
-                // إذا تم تمرير صنف معين، نعرضه فقط
                 if ($filterProductId && $item->product_id != $filterProductId) {
                     continue;
                 }
@@ -748,10 +877,9 @@ $url='byProductDetail';
         }
 
         $operation = Movement::find($id);
+        $url = 'byProductDetail';
+        $title = '-> حسب الصنف - تحليلي';
 
-
-$url='byProductDetail';
-        $title='-> حسب الصنف - تحليلي';
         return view('reports.movements.print.by_item_detail', compact(
             'operation',
             'stores',
@@ -761,17 +889,23 @@ $url='byProductDetail';
             'products',
             'url',
             'title',
-            'grouped'
+            'grouped',
+            'main_groups',
+            'sub_groups'
         ));
     }
 
-    public function byProductSummary($transactions,$id = null)
+
+    public function byProductSummary($transactions, $id = null)
     {
         $users = User::all();
         $employees = Employee::all();
         $products = Product::all();
         $stores = Store::all();
-
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
 
         // حساب الإجماليات حسب الصنف والوحدة
         $summary = [];
@@ -780,20 +914,28 @@ $url='byProductDetail';
             foreach ($transaction->items as $item) {
                 $productName = $item->product?->item?->name ?? 'غير محدد';
                 $unitName = $item->unit?->unit?->name ?? '-';
+                $mainGroupId = $item->product?->item?->main_group_id;
+                $subGroupId = $item->product?->item?->sub_group_id;
 
                 if (!isset($summary[$productName][$unitName])) {
-                    $summary[$productName][$unitName] = 0;
+                    $summary[$productName][$unitName] = [
+                        'count' => 0,
+                        'main_group_id' => $mainGroupId,
+                        'sub_group_id' => $subGroupId,
+                    ];
                 }
 
-                $summary[$productName][$unitName] += $item->count;
+                $summary[$productName][$unitName]['count'] += $item->count;
             }
         }
-        $url='byProductDetail';
-        $urlPrint='byProductDetailPrint';
-        $title='-> حسب الصنف - اجمالي';
-        $movements=Movement::all();
 
-        return view('reports.movements.by_item_summary', compact('summary',
+        $url = 'byProductDetail';
+        $urlPrint = 'byProductDetailPrint';
+        $title = '-> حسب الصنف - اجمالي';
+        $movements = Movement::all();
+
+        return view('reports.movements.by_item_summary', compact(
+            'summary',
             'stores',
             'users',
             'employees',
@@ -801,16 +943,22 @@ $url='byProductDetail';
             'title',
             'urlPrint',
             'movements',
-            'url'
+            'url',
+            'main_groups',
+            'sub_groups'
         ));
     }
-    public function byProductSummaryPrint($transactions,$id = null)
+
+    public function byProductSummaryPrint($transactions, $id = null)
     {
         $users = User::all();
         $employees = Employee::all();
         $products = Product::all();
         $stores = Store::all();
-
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
 
         // حساب الإجماليات حسب الصنف والوحدة
         $summary = [];
@@ -819,23 +967,34 @@ $url='byProductDetail';
             foreach ($transaction->items as $item) {
                 $productName = $item->product?->item?->name ?? 'غير محدد';
                 $unitName = $item->unit?->unit?->name ?? '-';
+                $mainGroupId = $item->product?->item?->main_group_id;
+                $subGroupId = $item->product?->item?->sub_group_id;
 
                 if (!isset($summary[$productName][$unitName])) {
-                    $summary[$productName][$unitName] = 0;
+                    $summary[$productName][$unitName] = [
+                        'count' => 0,
+                        'main_group_id' => $mainGroupId,
+                        'sub_group_id' => $subGroupId,
+                    ];
                 }
 
-                $summary[$productName][$unitName] += $item->count;
+                $summary[$productName][$unitName]['count'] += $item->count;
             }
         }
-        $url='byProductDetail';
-        $title='-> حسب الصنف - اجمالي';
-        return view('reports.movements.print.by_item_summary', compact('summary',
+
+        $url = 'byProductDetail';
+        $title = '-> حسب الصنف - اجمالي';
+
+        return view('reports.movements.print.by_item_summary', compact(
+            'summary',
             'stores',
             'users',
             'employees',
             'products',
             'title',
-        'url'
+            'url',
+            'main_groups',
+            'sub_groups'
         ));
     }
 
@@ -846,6 +1005,10 @@ $url='byProductDetail';
         $employees = Employee::with('item')->get();
         $products = Product::all();
         $stores = Store::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
 
         $query = StoreTransaction::with([
             'user',
@@ -855,6 +1018,7 @@ $url='byProductDetail';
             'items.product.item',
             'items.unit.unit'
         ]);
+
         if (!request('from_date') && !request('to_date')) {
             request()->merge(['from_date' => now()->toDateString()]);
         }
@@ -863,9 +1027,12 @@ $url='byProductDetail';
         if (request('user_id')) {
             $query->where('user_id', request('user_id'));
         }
+
+        // فلترة حسب نوع الحركة
         if (request('move_id')) {
             $query->where('movement_id', request('move_id'));
         }
+
         // فلترة حسب الموظف
         if (request('employee_id')) {
             $query->where('employee_id', request('employee_id'));
@@ -877,11 +1044,22 @@ $url='byProductDetail';
                 $q->where('id', request('product_id'));
             });
         }
-         if (request('move_id')) {
-            $query->where('movement_id', request('move_id'));
-        }
-        // فلترة حسب التاريخ
 
+        // فلترة حسب المجموعة الرئيسية
+        if (request('main_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('main_group_id', request('main_group_id'));
+            });
+        }
+
+        // فلترة حسب المجموعة الفرعية
+        if (request('sub_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('sub_group_id', request('sub_group_id'));
+            });
+        }
+
+        // فلترة حسب التاريخ
         if (request('from_date') && request('to_date')) {
             $query->whereBetween('created_at', [
                 request('from_date'),
@@ -891,17 +1069,18 @@ $url='byProductDetail';
             $query->whereDate('created_at', request('from_date'));
         }
 
-
         $transactions = $query->get();
 
         if (request('summary')) {
             return $this->byEmployeeSummary($transactions);
         }
+
         $operation = Movement::findOrFail($id ?: 2);
         $url = 'byEmployeeDetail';
         $urlPrint = 'byEmployeeDetailPrint';
-        $title='-> حسب المستخدم - تحليلي';
-        $movements=Movement::all();
+        $title = '-> حسب المستخدم - تحليلي';
+        $movements = Movement::all();
+
         return view('reports.movements.by_employee_detail', compact(
             'operation',
             'employees',
@@ -912,16 +1091,22 @@ $url='byProductDetail';
             'title',
             'urlPrint',
             'movements',
-
-            'products'
+            'products',
+            'main_groups',
+            'sub_groups'
         ));
     }
+
     public function byEmployeeDetailPrint($id = 3)
     {
         $users = User::all();
         $employees = Employee::with('item')->get();
         $products = Product::all();
         $stores = Store::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
 
         $query = StoreTransaction::with([
             'user',
@@ -931,6 +1116,7 @@ $url='byProductDetail';
             'items.product.item',
             'items.unit.unit'
         ]);
+
         if (!request('from_date') && !request('to_date')) {
             request()->merge(['from_date' => now()->toDateString()]);
         }
@@ -939,9 +1125,12 @@ $url='byProductDetail';
         if (request('user_id')) {
             $query->where('user_id', request('user_id'));
         }
+
+        // فلترة حسب نوع الحركة
         if (request('move_id')) {
             $query->where('movement_id', request('move_id'));
         }
+
         // فلترة حسب الموظف
         if (request('employee_id')) {
             $query->where('employee_id', request('employee_id'));
@@ -953,10 +1142,22 @@ $url='byProductDetail';
                 $q->where('id', request('product_id'));
             });
         }
-         if (request('move_id')) {
-            $query->where('movement_id', request('move_id'));
+
+        // فلترة حسب المجموعة الرئيسية
+        if (request('main_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('main_group_id', request('main_group_id'));
+            });
         }
 
+        // فلترة حسب المجموعة الفرعية
+        if (request('sub_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('sub_group_id', request('sub_group_id'));
+            });
+        }
+
+        // فلترة حسب التاريخ
         if (request('from_date') && request('to_date')) {
             $query->whereBetween('created_at', [
                 request('from_date'),
@@ -966,15 +1167,16 @@ $url='byProductDetail';
             $query->whereDate('created_at', request('from_date'));
         }
 
-
         $transactions = $query->get();
 
         if (request('summary')) {
             return $this->byEmployeeSummaryPrint($transactions);
         }
+
         $operation = Movement::findOrFail($id ?: 2);
         $url = 'byEmployeeDetail';
-        $title='-> حسب المستخدم - تحليلي';
+        $title = '-> حسب المستخدم - تحليلي';
+
         return view('reports.movements.print.by_employee_detail', compact(
             'operation',
             'employees',
@@ -983,157 +1185,576 @@ $url='byProductDetail';
             'url',
             'stores',
             'title',
-            'products'
+            'products',
+            'main_groups',
+            'sub_groups'
+        ));
+    }
+
+    public function byEmployeeSummary($transactions)
+    {
+        $users = User::all();
+        $employees = Employee::with('item')->get();
+        $products = Product::all();
+        $stores = Store::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
+        $url = 'byEmployeeDetail';
+
+        // نجمع حسب الموظف
+        $grouped = $transactions->groupBy('employee_id');
+        $summary = [];
+
+        foreach ($grouped as $employeeId => $employeeTransactions) {
+            $employeeName = $employeeTransactions->first()->employee?->item?->name ?? 'بدون اسم موظف';
+
+            // كل الأصناف التي تعامل معها الموظف
+            $allItems = $employeeTransactions->flatMap->items;
+
+            // نجمع حسب الصنف
+            $itemsGrouped = $allItems->groupBy(function ($item) {
+                return $item->product?->item?->name ?? 'صنف غير معروف';
+            });
+
+            foreach ($itemsGrouped as $itemName => $itemsSet) {
+                $mainGroupId = $itemsSet->first()->product?->item?->main_group_id;
+                $subGroupId = $itemsSet->first()->product?->item?->sub_group_id;
+
+                // العمليات الداخلة والخارجة
+                $inTransactions = $employeeTransactions->filter(function ($t) use ($itemName) {
+                    return $t->to_store_id && $t->items->contains(function ($i) use ($itemName) {
+                            return ($i->product?->item?->name ?? '') === $itemName;
+                        });
+                });
+
+                $outTransactions = $employeeTransactions->filter(function ($t) use ($itemName) {
+                    return $t->from_store_id && $t->items->contains(function ($i) use ($itemName) {
+                            return ($i->product?->item?->name ?? '') === $itemName;
+                        });
+                });
+
+                $totalIn = $inTransactions->flatMap->items
+                    ->filter(fn($i) => ($i->product?->item?->name ?? '') === $itemName)
+                    ->sum('count');
+
+                $totalOut = $outTransactions->flatMap->items
+                    ->filter(fn($i) => ($i->product?->item?->name ?? '') === $itemName)
+                    ->sum('count');
+
+                $transactionCount = $employeeTransactions->filter(function ($t) use ($itemName) {
+                    return $t->items->contains(function ($i) use ($itemName) {
+                        return ($i->product?->item?->name ?? '') === $itemName;
+                    });
+                })->count();
+
+                $summary[] = [
+                    'employee_name' => $employeeName,
+                    'item_name' => $itemName,
+                    'main_group_id' => $mainGroupId,
+                    'sub_group_id' => $subGroupId,
+                    'total_in' => $totalIn,
+                    'total_out' => $totalOut,
+                    'transaction_count' => $transactionCount,
+                ];
+            }
+        }
+
+        $title = '-> حسب المستخدم - اجمالي';
+        $urlPrint = 'byEmployeeDetailPrint';
+        $movements = Movement::all();
+
+        return view('reports.movements.by_employee_summary', compact(
+            'summary',
+            'employees',
+            'transactions',
+            'users',
+            'url',
+            'stores',
+            'title',
+            'movements',
+            'urlPrint',
+            'products',
+            'main_groups',
+            'sub_groups'
+        ));
+    }
+
+    public function byEmployeeSummaryPrint($transactions)
+    {
+        $users = User::all();
+        $employees = Employee::with('item')->get();
+        $products = Product::all();
+        $stores = Store::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
+        $url = 'byEmployeeDetail';
+
+        // نجمع حسب الموظف
+        $grouped = $transactions->groupBy('employee_id');
+        $summary = [];
+
+        foreach ($grouped as $employeeId => $employeeTransactions) {
+            $employeeName = $employeeTransactions->first()->employee?->item?->name ?? 'بدون اسم موظف';
+
+            // نجيب كل الأصناف التي تعامل معها الموظف (من خلال items)
+            $allItems = $employeeTransactions->flatMap->items;
+
+            // نجمع حسب الصنف
+            $itemsGrouped = $allItems->groupBy(function ($item) {
+                return $item->product?->item?->name ?? 'صنف غير معروف';
+            });
+
+            foreach ($itemsGrouped as $itemName => $itemsSet) {
+                $mainGroupId = $itemsSet->first()->product?->item?->main_group_id;
+                $subGroupId = $itemsSet->first()->product?->item?->sub_group_id;
+
+                // نحدد العمليات الداخلة والخارجة لهذا الصنف
+                $inTransactions = $employeeTransactions->filter(function ($t) use ($itemName) {
+                    return $t->to_store_id && $t->items->contains(function ($i) use ($itemName) {
+                            return ($i->product?->item?->name ?? '') === $itemName;
+                        });
+                });
+
+                $outTransactions = $employeeTransactions->filter(function ($t) use ($itemName) {
+                    return $t->from_store_id && $t->items->contains(function ($i) use ($itemName) {
+                            return ($i->product?->item?->name ?? '') === $itemName;
+                        });
+                });
+
+                $totalIn = $inTransactions->flatMap->items
+                    ->filter(fn($i) => ($i->product?->item?->name ?? '') === $itemName)
+                    ->sum('count');
+
+                $totalOut = $outTransactions->flatMap->items
+                    ->filter(fn($i) => ($i->product?->item?->name ?? '') === $itemName)
+                    ->sum('count');
+
+                $transactionCount = $employeeTransactions->filter(function ($t) use ($itemName) {
+                    return $t->items->contains(function ($i) use ($itemName) {
+                        return ($i->product?->item?->name ?? '') === $itemName;
+                    });
+                })->count();
+
+                $summary[] = [
+                    'employee_name' => $employeeName,
+                    'item_name' => $itemName,
+                    'main_group_id' => $mainGroupId,
+                    'sub_group_id' => $subGroupId,
+                    'total_in' => $totalIn,
+                    'total_out' => $totalOut,
+                    'transaction_count' => $transactionCount,
+                ];
+            }
+        }
+
+        $title = '-> حسب المستخدم - اجمالي';
+
+        return view('reports.movements.print.by_employee_summary', compact(
+            'summary',
+            'employees',
+            'transactions',
+            'users',
+            'url',
+            'stores',
+            'title',
+            'products',
+            'main_groups',
+            'sub_groups'
+        ));
+    }
+
+    public function bySubGroupDetail($id = null)
+    {
+        $users = User::all();
+        $employees = Employee::all();
+        $products = Product::all();
+        $stores = Store::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
+
+        $query = StoreTransaction::with([
+            'user',
+            'employee',
+            'FromStore',
+            'ToStore',
+            'items.product.item',
+            'items.unit.unit'
+        ]);
+
+        if (!request('from_date') && !request('to_date')) {
+            request()->merge(['from_date' => now()->toDateString()]);
+        }
+
+        // فلترة حسب المجموعات أو الصنف
+        if (request('main_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('main_group_id', request('main_group_id'));
+            });
+        }
+
+        if (request('sub_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('sub_group_id', request('sub_group_id'));
+            });
+        }
+
+        if (request('product_id')) {
+            $query->whereHas('items', function ($q) {
+                $q->where('product_id', request('product_id'));
+            });
+        }
+
+        // فلترة المستخدم، الموظف، الحركة
+        if (request('user_id')) $query->where('user_id', request('user_id'));
+        if (request('employee_id')) $query->where('employee_id', request('employee_id'));
+        if ($id) $query->where('movement_id', $id);
+        if (request('move_id')) $query->where('movement_id', request('move_id'));
+
+        // فلترة التاريخ
+        if (request('from_date') && request('to_date')) {
+            $query->whereBetween('created_at', [
+                request('from_date'),
+                request('to_date') . ' 23:59:59'
+            ]);
+        } elseif (request('from_date')) {
+            $query->whereDate('created_at', request('from_date'));
+        }
+
+        $transactions = $query->get();
+
+        // تصفية داخلية للعناصر ضمن العمليات نفسها
+        $transactions->each(function ($transaction) {
+            $transaction->setRelation('items', $transaction->items->filter(function ($item) {
+                $ok = true;
+
+                if (request('main_group_id')) {
+                    $ok = $ok && $item->product?->item?->main_group_id == request('main_group_id');
+                }
+
+                if (request('sub_group_id')) {
+                    $ok = $ok && $item->product?->item?->sub_group_id == request('sub_group_id');
+                }
+
+                if (request('product_id')) {
+                    $ok = $ok && $item->product_id == request('product_id');
+                }
+
+                return $ok;
+            }));
+        });
+
+        // إزالة العمليات التي أصبحت بلا عناصر بعد الفلترة
+        $transactions = $transactions->filter(fn($t) => $t->items->isNotEmpty());
+
+        if (request('summary')) {
+            return $this->bySubGroupSummary($transactions);
+        }
+
+        // تجميع العمليات حسب المجموعة الفرعية
+        $grouped = [];
+        foreach ($transactions as $transaction) {
+            foreach ($transaction->items as $item) {
+                $subGroup = $item->product?->item?->sub_group?->name ?? 'غير محدد';
+                $grouped[$subGroup][] = [
+                    'transaction' => $transaction,
+                    'item' => $item,
+                ];
+            }
+        }
+
+        $operation = Movement::find($id);
+        $url = 'bySubGroupDetail';
+        $urlPrint = 'bySubGroupDetailPrint';
+        $title = '-> حسب المجموعة الفرعية - تحليلي';
+        $movements = Movement::all();
+
+        return view('reports.movements.by_sub_group_detail', compact(
+            'operation',
+            'stores',
+            'transactions',
+            'users',
+            'employees',
+            'products',
+            'main_groups',
+            'sub_groups',
+            'url',
+            'urlPrint',
+            'title',
+            'movements',
+            'grouped'
+        ));
+    }
+
+    public function bySubGroupDetailPrint($id = null)
+    {
+        $users = User::all();
+        $employees = Employee::all();
+        $products = Product::all();
+        $stores = Store::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
+
+        $query = StoreTransaction::with([
+            'user',
+            'employee',
+            'FromStore',
+            'ToStore',
+            'items.product.item',
+            'items.unit.unit'
+        ]);
+
+        if (!request('from_date') && !request('to_date')) {
+            request()->merge(['from_date' => now()->toDateString()]);
+        }
+
+        // فلترة حسب المجموعات أو الصنف
+        if (request('main_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('main_group_id', request('main_group_id'));
+            });
+        }
+
+        if (request('sub_group_id')) {
+            $query->whereHas('items.product.item', function ($q) {
+                $q->where('sub_group_id', request('sub_group_id'));
+            });
+        }
+
+        if (request('product_id')) {
+            $query->whereHas('items', function ($q) {
+                $q->where('product_id', request('product_id'));
+            });
+        }
+
+        // فلترة المستخدم، الموظف، الحركة
+        if (request('user_id')) $query->where('user_id', request('user_id'));
+        if (request('employee_id')) $query->where('employee_id', request('employee_id'));
+        if ($id) $query->where('movement_id', $id);
+        if (request('move_id')) $query->where('movement_id', request('move_id'));
+
+        // فلترة التاريخ
+        if (request('from_date') && request('to_date')) {
+            $query->whereBetween('created_at', [
+                request('from_date'),
+                request('to_date') . ' 23:59:59'
+            ]);
+        } elseif (request('from_date')) {
+            $query->whereDate('created_at', request('from_date'));
+        }
+
+        $transactions = $query->get();
+
+        // تصفية داخلية للعناصر ضمن العمليات نفسها
+        $transactions->each(function ($transaction) {
+            $transaction->setRelation('items', $transaction->items->filter(function ($item) {
+                $ok = true;
+
+                if (request('main_group_id')) {
+                    $ok = $ok && $item->product?->item?->main_group_id == request('main_group_id');
+                }
+
+                if (request('sub_group_id')) {
+                    $ok = $ok && $item->product?->item?->sub_group_id == request('sub_group_id');
+                }
+
+                if (request('product_id')) {
+                    $ok = $ok && $item->product_id == request('product_id');
+                }
+
+                return $ok;
+            }));
+        });
+
+        // إزالة العمليات التي أصبحت بلا عناصر بعد الفلترة
+        $transactions = $transactions->filter(fn($t) => $t->items->isNotEmpty());
+
+        if (request('summary')) {
+            return $this->bySubGroupSummaryPrint($transactions);
+        }
+
+        // تجميع العمليات حسب المجموعة الفرعية
+        $grouped = [];
+        foreach ($transactions as $transaction) {
+            foreach ($transaction->items as $item) {
+                $subGroup = $item->product?->item?->sub_group?->name ?? 'غير محدد';
+                $grouped[$subGroup][] = [
+                    'transaction' => $transaction,
+                    'item' => $item,
+                ];
+            }
+        }
+
+        $operation = Movement::find($id);
+        $url = 'bySubGroupDetail';
+        $urlPrint = 'bySubGroupDetailPrint';
+        $title = '-> حسب المجموعة الفرعية - تحليلي';
+        $movements = Movement::all();
+
+        return view('reports.movements.print.by_sub_group_detail', compact(
+            'operation',
+            'stores',
+            'transactions',
+            'users',
+            'employees',
+            'products',
+            'main_groups',
+            'sub_groups',
+            'url',
+            'urlPrint',
+            'title',
+            'movements',
+            'grouped'
+        ));
+    }
+    public function bySubGroupSummary($transactions)
+    {
+        $summary = [];
+
+        foreach ($transactions as $transaction) {
+            // تحديد نوع الحركة
+            $isIn = !empty($transaction->to_store_id) && empty($transaction->from_store_id);
+
+            foreach ($transaction->items as $item) {
+                $main = $item->product?->item?->mainGroup?->name ?? 'غير محدد';
+                $sub  = $item->product?->item?->subGroup?->name ?? 'غير محدد';
+                $qty  = $item->count ?? 0;
+
+                if (!isset($summary[$main])) {
+                    $summary[$main] = [
+                        'subGroups' => [],
+                        'total' => 0,
+
+                    ];
+                }
+
+                if (!isset($summary[$main]['subGroups'][$sub])) {
+                    $summary[$main]['subGroups'][$sub] = [
+                        'total' => 0,
+
+                    ];
+                }
+
+
+                    $summary[$main]['subGroups'][$sub]['total'] += $qty;
+                    $summary[$main]['total'] += $qty;
+
+            }
+        }
+
+        $operation = Movement::find(request('move_id'));
+        $url = 'bySubGroupDetail';
+        $urlPrint = 'bySubGroupDetailPrint';
+        $title = '-> حسب المجموعة الفرعية - إجمالي';
+        $stores = Store::all();
+        $users = User::all();
+        $employees = Employee::all();
+        $products = Product::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', fn($q) => $q->where('department_id', 1))->get();
+        $movements = Movement::all();
+
+        return view('reports.movements.by_sub_group_summary', compact(
+            'summary',
+            'operation',
+            'stores',
+            'users',
+            'employees',
+            'products',
+            'main_groups',
+            'sub_groups',
+            'url',
+            'urlPrint',
+            'title',
+            'movements'
         ));
     }
 
 
-    public function byEmployeeSummary($transactions)
-{
-    $users = User::all();
-    $employees = Employee::with('item')->get();
-    $products = Product::all();
-    $stores = Store::all();
-    $url = 'byEmployeeDetail';
 
-    // نجمع حسب الموظف
-    $grouped = $transactions->groupBy('employee_id');
-    $summary = [];
 
-    foreach ($grouped as $employeeId => $employeeTransactions) {
-        $employeeName = $employeeTransactions->first()->employee?->item?->name ?? 'بدون اسم موظف';
+    public function bySubGroupSummaryPrint($transactions, $id = null)
+    {
+        $users = User::all();
+        $employees = Employee::all();
+        $products = Product::all();
+        $stores = Store::all();
+        $main_groups = MainGroup::where('department_id', 1)->get();
+        $sub_groups = SubGroup::whereHas('mainGroup', function ($q) {
+            $q->where('department_id', 1);
+        })->get();
 
-        // نجيب كل الأصناف التي تعامل معها الموظف (من خلال items)
-        $allItems = $employeeTransactions->flatMap->items;
+        // تصفية داخلية للعناصر قبل التجميع
+        $transactions->each(function ($transaction) {
+            $transaction->setRelation('items', $transaction->items->filter(function ($item) {
+                $ok = true;
 
-        // نجمع حسب الصنف
-        $itemsGrouped = $allItems->groupBy(function ($item) {
-            return $item->product?->item?->name ?? 'صنف غير معروف';
+                if (request('main_group_id')) {
+                    $ok = $ok && $item->product?->item?->main_group_id == request('main_group_id');
+                }
+
+                if (request('sub_group_id')) {
+                    $ok = $ok && $item->product?->item?->sub_group_id == request('sub_group_id');
+                }
+
+                if (request('product_id')) {
+                    $ok = $ok && $item->product_id == request('product_id');
+                }
+
+                return $ok;
+            }));
         });
 
-        foreach ($itemsGrouped as $itemName => $itemsSet) {
-            // نحدد العمليات الداخلة والخارجة لهذا الصنف
-            $inTransactions = $employeeTransactions->filter(function ($t) use ($itemName) {
-                return $t->to_store_id && $t->items->contains(function ($i) use ($itemName) {
-                        return ($i->product?->item?->name ?? '') === $itemName;
-                    });
-            });
+        // تجاهل أي عملية لم يبق فيها عناصر بعد الفلترة
+        $transactions = $transactions->filter(fn($t) => $t->items->isNotEmpty());
 
-            $outTransactions = $employeeTransactions->filter(function ($t) use ($itemName) {
-                return $t->from_store_id && $t->items->contains(function ($i) use ($itemName) {
-                        return ($i->product?->item?->name ?? '') === $itemName;
-                    });
-            });
+        // حساب الإجماليات حسب المجموعة الفرعية
+        $summary = [];
 
-            $totalIn = $inTransactions->flatMap->items
-                ->filter(fn($i) => ($i->product?->item?->name ?? '') === $itemName)
-                ->sum('count');
+        foreach ($transactions as $transaction) {
+            foreach ($transaction->items as $item) {
+                $subGroupName = $item->product?->item?->sub_group?->name ?? 'غير محدد';
+                $mainGroupName = $item->product?->item?->main_group?->name ?? '-';
+                $count = $item->count;
 
-            $totalOut = $outTransactions->flatMap->items
-                ->filter(fn($i) => ($i->product?->item?->name ?? '') === $itemName)
-                ->sum('count');
+                if (!isset($summary[$subGroupName])) {
+                    $summary[$subGroupName] = [
+                        'main_group' => $mainGroupName,
+                        'total_count' => 0,
+                    ];
+                }
 
-            $transactionCount = $employeeTransactions->filter(function ($t) use ($itemName) {
-                return $t->items->contains(function ($i) use ($itemName) {
-                    return ($i->product?->item?->name ?? '') === $itemName;
-                });
-            })->count();
-
-            $summary[] = [
-                'employee_name' => $employeeName,
-                'item_name' => $itemName,
-                'total_in' => $totalIn,
-                'total_out' => $totalOut,
-                'transaction_count' => $transactionCount,
-            ];
+                $summary[$subGroupName]['total_count'] += $count;
+            }
         }
+
+        $url = 'bySubGroupDetail';
+        $urlPrint = 'bySubGroupDetailPrint';
+        $title = '-> حسب المجموعة الفرعية - اجمالي';
+        $movements = Movement::all();
+
+        return view('reports.movements.print.by_sub_group_summary', compact(
+            'summary',
+            'stores',
+            'transactions',
+            'users',
+            'employees',
+            'products',
+            'main_groups',
+            'sub_groups',
+            'title',
+            'url',
+            'urlPrint',
+            'movements'
+        ));
     }
-    $title='-> حسب المستخدم - اجمالي';
-    $urlPrint = 'byEmployeeDetailPrint';
-    $movements=Movement::all();
-
-    return view('reports.movements.by_employee_summary', compact('summary',
-        'employees',
-        'transactions',
-        'users',
-        'url',
-        'stores',
-        'title',
-        'movements',
-        'urlPrint',
-        'products'));
-}
-    public function byEmployeeSummaryPrint($transactions)
-{
-    $users = User::all();
-    $employees = Employee::with('item')->get();
-    $products = Product::all();
-    $stores = Store::all();
-    $url = 'byEmployeeDetail';
-
-    // نجمع حسب الموظف
-    $grouped = $transactions->groupBy('employee_id');
-    $summary = [];
-
-    foreach ($grouped as $employeeId => $employeeTransactions) {
-        $employeeName = $employeeTransactions->first()->employee?->item?->name ?? 'بدون اسم موظف';
-
-        // نجيب كل الأصناف التي تعامل معها الموظف (من خلال items)
-        $allItems = $employeeTransactions->flatMap->items;
-
-        // نجمع حسب الصنف
-        $itemsGrouped = $allItems->groupBy(function ($item) {
-            return $item->product?->item?->name ?? 'صنف غير معروف';
-        });
-
-        foreach ($itemsGrouped as $itemName => $itemsSet) {
-            // نحدد العمليات الداخلة والخارجة لهذا الصنف
-            $inTransactions = $employeeTransactions->filter(function ($t) use ($itemName) {
-                return $t->to_store_id && $t->items->contains(function ($i) use ($itemName) {
-                        return ($i->product?->item?->name ?? '') === $itemName;
-                    });
-            });
-
-            $outTransactions = $employeeTransactions->filter(function ($t) use ($itemName) {
-                return $t->from_store_id && $t->items->contains(function ($i) use ($itemName) {
-                        return ($i->product?->item?->name ?? '') === $itemName;
-                    });
-            });
-
-            $totalIn = $inTransactions->flatMap->items
-                ->filter(fn($i) => ($i->product?->item?->name ?? '') === $itemName)
-                ->sum('count');
-
-            $totalOut = $outTransactions->flatMap->items
-                ->filter(fn($i) => ($i->product?->item?->name ?? '') === $itemName)
-                ->sum('count');
-
-            $transactionCount = $employeeTransactions->filter(function ($t) use ($itemName) {
-                return $t->items->contains(function ($i) use ($itemName) {
-                    return ($i->product?->item?->name ?? '') === $itemName;
-                });
-            })->count();
-
-            $summary[] = [
-                'employee_name' => $employeeName,
-                'item_name' => $itemName,
-                'total_in' => $totalIn,
-                'total_out' => $totalOut,
-                'transaction_count' => $transactionCount,
-            ];
-        }
-    }
-    $title='-> حسب المستخدم - اجمالي';
-    return view('reports.movements.print.by_employee_summary', compact('summary',
-        'employees',
-        'transactions',
-        'users',
-        'url',
-        'stores',
-        'title',
-        'products'));
-}
-
 
 
 
