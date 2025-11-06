@@ -51,11 +51,13 @@
                                 <div class="actions">
                                     <a href="{{ route('monitoring.show', $control->id) }}" class="btn btn-primary">عرض</a>
                                     <a href="{{ route('monitoring.edit', $control->id) }}" class="btn btn-worn">اكمال</a>
+                                    @if(Auth::user()->permissions('daily_monitoring-daily_monitoring')?->can_delete == 1)
                                     <form id="delete-form-{{ $control->id }}" action="{{ route('monitoring.destroy', $control->id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" class="btn btn-danger" onclick="confirmDelete({{ $control->id }})">حذف</button>
                                     </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
