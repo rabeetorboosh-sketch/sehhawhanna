@@ -50,7 +50,7 @@
                             <td>
                                 <div class="actions">
                                     <a href="{{ route('monitoring.show', $control->id) }}" class="btn btn-primary">عرض</a>
-                                    <a href="{{ route('monitoring.edit', $control->id) }}" class="btn btn-worn">اكمال</a>
+                                    <a href="{{ route('monitoring.edit', $control->id) }}" class="btn btn-wo  rn">اكمال</a>
                                     @if(Auth::user()->permissions('daily_monitoring-daily_monitoring')?->can_delete == 1)
                                     <form id="delete-form-{{ $control->id }}" action="{{ route('monitoring.destroy', $control->id) }}" method="POST" style="display:inline;">
                                         @csrf

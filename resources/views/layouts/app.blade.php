@@ -44,6 +44,16 @@
     </style>
     <!-- CSS / JS -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="manifest" href="{{asset('manifest.json')}} ">
+    <meta name="theme-color" content="#0d6efd">
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js');
+            });
+        }
+    </script>
 
 </head>
 <body class="font-sans antialiased">
