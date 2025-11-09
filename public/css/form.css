@@ -126,6 +126,10 @@ div#units-wrapper{
         background: white;
     }
 }
+.filter-buttons {
+    display: flex;
+    gap: 1px;
+}
 .tab
 {
     background: #cbcbcb;
@@ -133,6 +137,8 @@ div#units-wrapper{
     border-radius: 4px;
     cursor: pointer;
     text-wrap: nowrap;
+    width: 30%;
+    max-height: 25px;
 }
 .tab.active{
     background: #5c5454;

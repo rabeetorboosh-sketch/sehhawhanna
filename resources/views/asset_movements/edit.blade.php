@@ -37,7 +37,7 @@
                         <x-input-label for="movement_destination" :value="'وجهة النقل'" />
                         <x-text-input id="movement_destination" name="movement_destination" type="number" value="{{ $movement->movement_destination }}" class="mt-1 block w-full"/>
 
-                        <div class="flex justify-end mt-4">
+                        <div class="flex justify-end mt-4 btn">
                             <x-primary-button>تحديث</x-primary-button>
                         </div>
                     </div>

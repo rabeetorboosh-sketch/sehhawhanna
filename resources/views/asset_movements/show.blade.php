@@ -76,7 +76,7 @@
                 </div>
 
                 <div class="mt-6">
-                    <a href="{{ route('asset_movements.index') }}" class="btn-back">العودة للحركات</a>
+                    <a href="{{ route('asset_movements.index') }}" class="btn btn-back">العودة للحركات</a>
                 </div>
 
             </div>
