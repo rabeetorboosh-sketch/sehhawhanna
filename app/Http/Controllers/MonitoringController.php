@@ -273,7 +273,7 @@ class MonitoringController extends Controller
         $causers = $request->input('causer_id');
         $descriptions = $request->input('issue_text');
         $is_correct = $request->input('is_correct');
-        $oldImages = $request->input('old_images', []); // الصور القديمة القادمة من الفورم
+        $oldImages = $request->input('old_images', []);
         $branchId = auth()->user()->branch_id ?? 1;
 
         // نحذف البنود القديمة قبل التحديث

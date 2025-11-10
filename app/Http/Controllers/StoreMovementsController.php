@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\Store;
 use App\Models\StoreTransaction;
 use App\Models\SubGroup;
+use App\Models\SystemMovement;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -235,10 +236,7 @@ class StoreMovementsController extends Controller
     {
         $transaction = StoreTransaction::with(['items.product.item.units', 'employee.store'])->findOrFail($id);
 
-        $employees = (Auth::user()->isAdmin())
-            ? Employee::all()
-            : Employee::where('user_id', Auth::id())->get();
-
+        $employees = Employee::all();
         $products = Product::with(['item.subGroup', 'item.mainGroup', 'item.units'])->get();
         $sections = MainGroup::where('department_id', 1)->get();
         $groups = SubGroup::whereHas('mainGroup', function($q) {
@@ -275,11 +273,41 @@ class StoreMovementsController extends Controller
                 'user_id' => 'nullable|integer'
             ]);
 
-
             DB::beginTransaction();
 
             $report = StoreTransaction::findOrFail($id);
 
+            $data = [
+                'employee_id' => $request->employee_id,
+                'description' => $request->description,
+                'from_store_id' => $request->employee_store_id,
+                'to_store_id' => $request->store_id,
+                'movement_id' => $request->movement_id,
+                'product_id' => $request->product_id,
+            ];
+
+            // سجل تغييرات الحقول العامة
+            foreach ($data as $field => $val) {
+                if ($field==='product_id')
+                    continue;
+                $oldValue = is_array($report->$field) ? json_encode($report->$field, JSON_UNESCAPED_UNICODE) : $report->$field;
+                $newValue = is_array($val) ? json_encode($val, JSON_UNESCAPED_UNICODE) : $val;
+
+                if ($oldValue != $newValue) {
+                    SystemMovement::create([
+                        'field_name'   => $field,
+                        'old_value'    => $oldValue,
+                        'new_value'    => $newValue,
+                        'invoice_id'   => $report->id,
+                        'invoice_type' => $report->movement->name,
+                        'user_id'      => Auth::id(),
+                        'modified_at'  => now(),
+                    ]);
+                }
+            }
+
+
+            // تحديث بيانات التقرير الأساسية
             if ($request->direction == 0) {
                 $report->update([
                     'user_id' => Auth::id(),
@@ -302,27 +330,78 @@ class StoreMovementsController extends Controller
                 ]);
             }
 
-            // clear old items
+            // جلب الأصناف القديمة قبل حذفها
+            $oldItems = DB::table('store_transactions_items')
+                ->where('store_transactions_id', $report->id)
+                ->get();
+
+            // حذف الأصناف القديمة
             DB::table('store_transactions_items')->where('store_transactions_id', $report->id)->delete();
 
-            // insert new items
-            foreach ($request->product_id as $productId) {
-                if (!empty($productId['item_count'])) {
+            // إدخال الأصناف الجديدة + تسجيل حركة التعديل لكل صنف
+            foreach ($request->product_id as $product) {
+                if (!empty($product['item_count'])) {
                     DB::table('store_transactions_items')->insert([
                         'store_transactions_id' => $report->id,
-                        'product_id' => $productId['id'],
-                        'product_unit_id' => $productId['unit'],
-                        'count' => $productId['item_count'],
+                        'product_id' => $product['id'],
+                        'product_unit_id' => $product['unit'],
+                        'count' => $product['item_count'],
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
+
+                    // التحقق من وجود الصنف سابقًا لتسجيل التغيير بدقة
+                    $oldItem = $oldItems->firstWhere('product_id', $product['id']);
+
+                    if ($oldItem) {
+                        // سجل التغييرات في الكمية أو الوحدة
+                        if ($oldItem->count != $product['item_count'] || $oldItem->product_unit_id != $product['unit']) {
+                            SystemMovement::create([
+                                'field_name'   => 'product_update',
+                                'old_value'    => "Product: {$oldItem->product_id}, Count: {$oldItem->count}, Unit: {$oldItem->product_unit_id}",
+                                'new_value'    => "Product: {$product['id']}, Count: {$product['item_count']}, Unit: {$product['unit']}",
+                                'invoice_id'   => $report->id,
+                                'invoice_type' => $report->movement->name,
+                                'user_id'      => Auth::id(),
+                                'modified_at'  => now(),
+                            ]);
+                        }
+                    } else {
+                        // صنف جديد تمت إضافته
+                        SystemMovement::create([
+                            'field_name'   => 'product_add',
+                            'old_value'    => null,
+                            'new_value'    => "Product: {$product['id']}, Count: {$product['item_count']}, Unit: {$product['unit']}",
+                            'invoice_id'   => $report->id,
+                            'invoice_type' => $report->movement->name,
+                            'user_id'      => Auth::id(),
+                            'modified_at'  => now(),
+                        ]);
+                    }
                 }
             }
+
+            // تحقق من الأصناف التي تم حذفها
+            foreach ($oldItems as $oldItem) {
+                $exists = collect($request->product_id)->firstWhere('id', $oldItem->product_id);
+                if (!$exists) {
+                    SystemMovement::create([
+                        'field_name'   => 'product_delete',
+                        'old_value'    => "Product: {$oldItem->product_id}, Count: {$oldItem->count}, Unit: {$oldItem->product_unit_id}",
+                        'new_value'    => null,
+                        'invoice_id'   => $report->id,
+                        'invoice_type' => $report->movement->name,
+                        'user_id'      => Auth::id(),
+                        'modified_at'  => now(),
+                    ]);
+                }
+            }
+
+            // الصور
             if ($request->hasFile('images')) {
                 $report->media()->delete();
                 foreach ($request->file('images') as $image) {
                     $path = $image->store('uploads/transactions', 'public');
-
                     Media::create([
                         'item_id' => $report->id,
                         'url'     => $path,
@@ -330,11 +409,15 @@ class StoreMovementsController extends Controller
                     ]);
                 }
             }
+
             DB::commit();
 
-            return redirect()->route('storeMovements.index',$request->movement_id)->with('success', 'تم تعديل الحركة بنجاح.');
+            return redirect()
+                ->route('storeMovements.index', $request->movement_id)
+                ->with('success', 'تم تعديل الحركة بنجاح وتم تسجيل حركة لكل صنف.');
 
         } catch (\Exception $e) {
+
             DB::rollBack();
             Log::error('Update error: ' . $e->getMessage(), [
                 'exception' => $e,
@@ -345,6 +428,7 @@ class StoreMovementsController extends Controller
                 ->withErrors(['error' => 'حدث خطأ أثناء التعديل. حاول مرة أخرى.']);
         }
     }
+
 
     public function destroy($id)
     {

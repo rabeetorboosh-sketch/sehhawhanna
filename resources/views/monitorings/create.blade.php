@@ -7,9 +7,9 @@
     @if($existingReport)
         <script>
             if(confirm("لديك تقرير بنفس اليوم. هل تريد انشاء تقرير اخر؟")) {
-                // المستخدم ضغط موافق، يكمل العملية
+
             } else {
-                // المستخدم ضغط إلغاء، نرجعه للصفحة السابقة أو لصفحة التقارير
+
                 window.location.href = "{{ route('monitoring.index') }}";
             }
         </script>
@@ -18,7 +18,6 @@
     <div class="sections-bar">
         <div class="sections-container">
             @foreach($departments as $section)
-
                 <button class="section-lbl btn btn-primary" value="{{$section->id}}">
                     {{$section->name}}      <i class="fas fa-list"></i>
                 </button>

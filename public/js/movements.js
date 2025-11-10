@@ -138,8 +138,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // id مخزن في data-store الخاص بالخيار المحدد
         const selectedOption = empSelect.options[empSelect.selectedIndex];
-        const empStoreId = selectedOption ? (selectedOption.dataset.store || '') : '';
 
+        const empStoreId = selectedOption ? (selectedOption.dataset.store || '') : '';
+        console.log(empStoreId);
         // نبحث عن حقل employee_store داخل نفس الفورم إن وجد، أو أول عنصر من النوع الموجود
         const form = empSelect.closest('form') || document;
         const empStoreSelect = form.querySelector('.employee-store-select');
