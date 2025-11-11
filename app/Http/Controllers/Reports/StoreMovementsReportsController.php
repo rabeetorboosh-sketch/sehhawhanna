@@ -309,7 +309,10 @@ class StoreMovementsReportsController extends Controller
 
     }
     public function byStoreDetail($id = 3)
-    {$users = User::all();
+    {
+
+
+        $users = User::all();
         $employees = Employee::all();
         $products = Product::all();
         $stores = request('store_id') ? Store::where('id', request('store_id'))->get() : Store::all();

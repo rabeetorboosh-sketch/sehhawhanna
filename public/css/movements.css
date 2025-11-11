@@ -302,3 +302,18 @@ button:hover{
 .btn-additional{
     background: radial-gradient(#27966d, #148f6e);
 }
+.summary-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+.summary-table th, .summary-table td {
+    border: 1px solid #ddd;
+    padding: 6px;
+}
+.summary-table th {
+    background-color: #f3f3f3;
+    font-weight: bold;
+}

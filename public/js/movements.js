@@ -50,44 +50,100 @@ document.querySelectorAll('.section-lbl').forEach(button => {
     });
 });
 
-    function sumall(input){
-
-
+function sumall(input) {
     const parent = input.closest('[class*="grp"]');
     if (!parent) return;
-
 
     const groupClass = Array.from(parent.classList).find(cls => cls.startsWith('grp'));
     if (!groupClass) return;
     const groupId = groupClass.replace('grp', '');
+
     let Stotal = 0;
     let PHtotal = 0;
+
+    // اجمع الكميات من حقول الكمبيوتر
     document.querySelectorAll(`.S.grp${groupId} .count`).forEach(el => {
-    const val = parseFloat(el.value);
-    if (!isNaN(val)) {
-        Stotal += val;
-}
-});
-        document.querySelectorAll(`.PH.grp${groupId} .count`).forEach(el => {
-            const val = parseFloat(el.value);
-            if (!isNaN(val)) {
-                PHtotal += val;
+        const val = parseFloat(el.value);
+        if (!isNaN(val)) Stotal += val;
+    });
+
+    // اجمع الكميات من حقول الجوال
+    document.querySelectorAll(`.PH.grp${groupId} .count`).forEach(el => {
+        const val = parseFloat(el.value);
+        if (!isNaN(val)) PHtotal += val;
+    });
+
+    // تحديث الإجماليات العامة
+    const summaryDivPC = document.querySelector(`.summaryPC`);
+    const summaryDivPhone = document.querySelector(`.summaryPhone`);
+    if (summaryDivPC) summaryDivPC.textContent = `الإجمالي: ${Stotal}`;
+    if (summaryDivPhone) summaryDivPhone.textContent = `الإجمالي: ${PHtotal}`;
+
+    // -----------------------------
+    // 🔹 تحديث جدول الملخص للكمبيوتر
+    // -----------------------------
+    const tablePC = document.getElementById('group-summary-pc');
+    if (tablePC) {
+        const tbody = tablePC.querySelector('tbody');
+        tbody.innerHTML = ''; // إعادة بناء الجدول من الصفر
+        tablePC.style.display = 'table';
+
+        const groups = document.querySelectorAll('.S[class*="grp"]');
+        const groupTotals = {};
+
+        groups.forEach(g => {
+            const grpId = Array.from(g.classList).find(c => c.startsWith('grp')).replace('grp', '');
+            const groupName = document.querySelector(`.group-lbl[value="${grpId}"]`)?.textContent.trim() || 'غير معروف';
+            const unit = g.querySelector('.unit-select')?.selectedOptions[0]?.textContent || '';
+            let total = 0;
+            document.querySelectorAll(`.S.grp${grpId} .count`).forEach(el => {
+                const val = parseFloat(el.value);
+                if (!isNaN(val)) total += val;
+            });
+            if (total > 0) {
+                groupTotals[grpId] = { name: groupName, unit: unit, total: total };
             }
         });
 
-    // عرض المجموع داخل الديف الخاص بالمجموعة
-    const summaryDivPC = document.querySelector(`.summaryPC`);
-    const summaryDivPhone = document.querySelector(`.summaryPhone`);
-    if (summaryDivPC) {
-    summaryDivPC.textContent = `الإجمالي: ${Stotal}`;
-}
-    if(summaryDivPhone){
+        Object.values(groupTotals).forEach(g => {
+            const row = `<tr><td>${g.name}</td><td>${g.unit}</td><td>${g.total}</td></tr>`;
+            tbody.insertAdjacentHTML('beforeend', row);
+        });
+    }
 
-    summaryDivPhone.textContent = `الإجمالي: ${PHtotal}`;
+    // -----------------------------
+    // 🔹 تحديث جدول الملخص للجوال
+    // -----------------------------
+    const tablePH = document.getElementById('group-summary-phone');
+    if (tablePH) {
+        const tbody = tablePH.querySelector('tbody');
+        tbody.innerHTML = '';
+        tablePH.style.display = 'table';
 
+        const groups = document.querySelectorAll('.PH[class*="grp"]');
+        const groupTotals = {};
+
+        groups.forEach(g => {
+            const grpId = Array.from(g.classList).find(c => c.startsWith('grp')).replace('grp', '');
+            const groupName = document.querySelector(`.group-lbl[value="${grpId}"]`)?.textContent.trim() || 'غير معروف';
+            const unit = g.querySelector('.unit-select')?.selectedOptions[0]?.textContent || '';
+            let total = 0;
+            document.querySelectorAll(`.PH.grp${grpId} .count`).forEach(el => {
+                const val = parseFloat(el.value);
+                if (!isNaN(val)) total += val;
+            });
+            if (total > 0) {
+                groupTotals[grpId] = { name: groupName, unit: unit, total: total };
+            }
+        });
+
+        Object.values(groupTotals).forEach(g => {
+            const row = `<tr><td>${g.name}</td><td>${g.unit}</td><td>${g.total}</td></tr>`;
+            tbody.insertAdjacentHTML('beforeend', row);
+        });
+    }
 }
 
-}
 document.addEventListener('DOMContentLoaded', function() {
 
     function updateDefaultForSelect(selectEl) {

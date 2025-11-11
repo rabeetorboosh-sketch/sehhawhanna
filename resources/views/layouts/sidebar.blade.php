@@ -961,6 +961,11 @@
                             </ul>
                         </li>
                     @endif
+                @if(true)
+                                <li><a href="{{ route('SystemMovement.index') }}">  حرحكات النظام  </a></li>
+
+
+                    @endif
             </ul>
         </li>
 

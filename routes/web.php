@@ -441,6 +441,7 @@ Route::middleware('auth')->group(function () {
     Route::get('report/customerRequest/byProduct/detail', [CustomersRequestsReportController::class, 'byProductDetail'])->name('customerRequests.byProductDetail');
     Route::get('report/customerRequest/byOperation/detail', [CustomersRequestsReportController::class, 'byOperationDetail'])->name('customerRequests.byOperationDetail');
     Route::get('report/customerRequest/byCustomer/detail', [CustomersRequestsReportController::class, 'byCustomerDetail'])->name('customerRequests.byCustomerDetail');
+    Route::get('report/SystemMovement', [MainController::class, 'SystemMovementIndex'])->name('SystemMovement.index');
 
 
 

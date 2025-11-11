@@ -64,6 +64,19 @@
                 </div>
             </div>
             <div class="summaryPC">الإجمالي: 0</div>
+            <!-- جدول ملخص الكميات -->
+            <table id="group-summary-pc" class="summary-table" style="width:100%; margin-top:15px; display:none;">
+                <thead>
+                <tr style="background:#f0f0f0;">
+                    <th>المجموعة الفرعية</th>
+                    <th>الوحدة</th>
+                    <th>الكمية الإجمالية</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+
             <input type="hidden" name="stores_number" value="{{$movement->stores_number}}">
 
 
@@ -192,6 +205,19 @@
                     </div>
                 </div>
                 <div class=" summaryPhone"> الاجمالي </div>
+
+                <!-- جدول ملخص الكميات للجوال -->
+                <table id="group-summary-phone" class="summary-table" style="width:100%; margin-top:15px; display:none;">
+                    <thead>
+                    <tr style="background:#f0f0f0;">
+                        <th>المجموعة الفرعية</th>
+                        <th>الوحدة</th>
+                        <th>الكمية الإجمالية</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
             </div>
 
             <input type="hidden" name="stores_number" value="{{$movement->stores_number}}">
