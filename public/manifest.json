@@ -23,13 +23,13 @@
     "screenshots": [
         {
             "src": "/screenshots/phone.png",
-            "sizes": "720x1600",
+            "sizes": "720x1520",
             "type": "image/png",
             "form_factor": "narrow"
         },
         {
             "src": "/screenshots/pc.png",
-            "sizes": "1920x1080",
+            "sizes": "1600x793",
             "type": "image/png",
             "form_factor": "wide"
         }
