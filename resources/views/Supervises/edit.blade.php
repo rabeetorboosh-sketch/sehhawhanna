@@ -93,9 +93,9 @@
 
             {{-- الصور --}}
             <div class="form-group image-inputs" id="image-inputs">
-                <label>الصورة</label>
+                <label class="btn" for="image">  <i class="fa-solid fa-camera"></i></label>
                 <input type="file" multiple accept="image/*" capture="environment"
-                       name="images[]" id="image">
+                       name="images[]" id="image" style="display: none">
                 <button class="btn btn-primary" type="button" onclick="addImageInput()">+ إضافة صورة</button>
 
                 {{-- عرض الصور الحالية --}}
