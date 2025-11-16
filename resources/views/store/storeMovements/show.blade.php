@@ -23,6 +23,8 @@
                 <p><strong>الوصف:</strong> {{ $transaction->description ?? '-' }}</p>
                 <p><strong>الحالة:</strong> {{ $transaction->status }}</p>
                 <p><strong>تاريخ الإنشاء:</strong> {{ $transaction->created_at }}</p>
+
+                <p><strong>الموقع   :</strong> {{ $transaction->empSignature?->item?->name??'لم يتم التوقيع من الموظف' }}</p>
                 <div>
 
                     @if(isset($transaction->media) && $transaction->media->isNotEmpty())

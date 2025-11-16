@@ -317,3 +317,13 @@ button:hover{
     background-color: #f3f3f3;
     font-weight: bold;
 }
+/* إخفاء زر إظهار الباسوورد في كروم وإيدج */
+input[type="password"]::-webkit-textfield-decoration-container { display: none !important; }
+input[type="password"]::-webkit-credentials-auto-fill-button { display: none !important; }
+input[type="password"]::-webkit-password-toggle { display: none !important; }
+
+/* إخفاءه في متصفح إيدج القديم */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none !important;
+}

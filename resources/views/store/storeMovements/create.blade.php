@@ -88,6 +88,7 @@
                         @foreach($employees as $emp)
                             <option value="{{ $emp->id }}"
                                     data-store="{{ $emp->store?->id ?? '' }}"
+                                    data-signature="{{ $emp->signature ?? '' }}"
                                 {{ old('employee_id') == $emp->id ? 'selected' : '' }}>
                                 {{ $emp->item?->name }}
                             </option>
@@ -129,7 +130,7 @@
                         </div>
 
                         <div class="set_default" {{ isset($defaults['item']) ? 'style=display:none;' : '' }}>
-                            <label>وضع ك افتراضي </label>
+                            <label>وضع كافتراضي </label>
                             <!-- أضفنا name حتى يتم إرسالها مع الفورم إذا اختار المستخدم ذلك -->
                             <input type="checkbox" name="set_default" value="1" >
                         </div>
@@ -146,7 +147,14 @@
                 <input type="file" accept="image/*" name="images[]" id="image" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
             </div>
 
-
+            <div class="mb-4">
+                <label for="signature" class="block text-sm font-medium text-gray-700">التوقيع</label>
+                <input type="password"
+                       name="signature"
+                       id="signature"
+                       autocomplete="new-password"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+            </div>
             <button type="submit" class="bg-green-500 px-4 py-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-offset-2 transition duration-200">
                 <i class="fas fa-save"></i>    حفظ
 
@@ -220,6 +228,8 @@
 
             </div>
 
+
+
             <input type="hidden" name="stores_number" value="{{$movement->stores_number}}">
             @if($movement->stores_number >1)
                 <div class="mb-4" style="display: inline-block;">
@@ -242,7 +252,7 @@
                         </div>
 
                         <div class="set_default" {{ isset($defaults['item'])  ? 'style=display:none;' : '' }}>
-                            <label>وضع ك افتراضي </label>
+                            <label>وضع كافتراضي </label>
                             <input type="checkbox" name="set_default" value="1" class="checkbox">
                         </div>
                     </div>
@@ -257,6 +267,7 @@
                         @foreach($employees as $emp)
                             <option value="{{ $emp->id }}"
                                     data-store="{{ $emp->store?->id ?? '' }}"
+                                    data-signature="{{ $emp->signature ?? '' }}"
                                 {{ old('employee_id') == $emp->id ? 'selected' : '' }}>
                                 {{ $emp->item?->name }}
                             </option>
@@ -283,19 +294,26 @@
                 <label for="image" class="block text-sm font-medium text-gray-700">الصورة</label>
                 <input type="file" accept="image/*" capture="image" name="image" id="image" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
             </div>
-
+            <div class="mb-4">
+                <label for="signature" class="block text-sm font-medium text-gray-700">التوقيع</label>
+                <input type="password"
+                       name="signature"
+                       id="signature"
+                       autocomplete="new-password"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+            </div>
 <div class="row-3">
-    <button type="submit" class="btn btn-save">
-        <i class="fas fa-save"></i>    حفظ
-
-    </button>
     <a href="{{ url()->previous() }}" class="btn btn-worn" style="margin-left: 10px;">
         <i class="fas fa-arrow-left"></i> إلغاء
     </a>
+    <button type="submit" class="btn btn-save">
+        <i class="fas fa-save"></i>    حفظ
+    </button>
 </div>
 
         </form>
     </div>
+
 
     <script src="{{asset('js/movements.js')}}"></script>
 </x-app-layout>

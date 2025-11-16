@@ -35,6 +35,7 @@ class EmployeeController extends Controller
     public function store(Request $request) {
 
 
+
         DB::transaction(function () use ($request ) {
             $item = Item::create([
                 'name'          => $request['name'],
@@ -53,6 +54,7 @@ class EmployeeController extends Controller
                 'phone' => $request['phone'],
                 'email' => $request['email'],
                 'id_number' => $request['id_number'],
+                'signature' => $request['signature'],
                 'id_expiry_date'=> $request['id_expiry_date'],
                 'branch_id'=>1,
                 'type_id'=>$request['type_id']
@@ -65,6 +67,7 @@ class EmployeeController extends Controller
 
     public function edit($id) {
         $employee = Employee::with('item')->findOrFail($id);
+
         $mainGroups   = MainGroup::with('department')
             ->where('department_id', 4)
             ->get();
@@ -96,6 +99,7 @@ class EmployeeController extends Controller
                 'phone' => $request['phone'],
                 'email' => $request['email'],
                 'id_number' => $request['id_number'],
+                'signature' => $request['signature'],
                 'id_expiry_date'=> $request['id_expiry_date'],
                 'type_id'=>$request['type_id'],
 

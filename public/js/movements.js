@@ -1,5 +1,5 @@
 document.querySelectorAll('.section-lbl').forEach(button => {
-    button.addEventListener('click', function(e) {
+    button.addEventListener('click', function (e) {
 
         var grp = document.querySelectorAll('.group-lbl');
 
@@ -19,10 +19,8 @@ document.querySelectorAll('.section-lbl').forEach(button => {
 });
 
 
-
-
-    document.querySelectorAll('.group-lbl').forEach(button => {
-    button.addEventListener('click', function(e) {
+document.querySelectorAll('.group-lbl').forEach(button => {
+    button.addEventListener('click', function (e) {
         var itm = document.querySelectorAll('.item-container');
 
         itm.forEach(input => {
@@ -42,7 +40,7 @@ document.querySelectorAll('.section-lbl').forEach(button => {
     });
 });
 
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.count').forEach(input => {
         input.addEventListener('input', function () {
             sumall(input);
@@ -101,7 +99,7 @@ function sumall(input) {
                 if (!isNaN(val)) total += val;
             });
             if (total > 0) {
-                groupTotals[grpId] = { name: groupName, unit: unit, total: total };
+                groupTotals[grpId] = {name: groupName, unit: unit, total: total};
             }
         });
 
@@ -133,7 +131,7 @@ function sumall(input) {
                 if (!isNaN(val)) total += val;
             });
             if (total > 0) {
-                groupTotals[grpId] = { name: groupName, unit: unit, total: total };
+                groupTotals[grpId] = {name: groupName, unit: unit, total: total};
             }
         });
 
@@ -144,7 +142,7 @@ function sumall(input) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
     function updateDefaultForSelect(selectEl) {
         // نحاول إيجاد default-wrapper داخل نفس الفورم (أو الوثيقة إذا لم يوجد)
@@ -176,12 +174,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // استهدف كل العناصر التي تحمل الصنف store-select (نسخة الكمبيوتـر ونسخة الموبايل)
-    document.querySelectorAll('.store-select').forEach(function(sel) {
+    document.querySelectorAll('.store-select').forEach(function (sel) {
         // تحديث مبدئي عند تحميل الصفحة
         updateDefaultForSelect(sel);
 
         // استمع لتغيّر الاختيار
-        sel.addEventListener('change', function() {
+        sel.addEventListener('change', function () {
             updateDefaultForSelect(sel);
         });
     });
@@ -212,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // فأرِق أيّ مستمعين آخرين
-        empStoreSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        empStoreSelect.dispatchEvent(new Event('change', {bubbles: true}));
     }
 
     // ربط كل الـ selects اللي تحمل الصنف employee-select
@@ -225,5 +223,35 @@ document.addEventListener('DOMContentLoaded', function () {
             syncEmployeeStore(sel);
         });
     });
+
+});
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+    // جميع الفورمات (PC + Phone)
+    const forms = document.querySelectorAll("form");
+
+    forms.forEach(form => {
+    form.addEventListener("submit", function (e) {
+
+    const employeeSelect = form.querySelector(".employee-select");
+    const signatureInput = form.querySelector("#signature");
+
+    if (!employeeSelect || !signatureInput) return;
+
+    const selectedOption = employeeSelect.options[employeeSelect.selectedIndex];
+    const employeeSignature = selectedOption.dataset.signature?.trim() || "";
+    const userSignature = signatureInput.value.trim();
+
+    // السماح إذا الحقل فاضي
+    if (userSignature === "") return;
+
+    // مقارنة التوقيع
+    if (userSignature !== employeeSignature) {
+    e.preventDefault();
+    alert("❌ التوقيع غير صحيح. يرجى التأكد من إدخال التوقيع المطابق للموظف.");
+}
+});
+});
 
 });

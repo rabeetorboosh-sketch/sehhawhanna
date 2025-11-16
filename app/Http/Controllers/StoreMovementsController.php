@@ -106,7 +106,8 @@ class StoreMovementsController extends Controller
                 'product_id' => 'required|array',
                 'store_id' => 'nullable',
                 'employee_store_id' => 'nullable',
-                'user_id' => 'nullable|integer'
+                'user_id' => 'nullable|integer',
+                'signature' => 'nullable'
             ]);
 
 
@@ -123,6 +124,7 @@ class StoreMovementsController extends Controller
                     'from_store_id' => $request->employee_store_id,
                     'to_store_id' =>  $request->store_id,
                     'movement_id' => $request->movement_id,
+                    'signature' => $request->signature,
                     'status' => 'pending',
                 ]);
             }else{
@@ -134,6 +136,7 @@ class StoreMovementsController extends Controller
                     'from_store_id' =>  $request->store_id,
                     'to_store_id' => $request->employee_store_id,
                     'movement_id' => $request->movement_id,
+                    'signature' => $request->signature,
                     'status' => 'pending',
                 ]);
             }
@@ -213,7 +216,7 @@ class StoreMovementsController extends Controller
 
     public function show( $id)
     {
-        $transaction=StoreTransaction::with('items.unit.unit','media')->findOrFail($id);
+        $transaction=StoreTransaction::with('items.unit.unit','media','empSignature')->findOrFail($id);
 
         return view('store.storeMovements.show', compact('transaction'));
     }
@@ -270,7 +273,8 @@ class StoreMovementsController extends Controller
                 'product_id' => 'required|array',
                 'store_id' => 'nullable',
                 'employee_store_id' => 'nullable',
-                'user_id' => 'nullable|integer'
+                'user_id' => 'nullable|integer',
+                'signature' => 'nullable'
             ]);
 
             DB::beginTransaction();
@@ -284,6 +288,7 @@ class StoreMovementsController extends Controller
                 'to_store_id' => $request->store_id,
                 'movement_id' => $request->movement_id,
                 'product_id' => $request->product_id,
+                'signature' => $request->signature,
             ];
 
             // سجل تغييرات الحقول العامة
@@ -316,6 +321,7 @@ class StoreMovementsController extends Controller
                     'from_store_id' => $request->employee_store_id,
                     'to_store_id' => $request->store_id,
                     'movement_id' => $request->movement_id,
+                    'signature' => $request->signature,
                     'status' => 'pending',
                 ]);
             } else {
@@ -326,6 +332,7 @@ class StoreMovementsController extends Controller
                     'from_store_id' => $request->store_id,
                     'to_store_id' => $request->employee_store_id,
                     'movement_id' => $request->movement_id,
+                    'signature' => $request->signature,
                     'status' => 'pending',
                 ]);
             }

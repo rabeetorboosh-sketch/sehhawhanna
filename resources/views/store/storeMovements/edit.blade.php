@@ -92,6 +92,7 @@
                         @foreach($employees as $emp)
                             <option value="{{ $emp->id }}"
                                     data-store="{{ $emp->store?->id ?? '' }}"
+                                    data-signature="{{ $emp->signature ?? '' }}"
                                 {{ old('employee_id', $transaction->employee_id) == $emp->id ? 'selected' : '' }}>
                                 {{ $emp->item?->name }}
                             </option>
@@ -150,7 +151,14 @@
                 <input type="file" accept="image/*" name="images[]" id="image"
                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
             </div>
-
+            <div class="mb-4">
+                <label for="signature" class="block text-sm font-medium text-gray-700">التوقيع</label>
+                <input type="password"
+                       name="signature"
+                       id="signature"
+                       autocomplete="new-password"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+            </div>
             <button type="submit" class="bg-green-500 px-4 py-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-offset-2 transition duration-200">
                 <i class="fas fa-save"></i> تحديث
             </button>
@@ -258,6 +266,7 @@
                         @foreach($employees as $emp)
                             <option value="{{ $emp->id }}"
                                     data-store="{{ $emp->store?->id ?? '' }}"
+                                    data-signature="{{ $emp->signature ?? '' }}"
                                 {{ old('employee_id', $transaction->employee_id) == $emp->id ? 'selected' : '' }}>
                                 {{ $emp->item?->name }}
                             </option>
@@ -297,6 +306,15 @@
                 @endif
 
                 <input type="file" accept="image/*" name="images[]" id="image"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+            </div>
+
+            <div class="mb-4">
+                <label for="signature" class="block text-sm font-medium text-gray-700">التوقيع</label>
+                <input type="password"
+                       name="signature"
+                       id="signature"
+                       autocomplete="new-password"
                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
             </div>
 

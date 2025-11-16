@@ -18,6 +18,7 @@ class StoreTransaction extends Model
         'movement_id',
         'description',
         'status',
+        'signature',
     ];
 
     /**
@@ -34,6 +35,10 @@ class StoreTransaction extends Model
     public function employee()
     {
         return $this->belongsTo(Employee::class);
+    }
+    public function empSignature()
+    {
+        return $this->belongsTo(Employee::class,'signature' ,'signature');
     }
 
     /**

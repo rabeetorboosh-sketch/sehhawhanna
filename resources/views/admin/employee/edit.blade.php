@@ -50,6 +50,10 @@
                     <input name="id_number" type="text" value="{{ $employee->id_number }}" autocomplete="off">
                 </div>
                 <div class="form-group">
+                    <label>الــــتـــوقــــيــع  </label>
+                    <input name="signature" type="text" value="{{ $employee->signature }}"  autocomplete="off">
+                </div>
+                <div class="form-group">
                     <label>تاريخ انتهاء الهوية</label>
                     <input type="date" name="id_expiry_date" value="{{ $employee->id_expiry_date }}">
                 </div>

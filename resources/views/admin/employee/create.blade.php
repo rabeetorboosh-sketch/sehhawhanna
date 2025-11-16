@@ -49,6 +49,10 @@
                     <input name="id_number" type="text" autocomplete="off">
                 </div>
                 <div class="form-group">
+                    <label>الــــتـــوقــــيــع  </label>
+                    <input name="signature" type="text" autocomplete="off">
+                </div>
+                <div class="form-group">
                     <label>تاريخ انتهاء الهوية</label>
                     <input type="date" name="id_expiry_date">
                 </div>

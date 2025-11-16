@@ -17,6 +17,7 @@ class Employee extends Model
         'id_expiry_date',
         'branch_id',
         'type_id',
+        'signature',
     ];
 
     // علاقة الموظف بالمجموعة الرئيسية
