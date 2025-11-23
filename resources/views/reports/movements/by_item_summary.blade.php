@@ -21,15 +21,19 @@
                 </tr>
                 </thead>
                 <tbody>
+
                 @foreach($summary as $productName => $units)
                     @foreach($units as $unitName => $total)
+
                         <tr>
                             <td>{{ $productName }}</td>
                             <td>{{ $unitName }}</td>
-                            <td>{{ $total }}</td>
+
+                            <td>{{  $total['count'] }}</td>
                         </tr>
                     @endforeach
                 @endforeach
+
                 </tbody>
             </table>
         </div>

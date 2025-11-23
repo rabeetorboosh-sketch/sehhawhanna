@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{{ asset('css/table.css') }}">
 
     <style>
-        .emp-title {
+        .store-title {
             font-size: 1.4rem;
             font-weight: bold;
             margin: 25px 0 10px;
@@ -14,7 +14,6 @@
             border-right: 4px solid #cbd5e1;
             border-radius: 8px;
         }
-
         .group-row {
             display: flex;
             flex-wrap: wrap;
@@ -25,13 +24,11 @@
             margin-bottom: 8px;
             border: 1px solid #e2e8f0;
         }
-
         .group-name {
             width: 150px;
             font-weight: bold;
             color: #0f172a;
         }
-
         .item-box {
             padding: 10px;
             background: #ffffff;
@@ -42,26 +39,22 @@
             text-align: center;
             box-shadow: 0 1px 3px #00000010;
         }
-
         .item-title {
             font-weight: bold;
             margin-bottom: 6px;
             font-size: 1rem;
             color: #1e293b;
         }
-
         .item-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.85rem;
         }
-
         .item-table td, .item-table th {
             border: 1px solid #e2e8f0;
             padding: 4px 6px;
             text-align: center;
         }
-
         .group-total {
             margin-right: auto;
             padding: 8px 14px;
@@ -74,12 +67,12 @@
         }
     </style>
 
-    @foreach($summary as $emp)
-        <div class="emp-title">
-            {{ $emp['employee_name'] }}
+    @foreach($summary as $store)
+        <div class="store-title">
+            {{ $store['store_name'] }}
         </div>
 
-        @foreach($emp['groups'] as $g)
+        @foreach($store['groups'] as $g)
             <div class="group-row">
 
                 <div class="group-name">
@@ -114,9 +107,9 @@
                                 <th>صافي</th>
                             </tr>
                             <tr>
-                                <td>{{  $g['total_in'] }}</td>
-                                <td>{{  $g['total_out']  }}</td>
-                                <td>{{ $g['group_total']  }}</td>
+                                <td>{{ $g['total_in'] }}</td>
+                                <td>{{ $g['total_out'] }}</td>
+                                <td>{{ $g['group_total'] }}</td>
                             </tr>
                         </table>
                     </div>

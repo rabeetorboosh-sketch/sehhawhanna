@@ -112,7 +112,9 @@
                     <label>  طريقة العرض </label>
                     <select name="summary">
                         <option value="" >تحليلي</option>
-                        <option value="1" {{ request('summary')==1? 'selected':'' }}>اجمالي</option>
+                        <option value="1" {{ request('summary')==1? 'selected':'' }}>اجمالي حسب الصنف </option>
+                        <option value="2" {{ request('summary')==2? 'selected':'' }}>اجمالي حسب المجموعة  </option>
+{{--                        <option value="3" {{ request('summary')==3? 'selected':'' }}>اجمالي حسب  العملية  </option>--}}
                     </select>
                 </div>
             </div>
