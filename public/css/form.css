@@ -111,7 +111,11 @@ div#units-wrapper{
     display: grid;
     gap: 16px;
 }
-
+.row-3-static,.row-5-static{
+    width: 100%;
+    overflow: hidden;
+    gap:0;
+}
 .search-filter {
     background: #e6e6e6;
     padding: 5px;
