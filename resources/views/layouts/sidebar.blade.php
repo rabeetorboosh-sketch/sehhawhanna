@@ -966,7 +966,6 @@
                     @if(Auth::user()->isAdmin() )
                                 <li><a href="{{ route('SystemMovement.index') }}">  حرحكات النظام  </a></li>
 
-
                     @endif
             </ul>
         </li>
