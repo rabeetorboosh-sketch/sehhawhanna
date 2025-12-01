@@ -51,9 +51,14 @@ class MonitoringController extends Controller
 
        $departments = Department::whereIn('id',$permittedDepartments)->get();
 
+       $controlUnits = ControlUnit::where('daily_control', 1)->get();
 
-       $mainGroups=MainGroup::with('department')->get();
-       $subGroups=SubGroup::all();
+       $mainGroupIds = $controlUnits->pluck('main_group_id')->unique()->filter();
+       $subGroupIds  = $controlUnits->pluck('sub_group_id')->unique()->filter();
+
+       $mainGroups = MainGroup::whereIn('id', $mainGroupIds)->with('department')->get();
+       $subGroups = SubGroup::whereIn('id', $subGroupIds)->get();
+
 
        $items = Item::with('mainGroup')->where('type','!=','Customer')->get();
        $employees=Employee::with('item')->get();
@@ -91,6 +96,11 @@ class MonitoringController extends Controller
            ->where('day', $today)
            ->first();
 
+       $controlUnits = ControlUnit::where('daily_control', 1)->get();
+
+       $mainGroupIds = $controlUnits->pluck('main_group_id')->unique()->filter();
+       $subGroupIds  = $controlUnits->pluck('sub_group_id')->unique()->filter();
+
        $allDepartments=Department::all();
        $permittedDepartments=[];
        foreach ($allDepartments as $dept)
@@ -100,8 +110,11 @@ class MonitoringController extends Controller
        $departments = Department::whereIn('id',$permittedDepartments)->get();
 
 
-       $mainGroups=MainGroup::with('department')->get();
-       $subGroups=SubGroup::all();
+
+       $mainGroups = MainGroup::whereIn('id', $mainGroupIds)->with('department')->get();
+       $subGroups = SubGroup::whereIn('id', $subGroupIds)->get();
+
+
 
        $items = Item::with('mainGroup')->where('type','!=','Customer')->get();
 
