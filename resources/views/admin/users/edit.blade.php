@@ -42,15 +42,15 @@
                 <div class="form-group">
                     <label>الصلاحية</label>
                     <select name="rule" required>
-                        <option value="user" {{ old('rule', $user->rule) == 'user' ? 'selected' : '' }}>مستخدم</option>
-                        <option value="admin" {{ old('rule', $user->rule) == 'admin' ? 'selected' : '' }}>مسؤول</option>
+                        <option value="user" {{ $user->rule  == 'user' ? 'selected' : '' }}>مستخدم</option>
+                        <option value="admin" {{  $user->rule == 'admin' ? 'selected' : '' }}>مسؤول</option>
                     </select>
                 </div>
             </div>
 
             <div class="actions">
-                <button type="submit" class="btn-save">حفظ التعديلات</button>
                 <button type="reset" class="btn-primary">إعادة تعيين</button>
+                <button type="submit" class="btn-save">حفظ التعديلات</button>
             </div>
         </form>
     </div>

@@ -23,6 +23,7 @@
 {{--                <li><a href="#">---</a></li>--}}
 {{--            </ul>--}}
 {{--        </li>--}}
+        @if(Auth::user()->sectionsPermissions('general'))
         <li class="menu-item">
 
             <button class="dropdown-btn">المدخلات العامة </button>
@@ -72,6 +73,7 @@
                 @endif
             </ul>
         </li>
+        @endif
         @if(Auth::user()->sectionsPermissions('1'))
         <li class="menu-item">
 
@@ -913,7 +915,7 @@
                             </ul>
                         </li>
                     @endif
-                @if(Auth::user()->sectionsPermissions('8-operations-supervises'))
+                @if(Auth::user()->isAdmin() and Auth::user()->sectionsPermissions('8-operations-supervises'))
                         <li class="menu-item">
                             <button class="dropdown-btn">تقارير العملاء   </button>
                             <ul class="submenu">
@@ -961,7 +963,7 @@
                             </ul>
                         </li>
                     @endif
-                @if(true)
+                    @if(Auth::user()->isAdmin() )
                                 <li><a href="{{ route('SystemMovement.index') }}">  حرحكات النظام  </a></li>
 
 
