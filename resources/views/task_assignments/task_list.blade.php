@@ -213,7 +213,7 @@
                                     <div class="item-card">
                                         <label>
 
-                                            <span>{{ $item->controlUnit->name .' -> '. $item->item?->name }}</span>
+                                            <span>{{ $item->controlUnit?->name .' -> '. $item->item?->name }}</span>
                                         </label>
                                     </div>
                                 @endif
