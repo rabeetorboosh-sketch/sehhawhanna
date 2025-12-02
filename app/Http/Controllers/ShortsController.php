@@ -11,7 +11,7 @@ class ShortsController extends Controller
     public function store(Request $request)
     {
 
-        $shorts=Short::where('name',$request->name)->where('url',$request->url)->first();
+        $shorts=Short::where('name',$request->name)->where('url',$request->url)->where('user_id',Auth::id())->first();
        if (!$shorts){
          Short::create([
             'user_id'=> Auth::id(),
