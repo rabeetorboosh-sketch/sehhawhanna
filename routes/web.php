@@ -22,6 +22,7 @@ use App\Http\Controllers\Reports\AssetsMovementsReportsController;
 use App\Http\Controllers\Reports\CustomersRequestsReportController;
 use App\Http\Controllers\Reports\MonitoringReportController;
 use App\Http\Controllers\Reports\RatingsReportsController;
+use App\Http\Controllers\Reports\ReportReportingController;
 use App\Http\Controllers\Reports\StoreMovementsReportsController;
 use App\Http\Controllers\Reports\SuperviseReportController;
 use App\Http\Controllers\Reports\TaskReportController;
@@ -434,6 +435,7 @@ Route::middleware('auth')->group(function () {
     Route::get('report/movements/index', [StoreMovementsReportsController::class, 'index'])->name('storeMovements.ReportIndex');
     Route::get('report/assetsMovements/byOperation', [AssetsMovementsReportsController::class, 'byOperation'])->name('assetsMovements.byOperation');
     Route::get('report/ratingReport/byOperation', [RatingsReportsController::class, 'byOperationDetail'])->name('ratingReport.byOperationDetail');
+    Route::get('report/alertReport', [ReportReportingController::class, 'index'])->name('ratingReport.index');
 
 
     Route::get('report/customerRequest', [CustomersRequestsReportController::class, 'index'])->name('customerRequests.index');

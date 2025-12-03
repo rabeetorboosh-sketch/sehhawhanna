@@ -45,11 +45,9 @@
                         <p><strong>المتسبب:</strong> {{ $item->causer ? $item->causer->item->name : 'لا يوجد' }}</p>
                         <p><strong>الوصف:</strong> {{ $item->issue_description }}</p>
                         <p><strong>حالة الرد:</strong> {{ $item->response_status ? 'تم الرد' : 'قيد الانتظار' }}</p>
-
                         @if($item->media && $item->media->isNotEmpty())
                             <div class="media-grid">
                                 @foreach($item->media as $media)
-
                                     <a href="{{ asset('storage/uploads/report_items/fH51WO11I9tyo7p7Hcim4UaBhyZeStS6UcH45jVn.png') }}" target="_blank">
                                         <img src="{{ asset($media->url)}}" alt="صورة البند" class="media-thumb">
                                     </a>
@@ -58,9 +56,8 @@
                         @endif
                     </div>
                 @endforeach
-
                 <div class="mt-6">
-                    <a href="{{ route('reports.index') }}" class="btn-back">العودة للتقارير</a>
+                    <a href="{{ url()->previous() }}" class="btn-back">العودة للتقارير</a>
                 </div>
 
             </div>

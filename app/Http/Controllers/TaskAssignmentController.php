@@ -40,7 +40,17 @@ class TaskAssignmentController extends Controller
             $q->whereDate('day', '<=', $request->to_date);
         })->get();
 
-        $monitorings = DailyControl::with(['items.item', 'items.controlUnit', 'user'])
+        $monitorings = DailyControl::with([
+            'user',
+            'items' => function ($q) {
+                $q->where('is_correct', '!=', 1);
+            },
+            'items.item',
+            'items.controlUnit',
+        ])
+            ->whereHas('items', function ($q) {
+                $q->where('is_correct', '!=', 1);
+            })
             ->when($request->from_date, function ($q) use ($request) {
                 $q->whereDate('day', '>=', $request->from_date);
             })
@@ -49,32 +59,27 @@ class TaskAssignmentController extends Controller
             })
             ->when($request->item_id, function ($q) use ($request) {
                 $q->whereHas('items', function ($itemQ) use ($request) {
-                    $itemQ->where('item_id', $request->item_id);
-                })->with(['items' => function ($itemQ) use ($request) {
-                    $itemQ->where('item_id', $request->item_id);
-                }]);
+                    $itemQ->where('item_id', $request->item_id)
+                        ->where('is_correct', '!=', 1);
+                });
             })
             ->when($request->control_unit_id, function ($q) use ($request) {
                 $q->whereHas('items', function ($itemQ) use ($request) {
-                    $itemQ->where('control_unit_id', $request->control_unit_id);
-                })->with(['items' => function ($itemQ) use ($request) {
-                    $itemQ->where('control_unit_id', $request->control_unit_id);
-                }]);
+                    $itemQ->where('control_unit_id', $request->control_unit_id)
+                        ->where('is_correct', '!=', 1);
+                });
             })
             ->when($request->section_id, function ($q) use ($request) {
                 $q->whereHas('items.controlUnit', function ($unitQ) use ($request) {
                     $unitQ->where('department_id', $request->section_id);
-                })->with(['items' => function ($itemQ) use ($request) {
-                    $itemQ->whereHas('controlUnit', function ($unitQ) use ($request) {
-                        $unitQ->where('department_id', $request->section_id);
-                    });
-                }]);
+                });
             })
             ->when($request->assigned == 1, function ($q) {
                 $q->whereDoesntHave('items.assignments');
             })
             ->orderBy('day', 'desc')
             ->get();
+
 
 
 

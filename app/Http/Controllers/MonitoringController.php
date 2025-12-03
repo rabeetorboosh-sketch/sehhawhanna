@@ -270,8 +270,14 @@ class MonitoringController extends Controller
 
         $controlUnits = ControlUnit::all();
         $items = Item::where('type','!=','Customer')->get();
-        $mainGroups =MainGroup::all();
-        $subGroups = SubGroup::all();
+
+
+        $mainGroupIds = $controlUnits->pluck('main_group_id')->unique()->filter();
+        $subGroupIds  = $controlUnits->pluck('sub_group_id')->unique()->filter();
+
+        $mainGroups = MainGroup::whereIn('id', $mainGroupIds)->with('department')->get();
+        $subGroups = SubGroup::whereIn('id', $subGroupIds)->get();
+
         $employees = Employee::all();
 
         $monitoring->load('items');

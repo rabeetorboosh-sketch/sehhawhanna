@@ -25,17 +25,10 @@ class ShortsController extends Controller
     }
     public function delete(Request $request)
     {
-        $shorts=Short::where('name',$request->name)->where('url',$request->url)->where('user_id',Auth::id()
-
-
-
-        )->first();
-
+        $shorts=Short::where('name',$request->name)->where('url',$request->url)->where('user_id',Auth::id())->first();
         if ($shorts){
-     $shorts->delete();
-       }
+           $shorts->delete();
+        }
         return redirect()->back();
-
-
     }
 }

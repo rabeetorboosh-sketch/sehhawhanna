@@ -62,6 +62,7 @@ class ReportController extends Controller
             })
                 ->with('mainGroup','subGroup')
                 ->get();
+
         }
         $employees = Employee::all();
         $issueTypes = IssueType::all();

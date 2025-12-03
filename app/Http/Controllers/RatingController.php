@@ -41,6 +41,7 @@ class RatingController extends Controller
      */
     public function create()
     {
+
         $users = User::all();
         $employees = Employee::all();
         $units = RatingUnit::all();
