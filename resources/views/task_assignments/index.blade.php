@@ -87,7 +87,7 @@
                                     @endif
 
                                     <a href="{{ route('task_assignments.show', $assignment->id) }}" class="btn btn-primary">عرض</a>
-                                    @if(Auth::user()->permissions('5-operations-receipts')?->can_create == 1 and $assignment->receipt->isEmpty()  and $assignment->employee_id ==Auth::User()->employee->id)
+                                    @if(Auth::user()->permissions('5-operations-receipts')?->can_create == 1 and $assignment->receipt->isEmpty()  and $assignment->employee_id ==Auth::User()->employee?->id)
                                     <a href="{{ route('task_assignments.receipt', $assignment->id) }}" class="btn btn-secondary">استلام</a>
                                     @elseif(!$assignment->receipt->isEmpty() and (Auth::user()->permissions('5-operations-receipts')?->can_show == 1))
                                         <a href="{{ route('task_receipts.show', $assignment->receipt?->first()->id) }}" class="btn btn-secondary">عرض الاستلام</a>
