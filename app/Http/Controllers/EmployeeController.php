@@ -48,7 +48,7 @@ class EmployeeController extends Controller
 
             Employee::create([
                 'item_id' => $item->id,
-                'user_id' => Auth::id(),
+                'user_id' => $request['user_id'],
                 'nationality' => $request['nationality'],
                 'age' => $request['age'],
                 'phone' => $request['phone'],
@@ -95,6 +95,7 @@ class EmployeeController extends Controller
             $employee->update([
 
                 'nationality' => $request['nationality'],
+                'user_id' => $request['user_id'],
                 'age' => $request['age'],
                 'phone' => $request['phone'],
                 'email' => $request['email'],
