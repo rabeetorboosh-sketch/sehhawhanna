@@ -1,4 +1,4 @@
-@extends('reports.monitorings.filters')
+@extends('reports.alerts.filters')
 @section('tbl')
     <link rel="stylesheet" href="{{ asset('css/table.css') }}">
     <link rel="stylesheet" href="{{ asset('css/report/monitoring.css') }}">
@@ -17,37 +17,33 @@
                     <th> البند </th>
                     <th>وحدة الرقابة </th>
                     <th>التاريخ  </th>
-                    <th>المشكلة </th>
+                    <th>الوصف  </th>
+
                     <th>المتسبب </th>
-                    <th>الحالة </th>
+
                     <th>مسندة </th>
                     <th>تم حلها  </th>
                 </tr>
                 </thead>
                 <tbody>
 
-                @foreach($dailyControls as $dailyControl)
-                    @foreach($dailyControl->items as $CItem)
+                @foreach($reports as $report)
+                    @foreach($report->items as $RItem)
+
                         <tr>
-                            <td>{{ $CItem->id }}</td>
-                            <td>{{ $CItem->controlUnit?->section?->name }}</td>
-                            <td>{{ $CItem->item?->name ?? 'بدون تحديد' }}</td>
-                            <td>{{ $CItem->controlUnit?->name }}</td>
-                            <td>{{ $dailyControl->created_at }}</td>
-                            <td>{{ $CItem->description ?? 'ليس فيها مشكلة' }}</td>
-                            <td>{{ $CItem->causer?->item?->name }}</td>
-                            <td>
-                                @if($CItem->is_correct == 1)
-                                    ليس فيها مشكلة
-                                @else
-                                    @php(++$proplemsCount)
-                                    فيها مشكلة
-                                @endif
-                            </td>
-                            @if(isset($CItem->assignments) && $CItem->assignments->isNotEmpty())
+                            <td>{{ $RItem->id }}</td>
+                            <td>{{ $report->department?->name }}</td>
+                            <td>{{ $RItem->item?->name ?? 'بدون تحديد' }}</td>
+                            <td>{{ $RItem->controlUnit?->name?? $RItem->user_control_unit??'' }}</td>
+                            <td>{{ $report->created_at }}</td>
+                            <td>{{ $RItem->issue_description ?? ' ' }}</td>
+                            <td>{{ $RItem->causer?->item?->name ?? 'غير محدد' }}</td>
+
+
+                            @if(isset($RItem->assignments) && $RItem->assignments->isNotEmpty())
                                 @php($assiments++)
                                 <td>نعم</td>
-                                @foreach($CItem->assignments as $assignment)
+                                @foreach($RItem->assignments as $assignment)
                                     @if(isset($assignment->receipt) && $assignment->receipt->isNotEmpty())
                                         @php($receipt++)
                                         <td>نعم</td>

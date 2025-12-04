@@ -1,128 +1,164 @@
-<div class="filters-container">
+<x-app-layout>
 
-    <style>
-        .filters-container {
-            padding: 15px;
-            background: #ffffff;
-        }
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            تقارير الرقابة اليومية
+        </h2>
+    </x-slot>
 
-        .filters-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
+    <link rel="stylesheet" href="{{ asset('css/report/filters-form.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/report/monitoring.css') }}">
 
-        .filters-row label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: block;
-            font-size: 14px;
-        }
+    <div class="py-12">
+        <form class="smart-form" action="{{ route('ratingReport.index') }}" method="get">
 
-        .filters-row input,
-        .filters-row select {
-            width: 100%;
-            padding: 7px 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+            {{-- الصف الأول --}}
+            <div class="row-3">
+                <div class="form-group">
+                    <label>من تاريخ</label>
+                    <input type="date" name="from_date" value="{{ request('from_date') }}">
+                </div>
 
-        .filter-buttons {
-            margin-top: 10px;
-        }
+                <div class="form-group">
+                    <label>إلى تاريخ</label>
+                    <input type="date" name="to_date" value="{{ request('to_date') }}">
+                </div>
 
-        .filter-buttons button {
-            padding: 8px 18px;
-            border-radius: 6px;
-            font-size: 14px;
-            cursor: pointer;
-            border: none;
-            margin-right: 10px;
-        }
-
-        .btn-search {
-            background: #3490dc;
-            color: white;
-        }
-
-        .btn-reset {
-            background: #6c757d;
-            color: white;
-        }
-    </style>
-
-    <form method="GET" action="">
-        <div class="filters-row">
-
-            {{-- المخزن --}}
-            <div>
-                <label>المخزن</label>
-                <select name="store_id">
-                    <option value="">الجميع</option>
-                    @foreach($stores as $store)
-                        <option value="{{ $store->id }}" {{ request('store_id') == $store->id ? 'selected' : '' }}>
-                            {{ $store->name }}
-                        </option>
-                    @endforeach
-                </select>
+                <div class="form-group">
+                    <label>البند</label>
+                    <input type="text" id="itemInput" placeholder="ابحث عن بند"
+                           value="{{ optional($items->where('id', request('item_id'))->first())->name ?? 'كل البنود' }}">
+                    <input type="hidden" name="item_id" id="itemId" value="{{ request('item_id') }}">
+                    <select id="itemSelect" size="5" class="item-search">
+                        <option value="">كل البنود</option>
+                        @foreach ($items as $i)
+                            <option value="{{ $i->id }}" {{ request('item_id') == $i->id ? 'selected' : '' }}>
+                                {{ $i->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
-            {{-- نوع الحركة --}}
-            <div>
-                <label>نوع الحركة</label>
-                <select name="type">
-                    <option value="">الجميع</option>
-                    <option value="in" {{ request('type')=='in' ? 'selected' : '' }}>وارد</option>
-                    <option value="out" {{ request('type')=='out' ? 'selected' : '' }}>صادر</option>
-                </select>
+            {{-- الصف الثاني --}}
+            <div class="row-3">
+                <div class="form-group">
+                    <label>القسم</label>
+                    <select name="department_id" id="departmentSelect">
+                        <option value="">كل الأقسام</option>
+                        @foreach ($departments as $dep)
+                            <option value="{{ $dep->id }}" {{ request('department_id') == $dep->id ? 'selected' : '' }}>
+                                {{ $dep->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>المجموعة الرئيسية</label>
+                    <select name="main_group_id" id="mainGroupSelect">
+                        <option value="">اختر المجموعة الرئيسية</option>
+                        @foreach ($mainGroups as $main)
+                            <option value="{{ $main->id }}"
+                                    data-department="{{ $main->department->id }}"
+                                {{ request('main_group_id') == $main->id ? 'selected' : '' }}>
+                                {{ $main->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>المجموعة الفرعية</label>
+                    <select name="sub_group_id" id="subGroupSelect">
+                        <option value="">اختر المجموعة الفرعية</option>
+                        @foreach ($subGroups as $sub)
+                            <option value="{{ $sub->id }}"
+                                    data-main-group="{{ $sub->main_group_id }}"
+                                {{ request('sub_group_id') == $sub->id ? 'selected' : '' }}>
+                                {{ $sub->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
-            {{-- المستخدم --}}
-            <div>
-                <label>المستخدم</label>
-                <select name="user_id">
-                    <option value="">الجميع</option>
-                    @foreach($users as $u)
-                        <option value="{{ $u->id }}" {{ request('user_id')==$u->id ? 'selected':'' }}>
-                            {{ $u->name }}
-                        </option>
-                    @endforeach
-                </select>
+            {{-- الصف الثالث --}}
+            <div class="row-5">
+
+                <div class="form-group">
+                    <label>الوحدة الرقابية</label>
+                    <select name="control_unit_id" id="controlUnitSelect">
+                        <option value="">فلترة حسب الوحدة</option>
+                        @foreach ($controlUnits as $unit)
+                            <option value="{{ $unit->id }}"
+                                    data-photo="{{ $unit->has_photos }}"
+                                    data-department="{{ $unit->department_id }}"
+                                    data-main-group="{{ $unit->main_group_id }}"
+                                    data-sub-group="{{ $unit->sub_group_id }}"
+                                {{ request('control_unit_id') == $unit->id ? 'selected' : '' }}>
+                                {{ $unit->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>المتسبب</label>
+                    <select name="causer_id">
+                        <option value="">الكل</option>
+                        @foreach ($employees as $emp)
+                            <option value="{{ $emp->id }}" {{ request('causer_id') == $emp->id ? 'selected' : '' }}>
+                                {{ $emp->item->name ?? 'بدون اسم' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>المشاكل</label>
+                    <select name="issues">
+                        <option value="0" {{ request('issues') == 0 ? 'selected' : '' }}>الكل</option>
+                        <option value="1" {{ request('issues') == 1 ? 'selected' : '' }}>المشاكل فقط</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>طريقة العرض</label>
+                    <select name="summary">
+                        <option value="0" {{ request('summary') == 0 ? 'selected' : '' }}>تحليلي</option>
+                        <option value="1" {{ request('summary') == 1 ? 'selected' : '' }}>إجمالي</option>
+                    </select>
+                </div>
+
+                <div class="row-3">
+                    <div class="form-group">
+                        <label style="color: transparent">-</label>
+                        <button type="submit" class="btn btn-primary">فلترة</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="color: transparent">-</label>
+                        <a href="{{ route('ratingReport.index') }}" class="btn btn-worn">إعادة تعيين</a>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="color: transparent">-</label>
+                        <a href="{{ route('ratingReport.index', request()->query()) }}&print=1"
+                           class="btn btn-secondary">طباعة</a>
+                    </div>
+                </div>
+
             </div>
 
-            {{-- الصنف --}}
-            <div>
-                <label>الصنف</label>
-                <select name="item_id">
-                    <option value="">الجميع</option>
-                    @foreach($items as $i)
-                        <option value="{{ $i->id }}" {{ request('item_id')==$i->id ? 'selected':'' }}>
-                            {{ $i->name }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
+        </form>
+    </div>
 
-            {{-- من تاريخ --}}
-            <div>
-                <label>من تاريخ</label>
-                <input type="date" name="from_date" value="{{ request('from_date') }}">
-            </div>
+    <div class="main-holder">
+        @yield('tbl')
+    </div>
 
-            {{-- إلى تاريخ --}}
-            <div>
-                <label>إلى تاريخ</label>
-                <input type="date" name="to_date" value="{{ request('to_date') }}">
-            </div>
+    <script src="{{ asset('js/report/filter.js') }}"></script>
+    <script src="{{ asset('js/report/tableReport.js') }}"></script>
 
-        </div>
-
-        <div class="filter-buttons">
-            <button class="btn-search"><i class="fa fa-search"></i> بحث</button>
-            <a href="" class="btn-reset"><i class="fa fa-undo"></i> تصفية</a>
-        </div>
-
-    </form>
-
-</div>
+</x-app-layout>

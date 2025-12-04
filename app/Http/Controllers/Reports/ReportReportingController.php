@@ -64,7 +64,7 @@ class ReportReportingController extends Controller
                 'branch',
                 'items',
                 'items.controlUnit',
-                'items.causer',
+                'items.causer.item',
                 'items.item'
             ]);
 

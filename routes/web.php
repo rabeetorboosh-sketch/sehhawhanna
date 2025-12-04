@@ -219,6 +219,8 @@ Route::middleware('auth')->group(function () {
             Route::delete('/stores/{store}', [StoreController::class, 'destroy'])->name('stores.destroy');
         });
     });
+
+    Route::get('/myTasks', [TaskAssignmentController::class, 'myTasks'])->name('myTask.index');
     Route::middleware(['auth', 'checkPermissions:5-insertions-tasks,can_show'])->group(function () {
         Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
         Route::middleware(['auth', 'checkPermissions:5-insertions-tasks,can_create'])->group(function () {
@@ -226,7 +228,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
         });
 
-        Route::get('/myTasks', [TaskAssignmentController::class, 'myTasks'])->name('myTask.index');
+
 
         Route::middleware(['auth', 'checkPermissions:5-insertions-tasks,can_update'])->group(function () {
             Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');

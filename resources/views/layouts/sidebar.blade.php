@@ -910,8 +910,6 @@
                                         <li><a href="{{ route('reportTasks.byEmployeeSummary') }}">  مهام الموظفين </a></li>
                                     </ul>
                                 </li>
-
-
                             </ul>
                         </li>
                     @endif
@@ -952,6 +950,9 @@
 
                             </ul>
                         </li>
+                    @endif
+                @if(Auth::user()->isAdmin())
+                        <li><a href="{{ route('ratingReport.index') }}">  تقارير البلاغات </a></li>
                     @endif
                 @if(Auth::user()->sectionsPermissions('4-operations'))
                         <li class="menu-item">
