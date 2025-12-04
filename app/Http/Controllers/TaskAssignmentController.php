@@ -30,7 +30,7 @@ class TaskAssignmentController extends Controller
         if(Auth::user()->isAdmin())
         $assignments = TaskAssignment::with(['task.item', 'employee', 'days'])->latest()->paginate(15);
         else
-        $assignments = TaskAssignment::with(['task.item', 'employee', 'days'])->where('employee_id',Auth::id())->latest()->paginate(15);
+        $assignments = TaskAssignment::with(['task.item', 'employee', 'days'])->where('employee_id',Auth::user()?->employee?->id)->latest()->paginate(15);
 
         return view('task_assignments.index', compact('assignments'));
     }
