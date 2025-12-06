@@ -251,7 +251,14 @@ class MonitoringController extends Controller
     }
     public function show(DailyControl $monitoring)
     {
-        $monitoring->load(['items.controlUnit', 'items.item', 'user']);
+        $monitoring->load([
+            'items.controlUnit.mainGroup',
+            'items.controlUnit.subGroup',
+            'items.item',
+            'items.media',
+            'user'
+        ]);
+
         return view('monitorings.show', compact('monitoring'));
     }
 

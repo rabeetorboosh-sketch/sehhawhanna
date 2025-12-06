@@ -60,8 +60,6 @@
                         <input type="checkbox" id="forwardCheckbox" name="forwarded_to_management" value="1" class="checkbox">
                         تحويل للادارة
                     </label>
-
-
                 </div>
 
             </div>
@@ -73,7 +71,7 @@
                 </div>
                 <div class="row-2" id="multi-images">
                     <div class="form-group">
-                        <input type="file" accept="image/*" name="images[]" id="image"   class="hidden"   >
+                        <input type="file" accept="image/*" name="images[]" id="image"   class="hidden">
                         <label for="image" class="btn btn-primary" ><i class="fas fa-camera"></i> إضافة صورة
                         </label>
                     </div>
@@ -82,7 +80,16 @@
                     </div>
 
                 </div>
+
+
             </div>
+<div class="row-3">
+    <div class="form-group">
+        <label for="file" class="btn btn-primary"><i class="fas fa-file"></i>اختر ملف </label>
+        <input type="file" name="file-docs[]"  id="file" style="display: none">
+    </div>
+</div>
+
 
 
 

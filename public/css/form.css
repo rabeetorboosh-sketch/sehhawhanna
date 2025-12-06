@@ -251,7 +251,7 @@ input.color{
     color: black;
     border: 2px outset #d4d1d1;
     border-radius: 8px;
-    max-width: 100px;
+    max-width: 120px;
     text-align: center;
 }
 .smart-form .btn-danger{

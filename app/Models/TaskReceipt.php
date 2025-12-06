@@ -40,6 +40,10 @@ class TaskReceipt extends Model
     {
         return $this->hasMany(Media::class, 'item_id') ->where('type', 'TaskReceipt');
     }
+    public function file()
+    {
+        return $this->hasMany(File::class, 'item_id') ->where('type', 'TaskReceipt');
+    }
 
 }
 

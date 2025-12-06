@@ -46,10 +46,10 @@
                 <h3 class="section-title">بنود الرقابة</h3>
 
                 @php
-                    // تجميع البنود حسب الوحدة الرقابية
+
                     $groupedItems = $monitoring->items->groupBy('control_unit_id');
                 @endphp
-<div class="units-container">
+        <div class="units-container">
 
 
                 @foreach($groupedItems as $controlUnitId => $items)
@@ -61,8 +61,6 @@
                     @endphp
 
                     <div class="unit-section">
-
-
                         <div class="item-card">
                                 <h4 class="unit-title text-center text-lg font-bold mb-3 border-b pb-2">
                                       {{ $controlUnit->name ?? 'يدوي' }}
@@ -70,11 +68,8 @@
                                 <p class="text-sm text-gray-600 mb-2">
                                     عدد البنود: {{ $total }}
                                 </p>
-
                             @foreach($items as $item)
-
                                     <h5>البند: {{ $item->item->name ?? 'غير محدد' }}</h5>
-
                             @endforeach
                             <p><strong>المتسبب:</strong> {{ $item->causer ? $item->causer->item->name : 'لا يوجد' }}</p>
                             <p><strong>المشكلة :</strong> {{ $item->description ?? 'لا يوجد وصف' }}</p>
@@ -85,8 +80,6 @@
                                     <span class="status-span status-incorrect">يوجد مشكلة</span>
                                 @endif
                             </p>
-
-
                         @if(isset($item->media) && $item->media->isNotEmpty())
                                 <div class="media-grid">
                                     @foreach($item->media as $media)

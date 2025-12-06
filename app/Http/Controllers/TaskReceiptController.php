@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DailyControlItem;
+use App\Models\File;
 use App\Models\Media;
 use App\Models\ReportItem;
 use App\Models\TaskReceipt;
@@ -88,6 +89,19 @@ class TaskReceiptController extends Controller
                 ]);
             }
         }
+
+        if ($request->hasFile("file-docs")) {
+            foreach ($request->file("file-docs") as $file) {
+
+                $path = $file->store('uploads/TaskReceipt', 'public');
+                File::create([
+                    'item_id' => $taskReceipt->id,
+                    'url'     => $path,
+                    'type'    => 'TaskReceipt',
+                ]);
+            }
+        }
+
         return redirect()->to(session('old_url_receipt'))->with('success', 'تمت إضافة المهمة بنجاح ✅');
 
     }
@@ -138,7 +152,17 @@ class TaskReceiptController extends Controller
         $data['forwarded_to_management'] = $request->has('forwarded_to_management') ? 1 : 0;
 
         $taskReceipt->update($data);
+        if ($request->hasFile("file-docs")) {
+            foreach ($request->file("file-docs") as $file) {
 
+                $path = $file->store('uploads/TaskReceipt', 'public');
+                File::create([
+                    'item_id' => $taskReceipt->id,
+                    'url'     => $path,
+                    'type'    => 'TaskReceipt',
+                ]);
+            }
+        }
         return redirect()->route('task_receipts.index')
             ->with('success', 'تم تعديل استلام المهمة بنجاح');
     }
