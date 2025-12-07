@@ -104,9 +104,10 @@
                     <ul class="file-list">
                         @foreach($taskReceipt->file as $file)
                             <li>
-                                <a href="{{ $file->url}}" target="_blank">
-                                    <i class="fa fa-file-word-o" aria-hidden="true"></i>
-                               عرض الملف
+                                <a href="{{ $file->url}}" target="_blank" CLASS="
+                                btn btn-info">
+                                    <i class="fa fa-file" aria-hidden="true"></i>
+                                 عرض الملف
                                 </a>
                             </li>
                         @endforeach
@@ -190,6 +191,10 @@
         .file-list a i {
             margin-right: 5px;
             color: #0078d7; /* لون أيقونة الوورد */
+        }
+        a.btn.btn-info {
+            background: linear-gradient(65deg, #a3cdbc, #9fc1b29e);
+            border: 2px inset #bfd7cc;
         }
     </style>
 

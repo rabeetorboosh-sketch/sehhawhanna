@@ -20,7 +20,7 @@ class AssetController extends Controller
     {
 
         $assets = Asset::with(['item','branch'])->get();
-        return view('admin.asset.index', compact('assets'));
+        return view('admin.Asset.index', compact('assets'));
     }
 
     public function add()
@@ -33,7 +33,7 @@ class AssetController extends Controller
             $q->where('department_id', 2);
         })->get();
         $branches   = Branch::all();
-        return view('admin.asset.add', compact('mainGroups','subGroups','branches'));
+        return view('admin.Asset.add', compact('mainGroups','subGroups','branches'));
     }
 
 
@@ -86,7 +86,7 @@ class AssetController extends Controller
             $query->where('asset_id', $id);
         })->with('maintenanceRequest')->get();
 
-        return view('admin.asset.show', compact('asset','assetMaintenance','assetsMovements'));
+        return view('admin.Asset.show', compact('asset','assetMaintenance','assetsMovements'));
 
     }
 
@@ -102,7 +102,7 @@ class AssetController extends Controller
         })->get();
         $subGroups  = SubGroup::all();
         $branches   = Branch::all();
-        return view('admin.asset.edit', compact('asset','mainGroups','subGroups','branches'));
+        return view('admin.Asset.edit', compact('asset','mainGroups','subGroups','branches'));
     }
 
     public function update(Request $request, $id)
