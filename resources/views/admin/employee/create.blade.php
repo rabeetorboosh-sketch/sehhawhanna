@@ -59,7 +59,7 @@
                 <div class="form-group">
                     <label> ربــط  بـمـسـتـخـدم </label>
                     <select name="user_id">
-                        <option   selected>اختر المستخدم</option>
+                        <option value=""  selected>اختر المستخدم</option>
                         @foreach( $users as $user)
                             <option value="{{ $user->id }}">{{ $user   ->name }}</option>
                         @endforeach
