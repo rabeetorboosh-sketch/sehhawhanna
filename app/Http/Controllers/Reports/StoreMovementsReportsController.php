@@ -84,6 +84,31 @@ class StoreMovementsReportsController extends Controller
 
 
         $transactions = $query->get();
+        // فلترة أصناف الفاتورة حسب المجموعة أو المجموعة الفرعية
+        if (request('main_group_id') || request('sub_group_id')) {
+
+            foreach ($transactions as $transaction) {
+                $transaction->items = $transaction->items->filter(function ($item) {
+
+                    $itemModel = $item->product->item;
+
+                    // فلترة حسب المجموعة الرئيسية
+                    if (request('main_group_id') &&
+                        $itemModel->main_group_id != request('main_group_id')) {
+                        return false;
+                    }
+
+                    // فلترة حسب المجموعة الفرعية
+                    if (request('sub_group_id') &&
+                        $itemModel->sub_group_id != request('sub_group_id')) {
+                        return false;
+                    }
+
+                    return true;
+                })->values();
+            }
+        }
+
         if (request('summary')) {
             if (request('summary')==1)
             return $this->byOperationSummary($transactions,$id);
