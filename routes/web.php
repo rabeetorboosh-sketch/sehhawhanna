@@ -6,6 +6,7 @@ use App\Http\Controllers\ControlUnitController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerRequestController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\HousingAssignmentController;
 use App\Http\Controllers\HousingUnitController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MainController;
@@ -488,6 +489,10 @@ Route::middleware('auth')->group(function () {
         ->name('ratings.filter');
     Route::resource('ratings', RatingController::class);
     Route::resource('housing_units', HousingUnitController::class);
+    Route::resource('housing_assignments', HousingAssignmentController::class);
+    Route::get('/housing/rooms/{unit_id}', [HousingAssignmentController::class, 'getRooms']);
+    Route::get('/housing/room-status/{id}', [HousingAssignmentController::class, 'roomStatus']);
+
 
 
     Route::get('/employeeTypes', [MainInsertionController::class, 'EmployeeTypeIndex'])->name('employeeType.index');

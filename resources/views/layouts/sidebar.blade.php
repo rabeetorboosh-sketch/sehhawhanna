@@ -535,6 +535,17 @@
                                         </ul>
                                     </li>
                                 @endif
+                                @if(Auth::user()->permissions('4-insertions-housing_units')?->can_show == 1)
+                                    <li class="menu-item">
+                                        <button class="dropdown-btn">الوحدات السكنية</button>
+                                        <ul class="submenu">
+                                            @if(Auth::user()->permissions('4-insertions-housing_units')?->can_create == 1)
+                                                <li><a href="{{ route('housing_units.create') }}">إضافة وحدة سكنية</a></li>
+                                            @endif
+                                            <li><a href="{{ route('housing_units.index') }}">قائمة الوحدات السكنية</a></li>
+                                        </ul>
+                                    </li>
+                                @endif
 
                                 {{-- الوحدات الرقابية --}}
                                 @if(Auth::user()->permissions('4-insertions-controlUnits')?->can_show == 1)
@@ -616,6 +627,17 @@
                                                 <li><a href="{{ route('ratings.create') }}">إضافة تقييم</a></li>
                                             @endif
                                             <li><a href="{{ route('ratings.index') }}">قائمة التقييمات</a></li>
+                                        </ul>
+                                    </li>
+                                @endif
+                                @if(Auth::user()->permissions('4-operations-housing_assignments')?->can_show == 1)
+                                    <li class="menu-item">
+                                        <button class="dropdown-btn">التسكين</button>
+                                        <ul class="submenu">
+                                            @if(Auth::user()->permissions('4-operations-housing_assignments')?->can_create == 1)
+                                                <li><a href="{{ route('housing_assignments.create') }}">إضافة تسكين</a></li>
+                                            @endif
+                                            <li><a href="{{ route('housing_assignments.index') }}">قائمة التسكين</a></li>
                                         </ul>
                                     </li>
                                 @endif

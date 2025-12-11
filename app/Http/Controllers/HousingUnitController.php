@@ -10,8 +10,8 @@ class HousingUnitController extends Controller
 {
     public function index()
     {
-        $units = HousingUnit::latest()->paginate(20);
-        return view('admin.housing_units.index', compact('units'));
+        $housingUnits  = HousingUnit::latest()->paginate(20);
+        return view('admin.housing_units.index', compact('housingUnits'));
     }
 
     public function create()
@@ -79,22 +79,54 @@ class HousingUnitController extends Controller
         $unit = HousingUnit::findOrFail($id);
 
         $data = $request->validate([
-            'unit_code' => 'required',
+            'unit_code' => 'required|string',
             'name' => 'nullable|string',
             'unit_type' => 'nullable|string',
-            'total_rooms' => 'required|integer',
-            'total_kitchens' => 'required|integer',
-            'total_bathrooms' => 'required|integer',
-            'status' => 'nullable|string',
+            'total_kitchens' => 'nullable|integer',
+            'total_bathrooms' => 'nullable|integer',
             'address' => 'nullable|string',
             'notes' => 'nullable|string',
-            'branch_id' => 'nullable|integer',
+            'rooms' => 'array',
+            'rooms.*.room_name' => 'required|string',
+            'rooms.*.bed_count' => 'required|integer',
+            'rooms.*.room_type' => 'nullable|string',
+            'rooms.*.has_bathroom' => 'nullable'
         ]);
 
-        $unit->update($data);
+        $unit->update([
+            'unit_code' => $data['unit_code'],
+            'name' => $data['name'] ?? null,
+            'unit_type' => $data['unit_type'] ?? null,
+            'total_kitchens' => $data['total_kitchens'],
+            'total_bathrooms' => $data['total_bathrooms'],
+            'total_rooms' => count($data['rooms']),
+            'address' => $data['address'],
+            'notes' => $data['notes'],
+        ]);
 
-        return redirect()->route('housing_units.index')
-            ->with('success', 'تم تحديث بيانات الوحدة بنجاح');
+        // حذف كل الغرف السابقة ثم إعادة إنشاء الغرف
+        $unit->rooms()->delete();
+
+        foreach ($data['rooms'] as $room) {
+            HousingRoom::create([
+                'housing_unit_id' => $unit->id,
+                'room_name' => $room['room_name'],
+                'bed_count' => $room['bed_count'],
+                'room_type' => $room['room_type'] ?? null,
+                'has_bathroom' => $room['has_bathroom'] ?? 0,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'تم تحديث بيانات الوحدة بنجاح');
+    }
+
+    public function show($id)
+    {
+        $unit = HousingUnit::with('rooms')->findOrFail($id);
+
+        return view('admin.housing_units.show', [
+            'unit' => $unit
+        ]);
     }
 
     public function destroy($id)

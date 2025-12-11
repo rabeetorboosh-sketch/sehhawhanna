@@ -52,7 +52,7 @@ div#units-wrapper{
     width: 100%;
     padding: 10px 5px;
     border: 1px solid #022027;
-    border-radius: 15px;
+    border-radius: 8px;
     font-size: 14px;
     background: #00000000;
     transition: 0.2s;
@@ -157,6 +157,13 @@ div#units-wrapper{
 .row-5-static{
     grid-template-columns: repeat(5, 1fr);
 }
+.grid-tbl-5{
+    display: grid;
+    gap: 10px;
+    border: 1px solid;
+    border-radius: 8px;
+    padding: 5px;
+}
 @media(min-width: 640px){
     .row-2{
         grid-template-columns: repeat(2, 1fr);
@@ -170,6 +177,10 @@ div#units-wrapper{
     .smart-form{
 
         max-width:90%;
+
+    }
+    .grid-tbl-5{
+        grid-template-columns: repeat(5, 1fr);
 
     }
 }
@@ -194,6 +205,8 @@ div#units-wrapper{
             width: 100%;
         }
     }
+
+
 }
 /* الأزرار */
 .smart-form .actions{

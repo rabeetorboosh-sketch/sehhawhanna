@@ -26,4 +26,9 @@ class HousingUnit extends Model
     {
         return $this->hasMany(HousingRoom::class, 'housing_unit_id');
     }
+    public function assignments()
+    {
+        return $this->hasMany(HousingAssignment::class, 'housing_unit_id');
+    }
+
 }

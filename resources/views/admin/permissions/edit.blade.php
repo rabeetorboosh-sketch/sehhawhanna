@@ -414,6 +414,17 @@
                             </ul>
                         </li>
                         <li>
+                            <strong> الوحدات  السكنية </strong>
+                            <input type="checkbox" class="checkbox parent" name="4[insertions][housing_units]" value="1"
+                                   @if(isset($permissions['4']['insertions']['housing_units'])) checked @endif >
+                            <ul>
+                                <li><strong>إضافة </strong> <input type="checkbox" name="4[insertions][housing_units][create]" value="1" class="checkbox" @if(isset($permissions['4']['insertions']['housing_units']['create']) && $permissions['4']['insertions']['housing_units']['create'] == 1) checked @endif></li>
+                                <li><strong>عرض</strong> <input type="checkbox" name="4[insertions][housing_units][view]" value="1" class="checkbox" @if(isset($permissions['4']['insertions']['housing_units']['view']) && $permissions['4']['insertions']['housing_units']['view'] == 1) checked @endif></li>
+                                <li><strong>تعديل</strong> <input type="checkbox" name="4[insertions][housing_units][edit]" value="1" class="checkbox" @if(isset($permissions['4']['insertions']['housing_units']['edit']) && $permissions['4']['insertions']['housing_units']['edit'] == 1) checked @endif></li>
+                                <li><strong>حذف</strong> <input type="checkbox" name="4[insertions][housing_units][delete]" value="1" class="checkbox" @if(isset($permissions['4']['insertions']['housing_units']['delete']) && $permissions['4']['insertions']['housing_units']['delete'] == 1) checked @endif></li>
+                            </ul>
+                        </li>
+                        <li>
                             <strong>الوحدات الرقابية</strong>
                             <input type="checkbox" class="checkbox parent" name="4[insertions][controlUnits]" value="1"
                                    @if(isset($permissions['4']['insertions']['controlUnits'])) checked @endif >
@@ -474,6 +485,17 @@
                                 <li><strong>عرض</strong> <input type="checkbox" name="4[operations][ratings][view]" value="1" class="checkbox" @if(isset($permissions['4']['operations']['ratings']['view']) && $permissions['4']['operations']['ratings']['view'] == 1) checked @endif></li>
                                 <li><strong>تعديل</strong> <input type="checkbox" name="4[operations][ratings][edit]" value="1" class="checkbox" @if(isset($permissions['4']['operations']['ratings']['edit']) && $permissions['4']['operations']['ratings']['edit'] == 1) checked @endif></li>
                                 <li><strong>حذف</strong> <input type="checkbox" name="4[operations][ratings][delete]" value="1" class="checkbox" @if(isset($permissions['4']['operations']['ratings']['delete']) && $permissions['4']['operations']['ratings']['delete'] == 1) checked @endif></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>التسكين</strong>
+                            <input type="checkbox" class="checkbox parent" name="4[operations][housing_assignments]" value="1"
+                                   @if(isset($permissions['4']['operations']['housing_assignments'])) checked @endif >
+                            <ul>
+                                <li><strong>إضافة </strong> <input type="checkbox" name="4[operations][housing_assignments][create]" value="1" class="checkbox" @if(isset($permissions['4']['operations']['housing_assignments']['create']) && $permissions['4']['operations']['housing_assignments']['create'] == 1) checked @endif></li>
+                                <li><strong>عرض</strong> <input type="checkbox" name="4[operations][housing_assignments][view]" value="1" class="checkbox" @if(isset($permissions['4']['operations']['housing_assignments']['view']) && $permissions['4']['operations']['housing_assignments']['view'] == 1) checked @endif></li>
+                                <li><strong>تعديل</strong> <input type="checkbox" name="4[operations][housing_assignments][edit]" value="1" class="checkbox" @if(isset($permissions['4']['operations']['housing_assignments']['edit']) && $permissions['4']['operations']['housing_assignments']['edit'] == 1) checked @endif></li>
+                                <li><strong>حذف</strong> <input type="checkbox" name="4[operations][housing_assignments][delete]" value="1" class="checkbox" @if(isset($permissions['4']['operations']['housing_assignments']['delete']) && $permissions['4']['operations']['housing_assignments']['delete'] == 1) checked @endif></li>
                             </ul>
                         </li>
                         <li>

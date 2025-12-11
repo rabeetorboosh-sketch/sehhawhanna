@@ -399,6 +399,15 @@
                         </ul>
                     </li>
                     <li>
+                        <strong> وحدات التسكين   </strong> <input type="checkbox" class="checkbox parent" name="4[insertions][housing_units]" value="1"   >
+                        <ul>
+                            <li><strong>إضافة </strong> <input type="checkbox" name="4[insertions][housing_units][create]" value="1" class="checkbox"></li>
+                            <li><strong>عرض</strong> <input type="checkbox" name="4[insertions][housing_units][view]" value="1" class="checkbox"></li>
+                            <li><strong>تعديل</strong> <input type="checkbox" name="4[insertions][housing_units][edit]" value="1" class="checkbox"></li>
+                            <li><strong>حذف</strong> <input type="checkbox" name="4[insertions][housing_units][delete]" value="1" class="checkbox"></li>
+                        </ul>
+                    </li>
+                    <li>
                         <strong>وحدات  التقييم </strong> <input type="checkbox" class="checkbox parent" name="4[insertions][ratingUnits]" value="1"   >
                         <ul>
                             <li><strong>إضافة </strong> <input type="checkbox" name="4[insertions][ratingUnits][create]" value="1" class="checkbox"></li>
@@ -407,6 +416,7 @@
                             <li><strong>حذف</strong> <input type="checkbox" name="4[insertions][ratingUnits][delete]" value="1" class="checkbox"></li>
                         </ul>
                     </li>
+
                     <li>
                         <strong>الوحدات الرقابية</strong> <input type="checkbox" class="checkbox parent" name="4[insertions][controlUnits]" value="1"   >
                         <ul>
@@ -456,6 +466,15 @@
                             <li><strong>عرض</strong> <input type="checkbox" name="4[operations][ratings][view]" value="1" class="checkbox"></li>
                             <li><strong>تعديل</strong> <input type="checkbox" name="4[operations][ratings][edit]" value="1" class="checkbox"></li>
                             <li><strong>حذف</strong> <input type="checkbox" name="4[operations][ratings][delete]" value="1" class="checkbox"></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>عمليات التسكين </strong> <input type="checkbox" class="checkbox parent" name="4[operations][housing_assignments]" value="1"  >
+                        <ul>
+                            <li><strong>إضافة </strong> <input type="checkbox" name="4[operations][housing_assignments][create]" value="1" class="checkbox"></li>
+                            <li><strong>عرض</strong> <input type="checkbox" name="4[operations][housing_assignments][view]" value="1" class="checkbox"></li>
+                            <li><strong>تعديل</strong> <input type="checkbox" name="4[operations][housing_assignments][edit]" value="1" class="checkbox"></li>
+                            <li><strong>حذف</strong> <input type="checkbox" name="4[operations][housing_assignments][delete]" value="1" class="checkbox"></li>
                         </ul>
                     </li>
                     <li>
