@@ -102,7 +102,12 @@
 
         // تحديث الغرف حسب الوحدة
         function updateRoomsForAll(unitId) {
-            fetch(`/housing/rooms/${unitId}`)
+
+            let dateInput = document.querySelector('input[name="assignment_date"]');
+            let assignmentDate = dateInput ? dateInput.value : '';
+
+
+            fetch(`/housing/rooms/${unitId}?date=${assignmentDate}`)
                 .then(res => res.json())
                 .then(data => {
 
@@ -111,18 +116,19 @@
 
                         data.forEach(room => {
 
-                            let emptyBeds = room.bed_count - room.used_beds;
+                            let emptyBeds = room.empty_beds;
                             let disabled = emptyBeds <= 0 ? "disabled" : "";
 
                             select.innerHTML += `
-                                <option value="${room.id}" data-empty="${emptyBeds}" ${disabled}>
-                                    ${room.room_name} — ${emptyBeds <= 0 ? 'ممتلئة' : 'أسرة فارغة: ' + emptyBeds}
-                                </option>
-                            `;
+                        <option value="${room.id}" data-empty="${emptyBeds}" ${disabled}>
+                            ${room.room_name} — ${emptyBeds <= 0 ? 'ممتلئة' : 'أسرة فارغة: ' + emptyBeds}
+                        </option>
+                    `;
                         });
                     });
                 });
         }
+
 
         // حدث عند اختيار غرفة
         function attachRoomChangeEvent(row) {
@@ -214,6 +220,25 @@
             if (unitId) updateRoomsForAll(unitId);
 
             employeeIndex++;
+        });
+        document.querySelector('input[name="assignment_date"]').addEventListener('change', function () {
+            let unitId = document.getElementById('unit-select').value;
+            if (unitId) updateRoomsForAll(unitId);
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+
+            let dateInput = document.querySelector('input[name="assignment_date"]');
+
+            if (dateInput && !dateInput.value) {
+
+                let today = new Date();
+                let yyyy = today.getFullYear();
+                let mm = String(today.getMonth() + 1).padStart(2, '0');
+                let dd = String(today.getDate()).padStart(2, '0');
+
+                dateInput.value = `${yyyy}-${mm}-${dd}`;
+            }
+
         });
 
     </script>

@@ -55,4 +55,11 @@ class Employee extends Model
     {
         return $this->belongsTo(Branch::class, 'branch_id');
     }
+
+    public function assignments()
+    {
+        // جلب جميع عناصر التسكين المرتبطة بالموظف
+        return $this->hasMany(HousingAssignmentItem::class, 'employee_id');
+    }
+
 }

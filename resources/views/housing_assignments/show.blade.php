@@ -81,7 +81,7 @@
 
 
                 <div class="mt-6">
-                    <a href="{{ route('housing_assignments.index') }}" class="btn btn-secondary">العودة للقائمة</a>
+                    <a href="{{ route('housing_assignments.index') }}" class="btn btn-secondary">قائمة التسكينات </a>
                 </div>
 
             </div>

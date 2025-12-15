@@ -89,13 +89,20 @@
                         @foreach($unit->rooms as $index => $room)
 
                             @php
-                                // عدد الموظفين المسكنين في الغرفة (الذين لا يملكون end_date)
-                                $assigned = \App\Models\HousingAssignmentItem::where('housing_unit_room_id', $room->id)
-                                            ->whereNull('end_date')
-                                            ->count();
+                                $today = \Carbon\Carbon::today();
 
-                                $empty = $room->bed_count - $assigned;
+                                $assigned = $unit->assignments
+                                    ->flatMap->items
+                                    ->where('housing_unit_room_id', $room->id)
+                                    ->where('start_date', '<=', $today)
+                                    ->filter(function ($item) use ($today) {
+                                        return is_null($item->end_date) || $item->end_date >= $today;
+                                    })
+                                    ->count();
+
+                                $empty = max(0, $room->bed_count - $assigned);
                             @endphp
+
 
                             <tr class="hover:bg-gray-50">
                                 <td class="py-2 px-4 border">{{ $index + 1 }}</td>
@@ -110,12 +117,84 @@
                                 <td class="py-2 px-4 border text-blue-600 font-bold">
                                     {{ $empty }}
                                 </td>
-
                                 <td class="py-2 px-4 border">{{ $room->room_type ?? '-' }}</td>
                                 <td class="py-2 px-4 border">{{ $room->has_bathroom ? 'نعم' : 'لا' }}</td>
                             </tr>
 
                         @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+
+                {{-- المسكنون حالياً --}}
+                <h3 class="section-title mt-8">المسكنون حالياً في هذه الوحدة</h3>
+
+                <div class="overflow-x-auto bg-white shadow rounded-lg mt-4">
+                    <table class="w-full text-center border border-gray-200">
+                        <thead class="bg-gray-100 text-gray-700">
+                        <tr>
+                            <th class="py-3 px-4 border">#</th>
+                            <th class="py-3 px-4 border">اسم الموظف</th>
+                            <th class="py-3 px-4 border">الغرفة</th>
+                            <th class="py-3 px-4 border">تاريخ التسكين</th>
+                            <th class="py-3 px-4 border">تاريخ الخروج</th>
+                            <th class="py-3 px-4 border">ملاحظات</th>
+                            <th class="py-3 px-4 border">عمليات</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        @php
+                            $today = \Carbon\Carbon::today();
+                            $counter = 1;
+                        @endphp
+
+                        @forelse($unit->assignments as $assignment)
+                            @foreach($assignment->items
+                                ->where('start_date', '<=', $today)
+                                ->filter(function ($item) use ($today) {
+                                    return is_null($item->end_date) || $item->end_date >= $today;
+                                }) as $item)
+
+                                <tr class="hover:bg-gray-50">
+                                    <td class="py-2 px-4 border">{{ $counter++ }}</td>
+                                    <td class="py-2 px-4 border">
+                                        {{ $item->employee?->item?->name ?? '-' }}
+                                    </td>
+                                    <td class="py-2 px-4 border">
+                                        {{ $item->room->room_name ?? '-' }}
+                                    </td>
+                                    <td class="py-2 px-4 border">
+                                        {{ $item->start_date }}
+                                    </td>
+                                    <td class="py-2 px-4 border">
+                                        {{ $item->end_date ?? 'مستمر' }}
+                                    </td>
+                                    <td class="py-2 px-4 border">
+                                        {{ $item->notes ?? '-' }}
+                                    </td>
+                                    <td class="py-2 px-4 border">
+                                        <a href="{{ route('housing_assignments.out', $item->id) }}"
+                                           class="btn btn-danger"
+                                           onclick="return confirm('هل أنت متأكد من إخراج هذا الموظف؟')">
+                                            اخراج
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            @endforeach
+                        @empty
+                        @endforelse
+
+                        @if($counter === 1)
+                            <tr>
+                                <td colspan="6" class="py-3 px-4 border text-gray-500">
+                                    لا يوجد مسكنون حالياً في هذه الوحدة
+                                </td>
+                            </tr>
+                        @endif
+
                         </tbody>
                     </table>
                 </div>
@@ -132,6 +211,7 @@
                             <th class="py-3 px-4 border">عدد الموظفين</th>
                             <th class="py-3 px-4 border">تاريخ التسكين</th>
                             <th class="py-3 px-4 border">ملاحظات</th>
+                            <th  >عمليات</th>
                         </tr>
                         </thead>
 
@@ -143,6 +223,7 @@
                                 <td class="py-2 px-4 border">{{ $assign->items->count() }}</td>
                                 <td class="py-2 px-4 border">{{ $assign->assignment_date }}</td>
                                 <td class="py-2 px-4 border">{{ $assign->notes ?? '-' }}</td>
+                                <td class="py-2 px-4 border"> <a href="{{route('housing_assignments.show',$assign->id)}}" class="btn btn-secondary">   عرض  التسكين  </a></td>
                             </tr>
                         @empty
                             <tr>

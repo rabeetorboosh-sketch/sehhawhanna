@@ -76,7 +76,7 @@
                                          <a href="{{ route('storeMovements.edit', $transaction->id) }}" class="btn btn-worn">تعديل</a>
 
 
-
+                                    @if((Auth::user()->permissions('1-operations-exp')?->can_delete == 1 and $movement==1 )or (Auth::user()->permissions('1-operations-ret')?->can_delete == 1 and $movement ==2 )or (Auth::user()->permissions('1-operations-load')?->can_delete == 1 and $movement ==3 ))
                                         <form id="delete-form-{{ $transaction->id }}" action="{{ route('storeMovements.destroy', $transaction->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
@@ -85,7 +85,7 @@
                                             </button>
                                         </form>
 
-
+                                    @endif
                                     <a href="{{ route('storeMovements.show', $transaction->id) }}" class="btn btn-primary">عرض</a>
                                 </div>
                             </td>

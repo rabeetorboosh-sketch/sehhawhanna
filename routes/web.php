@@ -490,8 +490,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('ratings', RatingController::class);
     Route::resource('housing_units', HousingUnitController::class);
     Route::resource('housing_assignments', HousingAssignmentController::class);
+    Route::get(
+        'housing-assignments/out/{item}',
+        [HousingAssignmentController::class, 'out']
+    )->name('housing_assignments.out');
+
     Route::get('/housing/rooms/{unit_id}', [HousingAssignmentController::class, 'getRooms']);
     Route::get('/housing/room-status/{id}', [HousingAssignmentController::class, 'roomStatus']);
+
 
 
 
