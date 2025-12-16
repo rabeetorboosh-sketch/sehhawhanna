@@ -269,6 +269,7 @@ Route::middleware('auth')->group(function () {
             Route::delete('/monitoring/{monitoring}', [MonitoringController::class, 'destroy'])->name('monitoring.destroy');
         });
     });
+    Route::get('/task_assignments/{task_assignment}', [TaskAssignmentController::class, 'show'])->name('task_assignments.show');
     Route::middleware(['auth', 'checkPermissions:5-operations-assignments,can_show'])->group(function () {
         Route::get('/task_assignments', [TaskAssignmentController::class, 'index'])->name('task_assignments.index');
 
@@ -278,7 +279,6 @@ Route::middleware('auth')->group(function () {
             Route::post('/task_assign/assign', [TaskAssignmentController::class, 'assign'])->name('taskAssignment.assign');
         });
         Route::get('/task_assignments/task_list', [TaskAssignmentController::class, 'list'])->name('task_assignments.list');
-        Route::get('/task_assignments/{task_assignment}', [TaskAssignmentController::class, 'show'])->name('task_assignments.show');
 
         Route::middleware(['auth', 'checkPermissions:5-operations-assignments,can_update'])->group(function () {
             Route::get('/task_assignments/{task_assignment}/edit', [TaskAssignmentController::class, 'edit'])->name('task_assignments.edit');
@@ -290,6 +290,7 @@ Route::middleware('auth')->group(function () {
         });
     });
     Route::middleware(['auth', 'checkPermissions:5-operations-receipts,can_show'])->group(function () {
+
         Route::get('/task_receipts', [TaskReceiptController::class, 'index'])->name('task_receipts.index');
 
         Route::middleware(['auth', 'checkPermissions:5-operations-receipts,can_create'])->group(function () {
