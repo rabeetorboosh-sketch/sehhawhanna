@@ -217,8 +217,7 @@
 
             // تحديث الغرف إذا كانت الوحدة مختارة
             let unitId = document.getElementById('unit-select').value;
-            if (unitId) updateRoomsForAll(unitId);
-
+            if (unitId) updateRoomsForRow(unitId, row);
             employeeIndex++;
         });
         document.querySelector('input[name="assignment_date"]').addEventListener('change', function () {
@@ -240,7 +239,31 @@
             }
 
         });
+        function updateRoomsForRow(unitId, row) {
 
+            let dateInput = document.querySelector('input[name="assignment_date"]');
+            let assignmentDate = dateInput ? dateInput.value : '';
+
+            fetch(`/housing/rooms/${unitId}?date=${assignmentDate}`)
+                .then(res => res.json())
+                .then(data => {
+
+                    let roomSelect = row.querySelector('.room-select');
+                    roomSelect.innerHTML = `<option disabled selected>اختر غرفة</option>`;
+
+                    data.forEach(room => {
+
+                        let emptyBeds = room.empty_beds;
+                        let disabled = emptyBeds <= 0 ? "disabled" : "";
+
+                        roomSelect.innerHTML += `
+                    <option value="${room.id}" data-empty="${emptyBeds}" ${disabled}>
+                        ${room.room_name} — ${emptyBeds <= 0 ? 'ممتلئة' : 'أسرة فارغة: ' + emptyBeds}
+                    </option>
+                `;
+                    });
+                });
+        }
     </script>
 
 </x-app-layout>

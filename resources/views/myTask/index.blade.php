@@ -68,8 +68,16 @@
                             </td>
                             <td>
                                 <div class="actions">
-                                    <a href="{{ route('task_assignments.show', $assignment->id) }}" class="btn btn-primary">عرض</a>
-                                    <a href="{{ route('task_assignments.receipt', $assignment->id) }}" class="btn btn-secondary">استلام</a>
+                                    <a href="{{ route('task_assignments.show', $assignment->id) }}" class="btn btn-secondary">عرض</a>
+                                    <a href="{{ route('task_assignments.receipt', $assignment->id) }}" class="btn btn-worn">استلام</a>
+                                    <form action="{{route('task_receipts.endreceipt')}}" method="post" style="display: inline-block">
+                                        @csrf
+                                        <input type="hidden" name="task_assignment_id" value="{{$assignment->id}}">
+                                        <button class="btn btn-primary">انهاء</button>
+                                    </form>
+
+
+
                                 </div>
                             </td>
                         </tr>

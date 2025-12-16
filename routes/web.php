@@ -295,6 +295,7 @@ Route::middleware('auth')->group(function () {
         Route::middleware(['auth', 'checkPermissions:5-operations-receipts,can_create'])->group(function () {
             Route::get('/task_receipts/create', [TaskReceiptController::class, 'create'])->name('task_receipts.create');
             Route::post('/task_receipts', [TaskReceiptController::class, 'store'])->name('task_receipts.store');
+            Route::post('/task_endreceipt', [TaskReceiptController::class, 'endreceipt'])->name('task_receipts.endreceipt');
             Route::post('/task_receipts/rate/{task_receipt}', [TaskReceiptController::class, 'rate'])->name('task_receipts.rate');
         });
         Route::get('/task_receipts/receipts/{id}/{occurrences?}', [TaskReceiptController::class, 'receipt'])->name('task_assignments.receipt');

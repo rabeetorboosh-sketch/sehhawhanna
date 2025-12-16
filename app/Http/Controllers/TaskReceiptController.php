@@ -48,8 +48,64 @@ class TaskReceiptController extends Controller
 
     /**
      * تخزين الاستلام الجديد
-     */
-    public function store(Request $request)
+     */public function store(Request $request)
+{
+
+
+    $data = $request->validate([
+        'task_assignment_id' => 'required|exists:task_assignments,id',
+        'received_at' => 'nullable',
+        'is_completed' => 'nullable|boolean',
+        'forwarded_to_management' => 'nullable|boolean',
+        'forward_reason' => 'nullable|string|required_if:forwarded_to_management,1',
+        'notes' => 'nullable|string',
+        'location' => 'nullable|string',
+        'solution_method' => 'nullable|string',
+        'occurrence' => 'nullable|string',
+    ]);
+
+    $data['employee_id'] = User::with('employee')->find(auth()->id())->employee->id;
+
+    $task_assignment = TaskAssignment::with('occurrences')->find($data['task_assignment_id']);
+
+    $occurrences = $request->input('occurrence')??null;
+
+    // ضبط القيم الافتراضية للـ checkbox
+    $data['is_completed'] = $request->has('is_completed') ? 1 : 0;
+    $data['forwarded_to_management'] = $request->has('forwarded_to_management') ? 1 : 0;
+    $data['task_occurrence_id'] = $occurrences ??null;
+
+
+    $taskReceipt=TaskReceipt::create($data);
+
+    if ($request->hasFile("images")) {
+        foreach ($request->file("images") as $multiPhoto) {
+            $path = $multiPhoto->store('uploads/TaskReceipt', 'public');
+            Media::create([
+                'item_id' => $taskReceipt->id,
+                'url'     => $path,
+                'type'    => 'TaskReceipt',
+            ]);
+        }
+    }
+
+    if ($request->hasFile("file-docs")) {
+        foreach ($request->file("file-docs") as $file) {
+
+            $path = $file->store('uploads/TaskReceipt', 'public');
+            File::create([
+                'item_id' => $taskReceipt->id,
+                'url'     => $path,
+                'type'    => 'TaskReceipt',
+            ]);
+        }
+    }
+
+    return redirect()->to(session('old_url_receipt'))->with('success', 'تمت إضافة المهمة بنجاح ✅');
+
+}
+
+    public function endreceipt(Request $request)
     {
 
 
@@ -66,6 +122,8 @@ class TaskReceiptController extends Controller
         ]);
 
         $data['employee_id'] = User::with('employee')->find(auth()->id())->employee->id;
+        $data['received_at'] =  now();
+        $data['is_completed'] = true;
 
         $task_assignment = TaskAssignment::with('occurrences')->find($data['task_assignment_id']);
 
@@ -102,7 +160,7 @@ class TaskReceiptController extends Controller
             }
         }
 
-        return redirect()->to(session('old_url_receipt'))->with('success', 'تمت إضافة المهمة بنجاح ✅');
+        return redirect()->to(url()->previous())->with('success', 'تمت إضافة المهمة بنجاح ✅');
 
     }
 
