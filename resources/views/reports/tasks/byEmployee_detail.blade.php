@@ -190,6 +190,7 @@ $receivedTasks=0;
                                         @if($assignment->recurrence_type === 'daily')
                                             يومي
                                         @elseif($assignment->recurrence_type === 'weekly')
+
                                             أسبوعي
                                         @elseif($assignment->recurrence_type === 'monthly')
                                             شهري

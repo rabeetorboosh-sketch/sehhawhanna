@@ -157,6 +157,7 @@
                                     <form action="{{route('task_receipts.endreceipt')}}" method="post" style="display: inline-block">
                                         @csrf
                                         <input type="hidden" name="task_assignment_id" value="{{$assignment->id}}">
+                                        <input type="hidden" name="occurrence" value="{{$assignment->occurrences->last()->id}}">
                                         <button class="btn btn-primary">انهاء</button>
                                     </form>
                                 </div>

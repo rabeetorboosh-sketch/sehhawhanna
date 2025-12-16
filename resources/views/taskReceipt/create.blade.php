@@ -11,7 +11,7 @@
         <form class="smart-form" action="{{ route('task_receipts.store') }}" method="post" enctype="multipart/form-data">
             @csrf
 
-<input type="hidden" name="occurrence" value="{{$occurrence}}">
+<input type="hidden" name="occurrence" value="{{$occurrence?? ''}}">
             <div class="row-2">
                 <!-- اختيار الإسناد -->
                 <div class="form-group">
