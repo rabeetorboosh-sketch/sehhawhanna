@@ -33,7 +33,21 @@ document.addEventListener("DOMContentLoaded", function () {
             header.addEventListener("click", () => sortTable(table, columnIndex, header));
         });
     });
+    tables.forEach((table) => {
+        const toolsBar = document.createElement("div");
+        toolsBar.classList.add("table-tools");
+        toolsBar.classList.add("btn");
+        toolsBar.classList.add("btn-secondary");
 
+        const copyBtn = document.createElement("button");
+        copyBtn.textContent = "نسخ ";
+        copyBtn.classList.add("copy-table-btn");
+
+        toolsBar.appendChild(copyBtn);
+        table.parentNode.insertBefore(toolsBar, table);
+
+        copyBtn.addEventListener("click", () => copyTable(table));
+    });
     // تحديث جميع مناطق الأزرار
     function refreshAllContainers() {
         tables.forEach((table) => {
@@ -115,3 +129,30 @@ document.addEventListener("DOMContentLoaded", function () {
         rows.forEach(row => table.querySelector("tbody").appendChild(row));
     }
 });
+
+function copyTable(table) {
+    let text = "";
+
+    // الرؤوس
+    const headers = Array.from(table.querySelectorAll("th"))
+        .map(th => th.style.display !== "none" ? th.innerText.replace("×", "").trim() : null)
+        .filter(Boolean);
+
+    text += headers.join("\t") + "\n";
+
+    // الصفوف
+    table.querySelectorAll("tbody tr").forEach(row => {
+        const rowData = [];
+        Array.from(row.children).forEach((cell, i) => {
+            const header = table.querySelectorAll("th")[i];
+            if (header.style.display !== "none") {
+                rowData.push(cell.innerText.trim());
+            }
+        });
+        text += rowData.join("\t") + "\n";
+    });
+
+    navigator.clipboard.writeText(text).then(() => {
+        alert("تم نسخ محتوى الجدول بنجاح");
+    });
+}
