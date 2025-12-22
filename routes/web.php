@@ -17,6 +17,11 @@ use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Pur\PurItemController;
+use App\Http\Controllers\Pur\PurMainGroupController;
+use App\Http\Controllers\Pur\PurRequestController;
+use App\Http\Controllers\Pur\PurSupGroupController;
+use App\Http\Controllers\Pur\PurUnitController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RatingUnitsController;
 use App\Http\Controllers\ReportController;
@@ -518,3 +523,47 @@ require __DIR__.'/auth.php';
 
 
 Route::get('/tester', [MainController::class, 'tester'])->name('tester');
+
+
+Route::get('/pur_items', [PurItemController::class, 'index'])->name('pur_items.index');
+Route::get('/pur_items/create', [PurItemController::class, 'create'])->name('pur_items.create');
+Route::post('/pur_items/store', [PurItemController::class, 'store'])->name('pur_items.store');
+Route::get('/pur_items/show/{id}', [PurItemController::class, 'show'])->name('pur_items.show');
+Route::get('/pur_items/edit/{id}', [PurItemController::class, 'edit'])->name('pur_items.edit');
+Route::put('/pur_items/update/{id}', [PurItemController::class, 'update'])->name('pur_items.update');
+Route::delete('/pur_items/delete/{id}', [PurItemController::class, 'destroy'])->name('pur_items.delete');
+
+
+Route::get('/pur_units', [PurUnitController::class, 'index'])->name('pur_units.index');
+Route::get('/pur_units/create', [PurUnitController::class, 'create'])->name('pur_units.create');
+Route::post('/pur_units/store', [PurUnitController::class, 'store'])->name('pur_units.store');
+Route::get('/pur_units/edit/{id}', [PurUnitController::class, 'edit'])->name('pur_units.edit');
+Route::put('/pur_units/update/{id}', [PurUnitController::class, 'update'])->name('pur_units.update');
+Route::delete('/pur_units/delete/{id}', [PurUnitController::class, 'destroy'])->name('pur_units.delete');
+
+
+
+Route::get('/purMainGroup', [PurMainGroupController::class, 'index'])->name('purMainGroup.index');
+Route::get('/purMainGroup/add', [PurMainGroupController::class, 'create'])->name('purMainGroup.add');
+Route::post('/purMainGroup/crate', [PurMainGroupController::class, 'store'])->name('purMainGroup.create');
+Route::get('/purMainGroup/edit/{purMainGroup}', [PurMainGroupController::class, 'edit'])->name('purMainGroup.edit');
+Route::post('/purMainGroup/update/{purMainGroup}', [PurMainGroupController::class, 'update'])->name('purMainGroup.update');
+Route::delete('/purMainGroup/delete/{purMainGroup}', [PurMainGroupController::class, 'delete'])->name('purMainGroup.delete');
+
+
+//-///-/-//-/-/-/-/-/--/-/--/
+
+Route::get('/PurSubGroup', [PurSupGroupController::class, 'index'])->name('PurSubGroup.index');
+Route::get('/PurSubGroup/add', [PurSupGroupController::class, 'add'])->name('PurSubGroup.add');
+Route::post('/PurSubGroup/crate', [PurSupGroupController::class, 'create'])->name('PurSubGroup.create');
+Route::get('/PurSubGroup/edit/{PurSubGroup} ', [PurSupGroupController::class, 'edit'])->name('PurSubGroup.edit');
+Route::post('/PurSubGroup/update/{PurSubGroup}', [PurSupGroupController::class, 'update'])->name('PurSubGroup.update');
+Route::delete('/PurSubGroup/delete/{PurSubGroup} ', [PurSupGroupController::class, 'delete'])->name('PurSubGroup.delete');
+
+
+
+
+Route::resource('purchase_requests', PurRequestController::class);
+Route::post('purchase_requests/{purchase_request}/confirm', [PurRequestController::class, 'confirm'])->name('purchase_requests.confirm');
+Route::post('purchase_requests/{purchase_request}/deconfirm', [PurRequestController::class, 'deconfirm'])->name('purchase_requests.deconfirm');
+Route::post('purchase_requests/{purchase_request}/confirmItem', [PurRequestController::class, 'confirmItem'])->name('purchase_requests.confirmItem');

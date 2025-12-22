@@ -28,7 +28,6 @@ document.querySelectorAll('.group-lbl').forEach(button => {
 
         });
 
-
         var inp_ut = document.querySelectorAll(`.grp${e.target.value}`);
         var firstChild = document.querySelector(`.grp${e.target.value} :first-child`);
 
@@ -49,6 +48,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function sumall(input) {
+
+
+    if (!input || typeof input.closest !== 'function') {
+        return;
+    }
+
     const parent = input.closest('[class*="grp"]');
     if (!parent) return;
 

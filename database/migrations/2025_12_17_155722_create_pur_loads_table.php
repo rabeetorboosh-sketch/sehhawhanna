@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pur_groups', function (Blueprint $table) {
+        Schema::create('pur_loads', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->unsignedBigInteger('pur_intake_id')->nullable();
+            $table->string('note')->nullable();
+            $table->unsignedBigInteger('employee_id')->nullable();
+            $table->date('load_date')->nullable();
             $table->timestamps();
         });
     }
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pur_groups');
+        Schema::dropIfExists('pur_loads');
     }
 };

@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pur_groups', function (Blueprint $table) {
+        Schema::create('pur_items', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('code')->nullable();
+            $table->unsignedInteger('pur_main_group_id')->nullable();
+            $table->unsignedInteger('pur_sup_group_id')->nullable();
             $table->timestamps();
         });
     }
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pur_groups');
+        Schema::dropIfExists('pur_items');
     }
 };
