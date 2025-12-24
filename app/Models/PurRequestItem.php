@@ -29,6 +29,6 @@ class PurRequestItem extends Model
     }
     public function unit()
     {
-        return $this->belongsTo(PurUnit::class,'pur_unit_id');
+        return $this->belongsTo(PurItemUnit::class,'pur_unit_id');
     }
 }

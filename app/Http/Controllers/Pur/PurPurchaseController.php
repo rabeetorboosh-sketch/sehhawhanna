@@ -42,12 +42,12 @@ class PurPurchaseController extends Controller
             'items.*.item_id' => 'required|integer',
             'items.*.purchase_count' => 'nullable|numeric',
             'items.*.unit_id' => 'nullable|integer',
-            'request_id' => 'nullable|string'
+            'pur_request_id' => 'nullable|string'
         ]);
 
         $fromRequest = isset($data['request_id']);
 
-        $purchase = PurPurchase::create($request->only('note', 'employee_id', 'purchase_date', 'request_id'));
+        $purchase = PurPurchase::create($request->only('note', 'employee_id', 'purchase_date', 'pur_request_id'));
 
         foreach ($data['items'] as $item) {
             if(!is_null($item['purchase_count']) and !is_null($item['unit_id'] )) {
@@ -58,8 +58,9 @@ class PurPurchaseController extends Controller
                 ]);
 
                 if ($fromRequest) {
-                    PurRequestItem::where('item_id', $item['item_id'])
-                        ->where('request_id', $request->request_id)
+
+                    PurRequestItem::where('pur_item_id', $item['item_id'])
+                        ->where('pur_request_id', $request->request_id)
                         ->update(['is_purchased' => 1]);
                 }
             }
