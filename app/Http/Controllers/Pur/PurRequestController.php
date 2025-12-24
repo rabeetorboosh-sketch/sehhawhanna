@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\PurItem;
 use App\Models\PurMainGroup;
 use App\Models\PurRequest;
+use App\Models\PurRequestItem;
 use App\Models\PurSupGroup;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PurRequestController extends Controller
 {
@@ -17,7 +19,6 @@ class PurRequestController extends Controller
         $requests = PurRequest::with('requestItems.item')->latest()->paginate(10);
         return view('purchase.requests.index', compact('requests'));
     }
-
     public function create()
     {
 
@@ -27,7 +28,6 @@ class PurRequestController extends Controller
 
         return view('purchase.requests.create', compact('items','groups','sections'));
     }
-
     public function store(Request $request)
     {
 
@@ -41,81 +41,116 @@ class PurRequestController extends Controller
         ]);
 
 
-        $purchaseRequest = PurchaseRequest::create($request->only('note', 'employee_id', 'request_date'));
+        $purchaseRequest = PurRequest::create([
+            'note' =>$request['note'],
+            'user_id'=> Auth::id(),
+            'request_date'=>$request['request_date'],
+            'brunch_id' =>1]
+        );
 
         foreach ($data['items'] as $item) {
 
             if (!is_null( $item['request_count'])){
 
                 $purchaseRequest->requestItems()->create([
-                    'item_id' => $item['item_id'],
-                    'request_count' => $item['request_count'],
-                    'unit_id' => $item['unit_id'],
+                    'pur_item_id' => $item['item_id'],
+                    'pur_request_count' => $item['request_count'],
+                    'pur_unit_id' => $item['unit_id'],
                 ]);
             }
         }
 
         return redirect()->route('purchase_requests.index')->with('success', 'تم إنشاء الطلب بنجاح');
     }
-
-
-    public function show(PurchaseRequest $purchaseRequest)
+    public function show( $id)
     {
+
+
+        $purchaseRequest =PurRequest::findOrFail($id);
         // تحميل الأصناف والعلاقات
         $purchaseRequest->load('requestItems.item'); // item = علاقة في موديل RequestItem
 
-        return view('purchase_requests.show', compact('purchaseRequest'));
+        return view('purchase.requests.show', compact('purchaseRequest'));
     }
-
-    public function edit(PurchaseRequest $purchaseRequest)
+    public function edit($id)
     {
-        $items = Item::all();
-        $groups =Group::all();
-        $sections=Section::all();
-        $purchaseRequest->load('requestItems.unit','requestItems.item.units' );
-        return view('purchase_requests.edit', compact('purchaseRequest', 'items','groups','sections'));
-    }
+        $request = PurRequest::with('requestItems')->findOrFail($id);
 
-    public function update(Request $request, PurchaseRequest $purchaseRequest)
+        $items = PurItem::with('units')->get();
+        $sections = PurMainGroup::all();
+        $groups = PurSupGroup::all();
+
+        // ترتيب عناصر الطلب الحالية بشكل يسهل التعامل معها في Blade
+        $oldItems = $request->requestItems
+            ->keyBy('pur_item_id');
+
+        return view(
+            'purchase.requests.edit',
+            compact('request','items','groups','sections','oldItems')
+        );
+    }
+    public function update(Request $request, $id)
     {
         $data = $request->validate([
             'note' => 'nullable|string',
             'request_date' => 'nullable|date',
             'items' => 'required|array',
-            'items.*.item_id' => 'nullable|exists:items,id',
-            'items.*.request_count' => 'nullable|numeric|min:0',
-            'items.*.unit_id' => 'nullable|exists:units,id',
+            'items.*.item_id' => 'required|integer',
+            'items.*.request_count' => 'nullable|numeric',
+            'items.*.unit_id' => 'nullable|integer',
         ]);
-        $purchaseRequest->update($request->only('note', 'employee_id', 'request_date'));
-        $purchaseRequest->requestItems()->delete();
-        $validItems = collect($data['items'])->filter(function ($item) {
-            return isset($item['request_count']) && $item['request_count'] > 0;
-        });
 
-        foreach ($validItems as $item) {
-            $purchaseRequest->requestItems()->create($item);
+        $purchaseRequest = PurRequest::findOrFail($id);
+
+        $purchaseRequest->update([
+            'note' => $request->note,
+            'request_date' => $request->request_date,
+        ]);
+
+        // حذف الأصناف القديمة
+        $purchaseRequest->requestItems()->delete();
+
+        // إعادة الإدخال
+        foreach ($data['items'] as $item) {
+            if (!empty($item['request_count'])) {
+                $purchaseRequest->requestItems()->create([
+                    'pur_item_id' => $item['item_id'],
+                    'pur_request_count' => $item['request_count'],
+                    'pur_unit_id' => $item['unit_id'],
+                ]);
+            }
         }
 
-
-        return redirect()->route('purchase_requests.index')->with('success', 'تم تعديل الطلب بنجاح');
+        return redirect()
+            ->route('purchase_requests.index')
+            ->with('success', 'تم تعديل الطلب بنجاح');
     }
 
-    public function destroy(PurchaseRequest $purchaseRequest)
+    public function destroy(  $id)
     {
+
+        $purchaseRequest = PurRequest::with('requestItems')->findOrFail($id);
+
         $purchaseRequest->requestItems()->delete();
         $purchaseRequest->delete();
 
         return redirect()->route('purchase_requests.index')->with('success', 'تم حذف الطلب بنجاح');
     }
 
-    public function confirm(PurchaseRequest $purchaseRequest)
+    public function confirm($id)
     {
+
+        $purchaseRequest = PurRequest::with('requestItems')->findOrFail($id);
+
         $purchaseRequest->requestItems()->update(['is_confirmed' => 1]);
 
         return redirect()->route('purchase_requests.index')->with('success', 'تم اعتماد الطلب بنجاح');
     }
-    public function deconfirm(PurchaseRequest $purchaseRequest)
+    public function deconfirm($id)
     {
+
+        $purchaseRequest = PurRequest::with('requestItems')->findOrFail($id);
+
         $purchaseRequest->requestItems()->update(['is_confirmed' =>0]);
 
         return redirect()->route('purchase_requests.index')->with('success', 'تم الغاء اعتماد الطلب بنجاح');
@@ -124,7 +159,7 @@ class PurRequestController extends Controller
     {
 
         try {
-            $requestItem = RequestItem::findOrFail($id);
+            $requestItem = PurRequestItem::findOrFail($id);
             $requestItem->update([
                 'is_confirmed' => $requestItem->is_confirmed==1?0:1,
                 'confirmed_at' => now(), // إضافة وقت التأكيد إذا كنت بحاجة لذلك

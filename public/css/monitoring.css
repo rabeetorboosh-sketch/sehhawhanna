@@ -310,15 +310,16 @@ input.itemsCheck {
 
 
 
+
 .sections-container, .groups-container {
     display: flex;
-    justify-content: center;
-    gap: 10px;
+    justify-content: right;
+    gap: 30px;
     flex-wrap: wrap;
     width: 100%;
     overflow: hidden;
-}
 
+}
 
 .searchable-select select {
     width: 100%;
@@ -532,7 +533,11 @@ input.correct {
         width: 100%;
         gap: 10px;
     }
+    .sections-container, .groups-container {
 
+        justify-content: right;
+        gap: 10px;
+    }
 }
 span.btn.btn-secondary.items-add {
     height: 25px;
@@ -552,7 +557,8 @@ span.btn.btn-secondary.items-add {
     background: radial-gradient(#873014a6, #aa1c07fc);
 }
 .btn-primary{
-    background: radial-gradient(#0c6774a6, #118695e0);
+    background: radial-gradient(#3b536e, #3b536e);
+    color: white;
 }
 .btn-worn{
     background: radial-gradient(#8d8236a6, #aca314);
@@ -561,7 +567,7 @@ span.btn.btn-secondary.items-add {
     background: radial-gradient(#47710da6, #0b6b13e0);
 }
 .btn-secondary{
-    background: radial-gradient(#40c3b154, #10a091e0);
+    background: radial-gradient(#d8dce154, #d8dce1);
 }
 button:hover{
     background: #989a9f;
@@ -574,4 +580,9 @@ button:hover{
 .vlue-lbl,.item-container,.mainGroup-lbl,.subGroup-lbl{
 
     display: none;
+}
+button.section-lbl.btn.btn-primary {
+    text-align: center;
+    align-items: center;
+    padding: 0 30px;
 }

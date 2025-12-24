@@ -1,11 +1,17 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            تعديل طلب شراء
+        </h2>
+    </x-slot>
 
-@section('content')
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/movements.css') }}">
 
+    {{-- ===================== نسخة الكمبيوتر ===================== --}}
     <div class="forPC bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-4">تعديل طلب شراء <i class="fas fa-edit"></i></h1>
 
-        <form method="POST" action="{{ route('purchase_requests.update', $purchaseRequest) }}">
+        <form method="POST" action="{{ route('purchase_requests.update', $request->id) }}">
             @csrf
             @method('PUT')
 
@@ -13,124 +19,177 @@
                 <div class="groups-container">
                     @foreach($groups as $group)
                         @php
-                            $itemsGroup = collect($items->all())->where('group_id', $group->id);
+                            $itemsGroup = $items->where('pur_sup_group_id', $group->id);
                         @endphp
+
                         <div class="mb-4">
                             <div class="group-header">
-                                {{$group->group_name}} <i class="fas fa-layer-group"></i>
+                                {{ $group->name }}
+                                <i class="fas fa-layer-group"></i>
                             </div>
 
-                            <div class="flex items-center mb-4" id="item-field-1">
-                                <div class="searchable-select">
-                                    @foreach($itemsGroup as $item)
-                                        @php
-                                            $existing = $purchaseRequest->requestItems->firstWhere('item_id', $item->id);
-                                        @endphp
-                                        <div class="grp{{$item->group_id}} item-container" style="margin-bottom: 1px; display: flex">
-                                            <input value="{{ $item->name }}" class="product-name" style="border: none" disabled>
-                                            <input name="items[{{$item->id}}][item_id]" value="{{ $item->id }}" class="vlue-lbl">
+                            <div class="searchable-select">
+                                @foreach($itemsGroup as $item)
+                                    @php
+                                        $old = $oldItems[$item->id] ?? null;
+                                    @endphp
 
-                                            <select name="items[{{$item->id}}][unit_id]" class="unit-select">
-                                                @foreach($item->units as $unit)
-                                                    <option value="{{$unit->id}}"
-                                                            @if($existing && $existing->unit_id == $unit->id)
-                                                                selected
-                                                            @elseif(!$existing && $unit->is_default)
-                                                                selected
-                                                        @endif
-                                                    >{{$unit->unit_name}}</option>
-                                                @endforeach
-                                            </select>
+                                    <div class="grp{{ $item->pur_sup_group_id }} item-container"
+                                         style="margin-bottom:1px; display:flex;">
 
-                                            <input type="number" name="items[{{$item->id}}][request_count]" value="{{ $existing ? $existing->request_count : '' }}" class="mt-1 block w-1/3 rounded-md border-gray-300 shadow-sm mx-2 count" placeholder="الكمية">
-                                        </div>
-                                    @endforeach
-                                </div>
+                                        <input value="{{ $item->name }}"
+                                               class="product-name"
+                                               style="border:none"
+                                               disabled>
+
+                                        <input type="hidden"
+                                               name="items[{{ $item->id }}][item_id]"
+                                               value="{{ $item->id }}">
+
+                                        <select name="items[{{ $item->id }}][unit_id]"
+                                                class="unit-select">
+                                            @foreach($item->units as $unit)
+                                                <option value="{{ $unit->id }}"
+                                                    @selected(
+                                                        old(
+                                                            'items.'.$item->id.'.unit_id',
+                                                            $old?->pur_unit_id
+                                                        ) == $unit->id
+                                                    )>
+                                                    {{ $unit->unit->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
+                                        <input type="number"
+                                               name="items[{{ $item->id }}][request_count]"
+                                               value="{{ old(
+                                                   'items.'.$item->id.'.request_count',
+                                                   $old?->pur_request_count
+                                               ) }}"
+                                               class="count"
+                                               placeholder="الكمية">
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     @endforeach
                 </div>
             </div>
 
+            {{-- ملاحظات --}}
             <div class="mb-4">
-                <label for="note" class="block text-sm font-medium text-gray-700">ملاحظات</label>
-                <textarea name="note" id="note" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">{{ old('note', $purchaseRequest->note) }}</textarea>
+                <label class="block text-sm font-medium text-gray-700">
+                    ملاحظات
+                </label>
+                <textarea name="note" rows="4"
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">{{ old('note', $request->note) }}</textarea>
             </div>
 
-            <button type="submit" class="bg-green-500 px-4 py-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-offset-2 transition duration-200">
-                <i class="fas fa-save"></i> تحديث
-            </button>
-            <a href="{{ route('purchase_requests.index') }}" class="btn btn-outline" style="margin-left: 10px;">
-                <i class="fas fa-arrow-left"></i> إلغاء
-            </a>
+            <div class="row-3">
+                <a href="{{ route('purchase_requests.index') }}" class="btn btn-worn">
+                    <i class="fas fa-arrow-left"></i> إلغاء
+                </a>
+                <button type="submit" class="btn btn-save">
+                    <i class="fas fa-save"></i> حفظ التعديلات
+                </button>
+            </div>
+
         </form>
     </div>
 
-    {{-- نسخة الجوال --}}
+    {{-- ===================== نسخة الجوال ===================== --}}
     <div class="forPhone bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-4">تعديل طلب شراء <i class="fas fa-edit"></i></h1>
 
         <div class="sections-bar">
             <div class="sections-container">
                 @foreach($sections as $section)
-                    <button class="section-lbl" value="{{$section->id}}">
-                        {{$section->section_name}} <i class="fas fa-list"></i>
+                    <button class="section-lbl" value="{{ $section->id }}">
+                        {{ $section->name }}
+                        <i class="fas fa-list"></i>
                     </button>
                 @endforeach
             </div>
 
             <div class="groups-container">
                 @foreach($groups as $group)
-                    <button class="group-lbl sec{{$group->section_id}}" value="{{$group->id}}">
-                        {{$group->group_name}} <i class="fas fa-layer-group"></i>
+                    <button class="group-lbl sec{{ $group->pur_group_id }}"
+                            value="{{ $group->id }}">
+                        {{ $group->name }}
+                        <i class="fas fa-layer-group"></i>
                     </button>
                 @endforeach
             </div>
         </div>
 
-        <form method="POST" action="{{ route('purchase_requests.update', $purchaseRequest) }}">
+        <form method="POST" action="{{ route('purchase_requests.update', $request->id) }}">
             @csrf
             @method('PUT')
 
-            <label class="block text-sm font-medium text-gray-700">العناصر</label>
-            <div id="items-list">
+            <div class="searchable-select">
                 @foreach($items as $item)
                     @php
-                        $existing = $purchaseRequest->requestItems->firstWhere('item_id', $item->id);
+                        $old = $oldItems[$item->id] ?? null;
                     @endphp
-                    <div class="grp{{$item->group_id}} item-container" style="margin-bottom: 1px;">
-                        <input value="{{ $item->name }}" class="product-name" disabled>
-                        <input name="items[{{$item->id}}][item_id]" value="{{ $item->id }}" class="vlue-lbl">
 
-                        <select name="items[{{$item->id}}][unit_id]" class="unit-select">
+                    <div class="PH grp{{ $item->pur_sup_group_id }} item-container">
+
+                        <input value="{{ $item->name }}"
+                               class="product-name"
+                               style="border:none"
+                               disabled>
+
+                        <input type="hidden"
+                               name="items[{{ $item->id }}][item_id]"
+                               value="{{ $item->id }}">
+
+                        <select name="items[{{ $item->id }}][unit_id]"
+                                class="unit-select">
                             @foreach($item->units as $unit)
-                                <option value="{{$unit->id}}"
-                                        @if($existing && $existing->unit_id == $unit->id)
-                                            selected
-                                        @elseif(!$existing && $unit->is_default)
-                                            selected
-                                    @endif
-                                >{{$unit->unit_name}}</option>
+                                <option value="{{ $unit->id }}"
+                                    @selected(
+                                        old(
+                                            'items.'.$item->id.'.unit_id',
+                                            $old?->pur_unit_id
+                                        ) == $unit->id
+                                    )>
+                                    {{ $unit->unit->name }}
+                                </option>
                             @endforeach
                         </select>
 
-                        <input type="number" name="items[{{$item->id}}][request_count]" value="{{ $existing ? $existing->request_count : '' }}" class="mt-1 block w-1/3 rounded-md border-gray-300 shadow-sm mx-2 count" placeholder="الكمية">
+                        <input type="number"
+                               name="items[{{ $item->id }}][request_count]"
+                               value="{{ old(
+                                   'items.'.$item->id.'.request_count',
+                                   $old?->pur_request_count
+                               ) }}"
+                               class="count"
+                               placeholder="الكمية">
                     </div>
                 @endforeach
             </div>
 
+            {{-- ملاحظات --}}
             <div class="mb-4">
-                <label for="note" class="block text-sm font-medium text-gray-700">ملاحظات</label>
-                <textarea name="note" id="note" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">{{ old('note', $purchaseRequest->note) }}</textarea>
+                <label class="block text-sm font-medium text-gray-700">
+                    ملاحظات
+                </label>
+                <textarea name="note" rows="4"
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">{{ old('note', $request->note) }}</textarea>
             </div>
 
-            <button type="submit" class="bg-green-500 px-4 py-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-offset-2 transition duration-200">
-                <i class="fas fa-save"></i> تحديث
-            </button>
-            <a href="{{ route('purchase_requests.index') }}" class="btn btn-outline" style="margin-left: 10px;">
-                <i class="fas fa-arrow-left"></i> إلغاء
-            </a>
+            <div class="row-3">
+                <a href="{{ route('purchase_requests.index') }}" class="btn btn-worn">
+                    <i class="fas fa-arrow-left"></i> إلغاء
+                </a>
+                <button type="submit" class="btn btn-save">
+                    <i class="fas fa-save"></i> حفظ التعديلات
+                </button>
+            </div>
+
         </form>
     </div>
 
-@endsection
+    <script src="{{ asset('js/movements.js') }}"></script>
+</x-app-layout>

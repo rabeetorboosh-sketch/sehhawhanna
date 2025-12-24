@@ -4,9 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PurUnit extends Model
+class PurIntake extends Model
 {
-   protected $fillable =['name'];
-
-
+    //
 }

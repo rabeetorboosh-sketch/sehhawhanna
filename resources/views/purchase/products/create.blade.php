@@ -18,31 +18,39 @@
             @csrf
 
             <div class="row-2">
-                <div class="form-group">
-                    <label>اســــــــم الصـــنف</label>
-                    <input name="name" type="text" autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label>كــــــود الــــصنــف</label>
-                    <input name="code" type="text" autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label>المجموعة الرئيسية</label>
-                    <select name="main_group_id">
-                        <option disabled selected>اختر المجموعة</option>
-                        @foreach($mainGroups as $mainGroup)
-                            <option value="{{$mainGroup->id}}">{{$mainGroup->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>المجموعة الفرعية</label>
-                    <select name="sub_group_id">
-                        <option disabled selected>اختر المجموعة الفرعية</option>
-                        @foreach($subGroups as $subGroup)
-                            <option value="{{$subGroup->id}}">{{$subGroup->name}}</option>
-                        @endforeach
-                    </select>
+                <div>
+
+
+                    <div class="form-group">
+                        <label>اســــــــم الصـــنف</label>
+                        <input name="name" type="text" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>كــــــود الــــصنــف</label>
+                        <input name="code" type="text" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>المجموعة الرئيسية</label>
+                        <select name="main_group_id">
+                            <option disabled selected>اختر المجموعة</option>
+                            @foreach($mainGroups as $mainGroup)
+                                <option value="{{$mainGroup->id}}">{{$mainGroup->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>المجموعة الفرعية</label>
+                        <select name="sub_group_id">
+                            <option disabled selected>اختر المجموعة الفرعية</option>
+                            @foreach($subGroups as $subGroup)
+                                <option value="{{$subGroup->id}}">{{$subGroup->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
+
+
                 </div>
 
 
@@ -64,11 +72,13 @@
                                     <label> العبوة</label>
                                     <input type="number" name="units[0][package]" data-name="package" min="1" value="1">
                                 </div>
+                                <div class="row-2">
                                 <div class="form-group">
                                     <label>وحدة رئيسية</label>
                                     <input class="checkbox" type="checkbox" name="units[0][is_main]" data-name="is_main">
                                 </div>
                                 <button type="button" class="btn btn-danger remove-unit">-</button>
+                                </div>
                             </div>
                         </div>
 

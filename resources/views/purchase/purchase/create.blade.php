@@ -1,20 +1,22 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            إنشاء طلب شراء
+            إنشاء فاتورة مشتريات
         </h2>
     </x-slot>
 
     <link rel="stylesheet" href="{{ asset('css/form.css') }}">
     <link rel="stylesheet" href="{{ asset('css/movements.css') }}">
+
     {{-- ===================== نسخة الكمبيوتر ===================== --}}
     <div class="forPC bg-white p-6 rounded-lg shadow-md">
 
-        <form method="POST" action="{{ route('purchase_requests.store') }}">
+        <form method="POST" action="{{ route('purchase_purchase.store') }}">
             @csrf
 
             <div class="sections-bar">
                 <div class="groups-container">
+
                     @foreach($groups as $group)
                         @php
                             $itemsGroup = $items->where('pur_sup_group_id', $group->id);
@@ -51,8 +53,8 @@
                                         </select>
 
                                         <input type="number"
-                                               name="items[{{ $item->id }}][request_count]"
-                                               value="{{ old('items.' . $item->id . '.request_count') }}"
+                                               name="items[{{ $item->id }}][purchase_count]"
+                                               value="{{ old('items.' . $item->id . '.purchase_count') }}"
                                                class="count"
                                                placeholder="الكمية">
                                     </div>
@@ -60,6 +62,7 @@
                             </div>
                         </div>
                     @endforeach
+
                 </div>
             </div>
 
@@ -71,7 +74,7 @@
             </div>
 
             <div class="row-3">
-                <a href="{{ route('purchase_requests.index') }}" class="btn btn-worn">
+                <a href="{{ route('purchase_purchase.index') }}" class="btn btn-worn">
                     <i class="fas fa-arrow-left"></i> إلغاء
                 </a>
                 <button type="submit" class="btn btn-save">
@@ -97,19 +100,16 @@
 
             <div class="groups-container">
                 @foreach($groups as $group)
-
                     <button class="group-lbl sec{{ $group->pur_group_id }}"
                             value="{{ $group->id }}">
                         {{ $group->name }}
                         <i class="fas fa-layer-group"></i>
                     </button>
-
                 @endforeach
-
             </div>
         </div>
 
-        <form method="POST" action="{{ route('purchase_requests.store') }}">
+        <form method="POST" action="{{ route('purchase_purchase.store') }}">
             @csrf
 
             <div class="searchable-select">
@@ -117,7 +117,8 @@
                     <div class="PH grp{{ $item->pur_sup_group_id }} item-container">
 
                         <input value="{{ $item->name }}"
-                               class="product-name"  style=" border: none"
+                               class="product-name"
+                               style="border:none"
                                disabled>
 
                         <input type="hidden"
@@ -135,8 +136,8 @@
                         </select>
 
                         <input type="number"
-                               name="items[{{ $item->id }}][request_count]"
-                               value="{{ old('items.' . $item->id . '.request_count') }}"
+                               name="items[{{ $item->id }}][purchase_count]"
+                               value="{{ old('items.' . $item->id . '.purchase_count') }}"
                                class="count"
                                placeholder="الكمية">
                     </div>
@@ -151,7 +152,7 @@
             </div>
 
             <div class="row-3">
-                <a href="{{ route('purchase_requests.index') }}" class="btn btn-worn">
+                <a href="{{ route('purchase_purchase.index') }}" class="btn btn-worn">
                     <i class="fas fa-arrow-left"></i> إلغاء
                 </a>
                 <button type="submit" class="btn btn-save">
@@ -161,5 +162,6 @@
 
         </form>
     </div>
+
     <script src="{{ asset('js/movements.js') }}"></script>
 </x-app-layout>

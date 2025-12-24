@@ -19,6 +19,7 @@ use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Pur\PurItemController;
 use App\Http\Controllers\Pur\PurMainGroupController;
+use App\Http\Controllers\Pur\PurPurchaseController;
 use App\Http\Controllers\Pur\PurRequestController;
 use App\Http\Controllers\Pur\PurSupGroupController;
 use App\Http\Controllers\Pur\PurUnitController;
@@ -567,3 +568,17 @@ Route::resource('purchase_requests', PurRequestController::class);
 Route::post('purchase_requests/{purchase_request}/confirm', [PurRequestController::class, 'confirm'])->name('purchase_requests.confirm');
 Route::post('purchase_requests/{purchase_request}/deconfirm', [PurRequestController::class, 'deconfirm'])->name('purchase_requests.deconfirm');
 Route::post('purchase_requests/{purchase_request}/confirmItem', [PurRequestController::class, 'confirmItem'])->name('purchase_requests.confirmItem');
+
+
+
+Route::resource('purchase_purchase', PurPurchaseController::class);
+Route::post('purchase_purchase/{purchase}/confirm', [PurPurchaseController::class, 'confirm'])->name('purchase_purchase.confirm');
+Route::get('purchase_purchase/buy/{purchase_request}', [PurPurchaseController::class, 'buy'])->name('purchase_purchase.buy');
+
+
+
+
+
+Route::resource('intake', PurPurchaseController::class);
+Route::post('purchaseIntake/{purchaseIntake}/confirm', [PurPurchaseController::class, 'confirm'])->name('intake.confirm');
+Route::get('purchaseIntake/buy/{purchase}', [PurPurchaseController::class, 'buy'])->name('intake.buy');

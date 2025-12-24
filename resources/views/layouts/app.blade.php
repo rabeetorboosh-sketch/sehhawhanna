@@ -15,25 +15,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
+
+        body{
+            background: #f1eee6;
+        }
         .upNav {
             display: flex;
-            gap: 10px; /* تباعد بين الروابط */
-            background-color: #f9f9f9; /* خلفية فاتحة */
+            gap: 10px;
+            background-color: #cccecc;
             padding: 8px 12px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            margin-bottom: 15px;
-            flex-wrap: wrap; /* لتفادي كسر التصميم على الشاشات الصغيرة */
+            /* border-radius: 8px; */
+            /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); */
+            /* margin-bottom: 15px; */
+            flex-wrap: wrap;
         }
 
         .upNav a {
             text-decoration: none;
-            color: #333; /* لون النص */
-            background-color: #e0e0e0; /* خلفية خفيفة للروابط */
+
+            background-color: #2a4462e6;
             padding: 5px 12px;
-            border-radius: 5px;
+            border-radius: 8px;
+            color: white;
             font-size: 14px;
             transition: all 0.2s ease;
+            border: 2px outset #cfd6de;
         }
 
         .upNav a:hover {
@@ -93,8 +99,9 @@
 
         @isset($header)
             <header class="dark:bg-gray-800 shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                    <div>
+                <div class="  mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center" style=" background: #263f5b2e;
+    box-shadow: -1px 2px 2px 0px #273f5b;">
+                    <div  >
                         {{ $header }}
                     </div>
 

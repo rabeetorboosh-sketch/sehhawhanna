@@ -89,7 +89,7 @@
                                         $request->requestItems->where('is_confirmed', 1)->isNotEmpty()
 
                                     )
-                                        <a href="{{ route('purchase.buy', $request->id) }}"
+                                        <a href="{{ route('purchase_purchase.buy', $request->id) }}"
                                            class="btn btn-primary">شراء</a>
                                     @endif
 
