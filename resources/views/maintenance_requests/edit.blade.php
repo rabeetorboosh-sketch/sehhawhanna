@@ -81,8 +81,8 @@
             </div>
 
             <div class="actions">
-                <button type="submit" class="btn-save">تحديث</button>
                 <a href="{{ route('maintenance_requests.index') }}" class="btn btn-secondary">رجوع</a>
+                <button type="submit" class="btn btn-primary">تحديث</button>
             </div>
         </form>
     </div>

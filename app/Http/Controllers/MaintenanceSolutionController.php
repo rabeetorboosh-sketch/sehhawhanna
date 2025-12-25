@@ -25,7 +25,7 @@ class MaintenanceSolutionController extends Controller
     public function create($request="")
     {
 
-        $requests = MaintenanceRequest::where('status',1)->all();
+        $requests = MaintenanceRequest::where('status',1)->get();
         return view('maintenance_solutions.create', compact('requests','request'));
     }
 

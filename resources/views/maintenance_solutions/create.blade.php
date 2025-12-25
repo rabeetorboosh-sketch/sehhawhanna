@@ -24,8 +24,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label>الوقت المستغرق لحل المشكلة (ساعات)</label>
-                    <input type="number" name="time_spent" step="0.1" min="0">
+                    <label style="display:inline-block; width: 70%">الوقت المستغرق لحل المشكلة (ساعات)</label>
+                    <input type="number" name="time_spent" step="0.1" min="0" style="width: 28%;">
                 </div>
 
                 <div class="form-group">
@@ -57,15 +57,13 @@
                 <div class="form-group">
                     <label>الضمان</label>
                     <div class="warranty-tabs">
-                        <span   class="tab-button active btn tab" data-tab="no-warranty"  >لا يوجد</span>
-                        <span class="tab-button  tab" data-tab="has-warranty">يوجد</span>
+                        <span class="tab-button active tab" data-tab="no-warranty" id="no-warranty-btn" style="display: none">لا يوجد</span>
+                        <span class="tab-button tab" data-tab="has-warranty" id="add-warranty-btn">اضافة ضمان</span>
                     </div>
 
                     <input type="hidden" name="has_warranty" id="has_warranty" value="0">
 
-
                     <div id="has-warranty" class="tab-content" style="display:none;">
-
                         <div class="form-group">
                             <label>نوع الضمانة</label>
                             <input type="text" name="warranty_type">
@@ -77,6 +75,10 @@
                     </div>
                 </div>
 
+
+
+
+
                 <div class="form-group">
                     <label>هل تم تسليمها؟</label>
                     <input type="checkbox" name="delivered" value="1" class="checkbox">
@@ -85,31 +87,34 @@
             </div>
 
             <div class="actions">
-                <button type="submit" class="btn-save">حفظ</button>
                 <a href="{{ route('maintenance_solutions.index') }}" class="btn btn-secondary">رجوع</a>
+                <button type="submit" class="btn-save">حفظ</button>
             </div>
         </form>
     </div>
 
     <script>
-        const tabButtons = document.querySelectorAll('.tab-button');
+        const noWarrantyBtn = document.getElementById('no-warranty-btn');
+        const addWarrantyBtn = document.getElementById('add-warranty-btn');
         const tabContents = document.querySelectorAll('.tab-content');
         const hasWarrantyInput = document.getElementById('has_warranty');
 
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const target = button.dataset.tab;
-
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-
-                tabContents.forEach(content => {
-                    content.style.display = content.id === target ? 'block' : 'none';
-                });
-
-                // هنا نغيّر قيمة input بناءً على التاب
-                hasWarrantyInput.value = (target === 'has-warranty') ? '1' : '0';
+        addWarrantyBtn.addEventListener('click', () => {
+            addWarrantyBtn.style.display = 'none'; // إخفاء زر الإضافة
+            noWarrantyBtn.style.display = 'inline'; // عرض زر لا يوجد
+            tabContents.forEach(content => {
+                if(content.id === 'has-warranty') content.style.display = 'block';
             });
+            hasWarrantyInput.value = '1';
+        });
+
+        noWarrantyBtn.addEventListener('click', () => {
+            addWarrantyBtn.style.display = 'inline'; // عرض زر الإضافة
+            noWarrantyBtn.style.display = 'none'; // زر لا يوجد يبقى ظاهر
+            tabContents.forEach(content => {
+                if(content.id === 'has-warranty') content.style.display = 'none';
+            });
+            hasWarrantyInput.value = '0';
         });
     </script>
 </x-app-layout>
