@@ -80,7 +80,7 @@
                 <i class="fa-solid fa-arrow-right"></i> عودة للقائمة
             </a>
 
-            @if(Auth::user()->isAdmin() || Auth::user()->is_request() > 1)
+            @if(Auth::user()->permissions('pur-operations-request')?->can_edit == 1)
                 <a href="{{ route('purchase_requests.edit', $purchaseRequest) }}" class="btn btn-worn">
                     <i class="fa-solid fa-pen"></i> تعديل
                 </a>

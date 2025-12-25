@@ -16,13 +16,7 @@
     </ul>
     <ul class="menu">
 
-{{--        <li class="menu-item">--}}
-{{--            <button class="dropdown-btn"> تهيئة النظام</button>--}}
-{{--            <ul class="submenu">--}}
-{{--                <li><a href="#"> اللغة </a></li>--}}
-{{--                <li><a href="#">---</a></li>--}}
-{{--            </ul>--}}
-{{--        </li>--}}
+
         @if(Auth::user()->sectionsPermissions('general'))
         <li class="menu-item">
 
@@ -42,13 +36,7 @@
                     </ul>
                     @endif
                 </li>
-{{--                <li class="menu-item">--}}
-{{--                    <button class="dropdown-btn"> الفروع </button>--}}
-{{--                    <ul class="submenu">--}}
-{{--                        <li><a href="#">إضافة </a></li>--}}
-{{--                        <li><a href="#">قائمة الفروع</a></li>--}}
-{{--                    </ul>--}}
-{{--                </li>--}}
+
                 @if(Auth::user()->permissions('general-issues')?->can_show==1)
                 <li class="menu-item">
                     <button class="dropdown-btn">أنواع المشاكل</button>
@@ -900,7 +888,114 @@
                 </ul>
             </li>
         @endif
+            @if(Auth::user()->sectionsPermissions('pur'))
+                <li class="menu-item">
 
+                    <button class="dropdown-btn"> رقابة المشتريات   </button>
+                    <ul class="submenu">
+                        @if(Auth::user()->sectionsPermissions('pur-insertions'))
+                            <li class="menu-item">
+                                <button class="dropdown-btn">المدخلات</button>
+                                <ul class="submenu">
+                                    @if(Auth::user()->permissions('pur-insertions-products')?->can_show==1)
+                                        <li class="menu-item">
+                                            <button class="dropdown-btn">الأصناف</button>
+
+                                            <ul class="submenu">
+                                                @if(Auth::user()->permissions('pur-insertions-products')?->can_create==1)
+                                                    <li><a href="{{ route('pur_items.create') }}">إضافة صنف</a></li>
+                                                @endif
+                                                <li><a href="{{ route('pur_items.index') }}">قائمة الأصناف</a></li>
+                                            </ul>
+                                        </li>
+                                    @endif
+                                    @if(Auth::user()->permissions('pur-insertions-units')?->can_show == 1)
+                                        <li class="menu-item">
+                                            <button class="dropdown-btn">الوحدات</button>
+                                            <ul class="submenu">
+                                                @if(Auth::user()->permissions('pur-insertions-units')?->can_create == 1)
+                                                    <li><a href="{{ route('pur_units.create') }}">إضافة وحدة</a></li>
+                                                @endif
+                                                <li><a href="{{ route('pur_units.index') }}">قائمة الوحدات</a></li>
+                                            </ul>
+                                        </li>
+                                    @endif
+
+
+
+
+                                    @if(Auth::user()->permissions('pur-insertions-main_groups')?->can_show == 1)
+                                        <li class="menu-item">
+                                            <button class="dropdown-btn">المجموعات الرئيسية</button>
+                                            <ul class="submenu">
+                                                @if(Auth::user()->permissions('pur-insertions-main_groups')?->can_create == 1)
+                                                    <li><a href="{{ route('purMainGroup.add') }}">إضافة مجموعة</a></li>
+                                                @endif
+                                                <li><a href="{{ route('purMainGroup.index') }}">قائمة المجموعات</a></li>
+                                            </ul>
+                                        </li>
+                                    @endif
+
+                                    @if(Auth::user()->permissions('pur-insertions-sub_groups')?->can_show == 1)
+                                        <li class="menu-item">
+                                            <button class="dropdown-btn">المجموعات الفرعية</button>
+                                            <ul class="submenu">
+                                                @if(Auth::user()->permissions('pur-insertions-sub_groups')?->can_create == 1)
+                                                    <li><a href="{{ route('PurSubGroup.add') }}">إضافة مجموعة</a></li>
+                                                @endif
+                                                <li><a href="{{ route('PurSubGroup.index') }}">قائمة المجموعات</a></li>
+                                            </ul>
+                                        </li>
+                                    @endif
+
+                                </ul>
+                            </li>
+                        @endif
+                        @if(Auth::user()->sectionsPermissions('pur-operations'))
+                            <li class="menu-item">
+                                <button class="dropdown-btn">العمليات</button>
+                                <ul class="submenu">
+
+                                    @if(Auth::user()->permissions('pur-operations-request')?->can_show == 1)
+                                        <li class="menu-item">
+                                            <button class="dropdown-btn">الطلبات </button>
+                                            <ul class="submenu">
+                                                @if(Auth::user()->permissions('pur-operations-request')?->can_create == 1)
+                                                    <li><a href="{{ route('purchase_requests.create') }}">إضافة طلب</a></li>
+                                                @endif
+                                                <li><a href="{{ route('purchase_requests.index') }}">قائمة الطلبات</a></li>
+                                            </ul>
+                                        </li>
+                                    @endif
+                                    @if(Auth::user()->permissions('pur-operations-purchase')?->can_show == 1)
+                                        <li class="menu-item">
+                                            <button class="dropdown-btn">المشتريات</button>
+                                            <ul class="submenu">
+                                                @if(Auth::user()->permissions('pur-operations-purchase')?->can_create == 1)
+                                                    <li><a href="{{ route('purchase_purchase.create') }}">إضافة مشتريات</a></li>
+                                                @endif
+                                                <li><a href="{{ route('purchase_purchase.index') }}">قائمة المشتريات</a></li>
+                                            </ul>
+                                        </li>
+                                    @endif
+                                    @if(Auth::user()->permissions('pur-operations-intake')?->can_show == 1)
+                                        <li class="menu-item">
+                                            <button class="dropdown-btn">الاستلامات</button>
+                                            <ul class="submenu">
+                                                @if(Auth::user()->permissions('pur-operations-intake')?->can_create == 1)
+                                                    <li><a href="{{ route('intake.create') }}">إضافة استلام</a></li>
+                                                @endif
+                                                <li><a href="{{ route('intake.index') }}">قائمة الاستلامات </a></li>
+                                            </ul>
+                                        </li>
+                                    @endif
+
+                                </ul>
+                            </li>
+                        @endif
+                    </ul>
+                </li>
+            @endif
         <li class="menu-item">
             <button class="dropdown-btn">  التقارير </button>
             <ul class="submenu">

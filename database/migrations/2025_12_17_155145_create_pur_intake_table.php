@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('pur_purchase_id')->nullable();
             $table->string('note')->nullable();
             $table->unsignedBigInteger('employee_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->date('intake_date')->nullable();
             $table->timestamps();
         });

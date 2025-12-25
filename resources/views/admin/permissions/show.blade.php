@@ -26,7 +26,7 @@ $modelTranslations = [
     'reports'         => 'البلاغات',
     'permissions'   => 'الصلاحيات',
     'packages'      => 'الحزم',
-  'maintenance_request'      => 'طلبات الصيانة',
+    'maintenance_request'      => 'طلبات الصيانة',
     'maintenance'      => ' عمليات الصيانة',
     'movements'      => 'نقل الاصول',
     'monitoring'      => ' الرقابة اليومية ',
@@ -41,15 +41,20 @@ $modelTranslations = [
     'sub_groups'   => 'المجموعات الفرعية',
     'daily_monitoring'   => 'الرقابة اليومية',
     'operations'   => 'العمليات',
-        'myTask'   => 'مهامي اليومية',
+    'myTask'   => 'مهامي اليومية',
     'exp'   => 'التوالف',
     'ret'   => '  المرتجعات',
     'load'   => '  التحميل',
-     'ratingUnits'   => ' وحدات التقييم',
+    'ratingUnits'   => ' وحدات التقييم',
     'ratings'   => '   التقييم',
     'sales_routs'   => '   الخطوط',
     'customersRequests'   => '   طلبات العملاء',
-
+    'employeesTypes'   => '      انواع الموظفين',
+    'housing_units'   => '         وحدات التسكين',
+    'housing_assignments'   => '         عمليات التسكين',
+    'request'   => '    طلبات المشتريات',
+    'purchase'   => '     المشتريات',
+    'intake'   => '   استلامات  المشتريات',
 ];
 @endphp
 

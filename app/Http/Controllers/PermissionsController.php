@@ -83,7 +83,39 @@ return view('admin.permissions.create',compact('departments','users','packages')
                 }
 
             }
+            if ($request->has('pur')) {
+                $deptData = $request->$deptName;
 
+
+                if (isset($deptData['insertions'])) {
+                    foreach ($deptData['insertions'] as $model => $perms) {
+                        $template = Template::create([
+                            'model'         =>  'pur-insertions'.'-'.$model,
+                            'can_create'    => $perms['create'] ?? 0,
+                            'can_update'    => $perms['edit'] ?? 0,
+                            'can_delete'    => $perms['delete'] ?? 0,
+                            'can_approve'   => $perms['approve'] ?? 0,
+                            'can_show'      => $perms['view'] ?? 0,
+                        ]);
+                        $user->templates()->attach($template->id);
+                    }
+                }
+
+                // Process operations if present
+                if (isset($deptData['operations'])) {
+                    foreach ($deptData['operations'] as $model => $perms) {
+                        $template = Template::create([
+                            'model'         =>  'pur-operations'.'-'.$model,
+                            'can_create'    => $perms['create'] ?? 0,
+                            'can_update'    => $perms['edit'] ?? 0,
+                            'can_delete'    => $perms['delete'] ?? 0,
+                            'can_approve'   => $perms['approve'] ?? 0,
+                            'can_show'      => $perms['view'] ?? 0,
+                        ]);
+                        $user->templates()->attach($template->id);
+                    }
+                }
+            }
             if ($request->has('general')){
                 $deptData = $request->general;
                 foreach ($deptData as $model => $perms) {
@@ -128,6 +160,7 @@ return view('admin.permissions.create',compact('departments','users','packages')
 
         $departments = Department::pluck('name', 'id')->toArray();
         $departments['general'] = 'مدخلات عامة'  ;
+        $departments['pur'] = 'المشتريات'  ;
         $departments['daily_monitoring'] = 'الرقابة اليومية'  ;
         return view('admin.permissions.show', compact('user','departments'));
     }
@@ -224,7 +257,39 @@ return view('admin.permissions.create',compact('departments','users','packages')
                     }
                 }
             }
+            if ($request->has('pur')) {
+                $deptData = $request->pur;
 
+                if (isset($deptData['insertions'])) {
+                    foreach ($deptData['insertions'] as $model => $perms) {
+
+
+                        $template = Template::create(array(
+                            'model'         => 'pur-'.'insertions'.'-'.$model,
+                            'can_create'    => $perms['create'] ?? 0,
+                            'can_update'    => $perms['edit'] ?? 0,
+                            'can_delete'    => $perms['delete'] ?? 0,
+                            'can_approve'   => $perms['approve'] ?? 0,
+                            'can_show'      => $perms['view'] ?? 0,
+                        ));
+                        $user->templates()->attach($template->id);
+                    }
+                }
+
+                if (isset($deptData['operations'])) {
+                    foreach ($deptData['operations'] as $model => $perms) {
+                        $template = Template::create([
+                            'model'         =>  'pur-'.'operations'.'-'.$model,
+                            'can_create'    => $perms['create'] ?? 0,
+                            'can_update'    => $perms['edit'] ?? 0,
+                            'can_delete'    => $perms['delete'] ?? 0,
+                            'can_approve'   => $perms['approve'] ?? 0,
+                            'can_show'      => $perms['view'] ?? 0,
+                        ]);
+                        $user->templates()->attach($template->id);
+                    }
+                }
+            }
             if ($request->has('general')) {
                 $deptData = $request->general;
                 foreach ($deptData as $model => $perms) {

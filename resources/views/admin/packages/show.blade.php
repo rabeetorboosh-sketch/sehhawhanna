@@ -49,6 +49,12 @@ $modelTranslations = [
     'ratings'   => '   التقييم',
     'sales_routs'   => '   الخطوط',
     'customersRequests'   => '   طلبات العملاء',
+    'employeesTypes'   => '      انواع الموظفين',
+    'housing_units'   => '         وحدات التسكين',
+    'housing_assignments'   => '         عمليات التسكين',
+    'request'   => '    طلبات المشتريات',
+    'purchase'   => '     المشتريات',
+    'intake'   => '   استلامات  المشتريات',
 ];
 @endphp
 

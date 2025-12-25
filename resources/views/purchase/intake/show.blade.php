@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            تفاصيل فاتورة الشراء
+            تفاصيل الاستلام
         </h2>
     </x-slot>
 
@@ -9,24 +9,24 @@
 
     <div class="transaction-container">
 
-        <!-- بطاقة معلومات الفاتورة -->
+        <!-- بطاقة معلومات الاستلام -->
         <div class="transaction-card">
-            <h3>معلومات الفاتورة</h3>
+            <h3>معلومات الاستلام</h3>
             <div class="transaction-info">
-                <p><strong>رقم الفاتورة:</strong> {{ $purchase->id }}</p>
-                <p><strong>التاريخ:</strong> {{ $purchase->created_at->format('d-m-Y h:i A') }}</p>
-                <p><strong>ملاحظات:</strong> {{ $purchase->note ?? '-' }}</p>
+                <p><strong>رقم الاستلام:</strong> {{ $purchaseIntake->id }}</p>
+                <p><strong>التاريخ:</strong> {{ $purchaseIntake->created_at->format('d-m-Y h:i A') }}</p>
+                <p><strong>ملاحظات:</strong> {{ $purchaseIntake->note ?? '-' }}</p>
             </div>
         </div>
 
-        <!-- بطاقة العناصر المشتراة -->
+        <!-- بطاقة العناصر المستلمة -->
         <div class="transaction-card">
-            <h3>العناصر المشتراة</h3>
+            <h3>العناصر المستلمة</h3>
 
             <div class="items-list">
                 <p class="items-summary">
                     <strong>إجمالي الكمية:</strong>
-                    {{ $purchase->purchaseItems->sum('purchase_count') }}
+                    {{ $purchaseIntake->purchaseIntakeItems->sum('intake_count') }}
                 </p>
 
                 <table class="items-table">
@@ -40,13 +40,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($purchase->purchaseItems as $index => $item)
-
+                    @foreach($purchaseIntake->purchaseIntakeItems as $index => $item)
                         <tr>
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $item->item->name ?? 'غير متوفر' }}</td>
-                            <td> {{  $item->unit->unit->name ?? 'غير متوفر' }}</td>
-                            <td>{{ $item->pur_purchase_count }}</td>
+                            <td>{{ $item->unit->unit?->name ?? 'غير متوفر' }}</td>
+                            <td>{{ $item->pur_intake_count }}</td>
                             <td>
                                 @if($item->is_confirmed)
                                     <span style="color: green; font-weight: bold;">✅</span>
@@ -63,12 +62,12 @@
 
         <!-- الأزرار -->
         <div class="actions">
-            <a href="{{ route('purchase_purchase.index') }}" class="btn btn-primary">
+            <a href="{{ route('intake.index') }}" class="btn btn-primary">
                 <i class="fa-solid fa-arrow-right"></i> عودة للقائمة
             </a>
 
-            @if(Auth::user()->permissions('pur-operations-purchase')?->can_edit == 1)
-                <a href="{{ route('purchase_purchase.edit', $purchase) }}" class="btn btn-worn">
+            @if(Auth::user()->permissions('pur-operations-intake')?->can_edit == 1)
+                <a href="{{ route('intake.edit', $purchaseIntake->id) }}" class="btn btn-worn">
                     <i class="fa-solid fa-pen"></i> تعديل
                 </a>
             @endif

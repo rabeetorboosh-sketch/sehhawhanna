@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            المشتريات
+            الاستلامات
         </h2>
     </x-slot>
 
@@ -10,10 +10,10 @@
     <div class="py-12">
 
         {{-- زر إضافة --}}
-        @if(Auth::user()->isAdmin() || Auth::user()->is_purchase() > 1)
+        @if(Auth::user()->permissions('pur-operations-intake')?->can_creata == 1)
             <div class="add btn">
-                <a href="{{ route('purchase_purchase.create') }}">
-                    إنشاء فاتورة جديدة <i class="fa-solid fa-plus"></i>
+                <a href="{{ route('intake.create') }}">
+                    إنشاء استلام <i class="fa-solid fa-plus"></i>
                 </a>
             </div>
         @endif
@@ -31,24 +31,24 @@
                     </thead>
 
                     <tbody>
-                    @foreach($purchases as $purchase)
+                    @foreach($purchaseIntakes as $purchaseIntake)
                         <tr>
-                            <td>{{ $purchase->id }}</td>
+                            <td>{{ $purchaseIntake->id }}</td>
 
                             {{-- التاريخ --}}
-                            <td>{{ $purchase->created_at->format('Y-m-d') }}</td>
+                            <td>{{ $purchaseIntake->created_at->format('Y-m-d') }}</td>
 
                             {{-- الملاحظة --}}
-                            <td>{{ $purchase->note ?? '--' }}</td>
+                            <td>{{ $purchaseIntake->note ?? '--' }}</td>
 
                             {{-- العمليات --}}
                             <td>
                                 <div class="actions">
 
                                     {{-- اعتماد --}}
-                                    @if(Auth::user()->permissions('pur-operations-purchase')?->can_approve == 1)
+                                    @if(Auth::user()->permissions('pur-operations-intake')?->can_approve== 1)
                                         <form method="POST"
-                                              action="{{ route('purchase_purchase.confirm', $purchase->id) }}"
+                                              action="{{ route('intake.confirm', $purchaseIntake->id) }}"
                                               style="display:inline;">
                                             @csrf
                                             <button class="btn btn-success">اعتماد</button>
@@ -56,31 +56,34 @@
                                     @endif
 
                                     {{-- عرض --}}
-                                    <a href="{{ route('purchase_purchase.show', $purchase->id) }}"
+                                    <a href="{{ route('intake.show', $purchaseIntake->id) }}"
                                        class="btn btn-primary">عرض</a>
 
                                     {{-- تعديل --}}
-                                    @if(Auth::user()->permissions('pur-operations-purchase')?->can_edit == 1)
-                                        <a href="{{ route('purchase_purchase.edit', $purchase->id) }}"
+                                    @if(Auth::user()->permissions('pur-operations-intake')?->can_edit == 1)
+                                        <a href="{{ route('intake.edit', $purchaseIntake->id) }}"
                                            class="btn btn-worn">تعديل</a>
                                     @endif
 
-                                    {{-- استلام --}}
-                                    @if(Auth::user()->permissions('pur-operations-intake')?->can_edit == 1)
-                                        <a href="{{ route('intake.buy', $purchase->id) }}"
-                                           class="btn btn-primary">استلام</a>
-                                    @endif
+                                    {{-- تحميل --}}
+{{--                                    @if(Auth::user()->isAdmin() || Auth::user()->is_load() > 1)--}}
+{{--                                        <a href="{{ route('load.buy', $purchaseIntake->id) }}"--}}
+{{--                                           class="btn btn-primary">تحميل</a>--}}
+{{--                                    @endif--}}
 
                                     {{-- حذف --}}
-                                    @if(Auth::user()->permissions('pur-operations-purchase')?->can_delete == 1)
+                                    @if(Auth::user()->permissions('pur-operations-intake')?->can_delete == 1)
                                         <form method="POST"
-                                              action="{{ route('purchase_purchase.destroy', $purchase->id) }}"
+                                              action="{{ route('intake.destroy', $purchaseIntake->id) }}"
                                               style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ $purchase->id }})">
+                                            <button type="submit"
+                                                    class="btn btn-danger"
+                                                    onclick="return confirm('هل أنت متأكد من الحذف؟')">
                                                 حذف
-                                            </button>  </form>
+                                            </button>
+                                        </form>
                                     @endif
 
                                 </div>
@@ -95,7 +98,7 @@
 
         {{-- Pagination --}}
         <div class="mt-4">
-            {{ $purchases->links() }}
+            {{ $purchaseIntakes->links() }}
         </div>
 
     </div>

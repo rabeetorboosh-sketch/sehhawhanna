@@ -10,14 +10,14 @@
     <div class="py-12">
 
         {{-- زر إضافة --}}
-
+        @if(Auth::user()->permissions('pur-operations-request')?->can_create == 1)
             <div class="add btn">
                 <a href="{{ route('purchase_requests.create') }}">
                     إنشاء طلب جديد <i class="fa-solid fa-plus"></i>
                 </a>
             </div>
 
-
+        @endif
         <div class="table-wrap">
             <div class="table-scroll">
                 <table class="table">
@@ -56,7 +56,7 @@
                                 <div class="actions">
 
                                     {{-- اعتماد / إلغاء اعتماد --}}
-                                    @if(Auth::user()->isAdmin())
+                                    @if(Auth::user()->permissions('pur-operations-request')?->can_approve == 1)
                                         @if($request->requestItems->where('is_confirmed', 1)->isNotEmpty())
                                             <form method="POST"
                                                   action="{{ route('purchase_requests.deconfirm', $request->id) }}"
@@ -79,12 +79,12 @@
                                        class="btn btn-primary">عرض</a>
 
                                     {{-- تعديل --}}
-
+                                    @if(Auth::user()->permissions('pur-operations-request')?->can_edit == 1)
                                         <a href="{{ route('purchase_requests.edit', $request->id) }}"
                                            class="btn btn-worn">تعديل</a>
+                                    @endif
 
-
-                                    {{-- شراء --}}
+                                    @if(Auth::user()->permissions('pur-operations-purchase')?->can_create == 1)      {{-- شراء --}}
                                     @if(
                                         $request->requestItems->where('is_confirmed', 1)->isNotEmpty()
 
@@ -92,8 +92,8 @@
                                         <a href="{{ route('purchase_purchase.buy', $request->id) }}"
                                            class="btn btn-primary">شراء</a>
                                     @endif
-
-                                    {{-- حذف --}}
+                                    @endif
+                                    @if(Auth::user()->permissions('pur-operations-request')?->can_delte == 1)
                                          <form method="POST"
                                               action="{{ route('purchase_requests.destroy', $request->id) }}"
                                               style="display:inline;">
@@ -101,7 +101,7 @@
                                             @method('DELETE')
                                             <button class="btn btn-danger">حذف</button>
                                         </form>
-
+                                    @endif
 
                                 </div>
                             </td>

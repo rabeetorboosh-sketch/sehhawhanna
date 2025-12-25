@@ -706,6 +706,87 @@
                 </li>
             </ul>
 
+            <h3>رقابة المشتريات</h3>
+
+            <ul class="departments">
+                <li>
+                    <strong>المدخلات</strong> <input type="checkbox" class="checkbox parent" name="pur[insertions]" value="1" @if(isset($permissions['pur']['insertions'])) checked @endif >
+                    <ul>
+                        <li>
+                            <strong>الأصناف</strong> <input type="checkbox" class="checkbox parent" name="pur[insertions][products]" value="1" @if(isset($permissions['pur']['insertions']['products'])) checked @endif >
+                            <ul>
+                                <li><strong>إضافة </strong> <input type="checkbox" name="pur[insertions][products][create]" value="1" class="checkbox" @if(isset($permissions['pur']['insertions']['products']['create']) && $permissions['pur']['insertions']['products']['create'] == 1) checked @endif></li>
+                                <li><strong>عرض</strong> <input type="checkbox" name="pur[insertions][products][view]" value="1" class="checkbox" @if(isset($permissions['pur']['insertions']['products']['view']) && $permissions['pur']['insertions']['products']['view'] == 1) checked @endif></li>
+                                <li><strong>تعديل</strong> <input type="checkbox" name="pur[insertions][products][edit]" value="1" class="checkbox" @if(isset($permissions['pur']['insertions']['products']['edit']) && $permissions['pur']['insertions']['products']['edit'] == 1) checked @endif></li>
+                                <li><strong>حذف</strong> <input type="checkbox" name="pur[insertions][products][delete]" value="1" class="checkbox" @if(isset($permissions['pur']['insertions']['products']['delete']) && $permissions['pur']['insertions']['products']['delete'] == 1) checked @endif></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>الوحدات</strong> <input type="checkbox" class="checkbox parent" name="pur[insertions][units]" value="1" @if(isset($permissions['pur']['insertions']['units'])) checked @endif  >
+                            <ul>
+                                <li><strong>إضافة </strong> <input type="checkbox" name="pur[insertions][units][create]" value="1" class="checkbox" @if(isset($permissions['pur']['insertions']['units']['create']) && $permissions['pur']['insertions']['units']['create'] == 1) checked @endif></li>
+                                <li><strong>عرض</strong> <input type="checkbox" name="pur[insertions][units][view]" value="1" class="checkbox"  @if(isset($permissions['pur']['insertions']['units']['view']) && $permissions['pur']['insertions']['units']['view'] == 1) checked @endif></li>
+                                <li><strong>تعديل</strong> <input type="checkbox" name="pur[insertions][units][edit]" value="1" class="checkbox" @if(isset($permissions['pur']['insertions']['units']['edit']) && $permissions['pur']['insertions']['units']['edit'] == 1) checked @endif></li>
+                                <li><strong>حذف</strong> <input type="checkbox" name="pur[insertions][units][delete]" value="1" class="checkbox" @if(isset($permissions['pur']['insertions']['units']['delete']) && $permissions['pur']['insertions']['units']['delete'] == 1) checked @endif></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>المجموعات الرئيسية</strong> <input type="checkbox" class="checkbox parent" name="pur[insertions][main_groups]" value="1"  @if(isset($permissions['pur']['insertions']['main_groups'])) checked @endif >
+                            <ul>
+                                <li><strong>إضافة </strong> <input type="checkbox" name="pur[insertions][main_groups][create]" value="1" class="checkbox"  @if(isset($permissions['pur']['insertions']['main_groups']['create']) && $permissions['pur']['insertions']['main_groups']['create'] == 1) checked @endif></li>
+                                <li><strong>عرض</strong> <input type="checkbox" name="pur[insertions][main_groups][view]" value="1" class="checkbox" @if(isset($permissions['pur']['insertions']['main_groups']['view']) && $permissions['pur']['insertions']['main_groups']['view'] == 1) checked @endif></li>
+                                <li><strong>تعديل</strong> <input type="checkbox" name="pur[insertions][main_groups][edit]" value="1" class="checkbox" @if(isset($permissions['pur']['insertions']['main_groups']['edit']) && $permissions['pur']['insertions']['main_groups']['edit'] == 1) checked @endif></li>
+                                <li><strong>حذف</strong> <input type="checkbox" name="pur[insertions][main_groups][delete]" value="1" class="checkbox" @if(isset($permissions['pur']['insertions']['main_groups']['delete']) && $permissions['pur']['insertions']['main_groups']['delete'] == 1) checked @endif></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>المجموعات الفرعية</strong> <input type="checkbox" class="checkbox parent" name="pur[insertions][sub_groups]" value="1"  @if(isset($permissions['pur']['insertions']['sub_groups'])) checked @endif>
+                            <ul>
+                                <li><strong>إضافة </strong> <input type="checkbox" name="pur[insertions][sub_groups][create]" value="1" class="checkbox" @if(isset($permissions['pur']['insertions']['sub_groups']['create']) && $permissions['pur']['insertions']['sub_groups']['create'] == 1) checked @endif></li>
+                                <li><strong>عرض</strong> <input type="checkbox" name="pur[insertions][sub_groups][view]" value="1" class="checkbox" @if(isset($permissions['pur']['insertions']['sub_groups']['view']) && $permissions['pur']['insertions']['sub_groups']['view'] == 1) checked @endif></li>
+                                <li><strong>تعديل</strong> <input type="checkbox" name="pur[insertions][sub_groups][edit]" value="1" class="checkbox" @if(isset($permissions['pur']['insertions']['sub_groups']['edit']) && $permissions['pur']['insertions']['sub_groups']['edit'] == 1) checked @endif></li>
+                                <li><strong>حذف</strong> <input type="checkbox" name="pur[insertions][sub_groups][delete]" value="1" class="checkbox" @if(isset($permissions['pur']['insertions']['sub_groups']['delete']) && $permissions['pur']['insertions']['sub_groups']['delete'] == 1) checked @endif></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>العمليات</strong> <input type="checkbox" class="checkbox parent" name="pur[operations]" value="1"   @if(isset($permissions['pur']['operations'])) checked @endif  >
+                    <ul>
+                        <li>
+                            <strong>الطلبات</strong> <input type="checkbox" class="checkbox parent" name="pur[operations][request]" value="1"  @if(isset($permissions['pur']['operations']['request'])) checked @endif   >
+                            <ul>
+                                <li><strong>إضافة </strong> <input type="checkbox" name="pur[operations][request][create]" value="1" class="checkbox"  @if(isset($permissions['pur']['operations']['request']['create']) && $permissions['pur']['operations']['request']['create'] == 1) checked @endif></li>
+                                <li><strong>عرض</strong> <input type="checkbox" name="pur[operations][request][view]" value="1" class="checkbox" @if(isset($permissions['pur']['operations']['request']['view']) && $permissions['pur']['operations']['request']['view'] == 1) checked @endif></li>
+                                <li><strong>تعديل</strong> <input type="checkbox" name="pur[operations][request][edit]" value="1" class="checkbox" @if(isset($permissions['pur']['operations']['request']['edit']) && $permissions['pur']['operations']['request']['edit'] == 1) checked @endif></li>
+                                <li><strong>حذف</strong> <input type="checkbox" name="pur[operations][request][delete]" value="1" class="checkbox"  @if(isset($permissions['pur']['operations']['request']['delete']) && $permissions['pur']['operations']['request']['delete'] == 1) checked @endif></li>
+                                <li><strong>اعتماد</strong> <input type="checkbox" name="pur[operations][request][approve]" value="1" class="checkbox"  @if(isset($permissions['pur']['operations']['request']['approve']) && $permissions['pur']['operations']['request']['approve'] == 1) checked @endif></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>المشتريات </strong> <input type="checkbox" class="checkbox parent" name="pur[operations][purchase]" value="1"  @if(isset($permissions['pur']['operations']['purchase'])) checked @endif   >
+                            <ul>
+                                <li><strong>إضافة </strong> <input type="checkbox" name="pur[operations][purchase][create]" value="1" class="checkbox"  @if(isset($permissions['pur']['operations']['purchase']['create']) && $permissions['pur']['operations']['purchase']['create'] == 1) checked @endif></li>
+                                <li><strong>عرض</strong> <input type="checkbox" name="pur[operations][purchase][view]" value="1" class="checkbox" @if(isset($permissions['pur']['operations']['purchase']['view']) && $permissions['pur']['operations']['purchase']['view'] == 1) checked @endif></li>
+                                <li><strong>تعديل</strong> <input type="checkbox" name="pur[operations][purchase][edit]" value="1" class="checkbox" @if(isset($permissions['pur']['operations']['purchase']['edit']) && $permissions['pur']['operations']['purchase']['edit'] == 1) checked @endif></li>
+                                <li><strong>حذف</strong> <input type="checkbox" name="pur[operations][purchase][delete]" value="1" class="checkbox"  @if(isset($permissions['pur']['operations']['purchase']['delete']) && $permissions['pur']['operations']['purchase']['delete'] == 1) checked @endif></li>
+                                <li><strong>اعتماد</strong> <input type="checkbox" name="pur[operations][purchase][approve]" value="1" class="checkbox"  @if(isset($permissions['pur']['operations']['purchase']['approve']) && $permissions['pur']['operations']['purchase']['approve'] == 1) checked @endif></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>الاستلامات </strong> <input type="checkbox" class="checkbox parent" name="pur[operations][intake]" value="1"  @if(isset($permissions['pur']['operations']['intake'])) checked @endif   >
+                            <ul>
+                                <li><strong>إضافة </strong> <input type="checkbox" name="pur[operations][intake][create]" value="1" class="checkbox"  @if(isset($permissions['pur']['operations']['intake']['create']) && $permissions['pur']['operations']['intake']['create'] == 1) checked @endif></li>
+                                <li><strong>عرض</strong> <input type="checkbox" name="pur[operations][intake][view]" value="1" class="checkbox" @if(isset($permissions['pur']['operations']['intake']['view']) && $permissions['pur']['operations']['intake']['view'] == 1) checked @endif></li>
+                                <li><strong>تعديل</strong> <input type="checkbox" name="pur[operations][intake][edit]" value="1" class="checkbox" @if(isset($permissions['pur']['operations']['intake']['edit']) && $permissions['pur']['operations']['intake']['edit'] == 1) checked @endif></li>
+                                <li><strong>حذف</strong> <input type="checkbox" name="pur[operations][intake][delete]" value="1" class="checkbox"  @if(isset($permissions['pur']['operations']['intake']['delete']) && $permissions['pur']['operations']['intake']['delete'] == 1) checked @endif></li>
+                                <li><strong>اعتماد</strong> <input type="checkbox" name="pur[operations][intake][approve]" value="1" class="checkbox"  @if(isset($permissions['pur']['operations']['intake']['approve']) && $permissions['pur']['operations']['intake']['approve'] == 1) checked @endif></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <!-- باقي الأقسام بنفس الطريقة -->
+            </ul>
 
 
             <div class="actions">

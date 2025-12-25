@@ -84,7 +84,39 @@ class PackageController extends Controller
                 }
 
             }
+            if ($request->has('pur')) {
+                $deptData = $request->$deptName;
 
+
+                if (isset($deptData['insertions'])) {
+                    foreach ($deptData['insertions'] as $model => $perms) {
+                        $template = Template::create([
+                            'model'         =>  'pur-insertions'.'-'.$model,
+                            'can_create'    => $perms['create'] ?? 0,
+                            'can_update'    => $perms['edit'] ?? 0,
+                            'can_delete'    => $perms['delete'] ?? 0,
+                            'can_approve'   => $perms['approve'] ?? 0,
+                            'can_show'      => $perms['view'] ?? 0,
+                        ]);
+                        $pakage->templates()->attach($template->id);
+                    }
+                }
+
+                // Process operations if present
+                if (isset($deptData['operations'])) {
+                    foreach ($deptData['operations'] as $model => $perms) {
+                        $template = Template::create([
+                            'model'         =>  'pur-operations'.'-'.$model,
+                            'can_create'    => $perms['create'] ?? 0,
+                            'can_update'    => $perms['edit'] ?? 0,
+                            'can_delete'    => $perms['delete'] ?? 0,
+                            'can_approve'   => $perms['approve'] ?? 0,
+                            'can_show'      => $perms['view'] ?? 0,
+                        ]);
+                        $pakage->templates()->attach($template->id);
+                    }
+                }
+            }
             if ($request->has('general')){
                 $deptData = $request->general;
                 foreach ($deptData as $model => $perms) {
@@ -113,6 +145,7 @@ class PackageController extends Controller
                     $pakage->templates()->attach($template->id);
                 }
             }
+
         });
         return redirect()->route('packages.index')->with('success', 'تمت إضافة الحزمة');
     }
@@ -125,6 +158,7 @@ class PackageController extends Controller
         $departments = Department::pluck('name', 'id')->toArray();
         $departments['general'] = 'مدخلات عامة'  ;
         $departments['daily_monitoring'] = 'الرقابة اليومية'  ;
+        $departments['pur'] = 'المشتريات'  ;
         return view('admin.packages.show', compact('package','departments'));
     }
     public function edit($id)
@@ -184,6 +218,7 @@ class PackageController extends Controller
             foreach ($departments as $department) {
                 $deptName = strtolower($department->id);
 
+
                 if ($request->has($deptName)) {
                     $deptData = $request->$deptName;
 
@@ -218,7 +253,39 @@ class PackageController extends Controller
                     }
                 }
             }
+            if ($request->has('pur')) {
+                $deptData = $request->pur;
 
+                if (isset($deptData['insertions'])) {
+                    foreach ($deptData['insertions'] as $model => $perms) {
+
+
+                        $template = Template::create(array(
+                            'model'         => 'pur-'.'insertions'.'-'.$model,
+                            'can_create'    => $perms['create'] ?? 0,
+                            'can_update'    => $perms['edit'] ?? 0,
+                            'can_delete'    => $perms['delete'] ?? 0,
+                            'can_approve'   => $perms['approve'] ?? 0,
+                            'can_show'      => $perms['view'] ?? 0,
+                        ));
+                        $package->templates()->attach($template->id);
+                    }
+                }
+
+                if (isset($deptData['operations'])) {
+                    foreach ($deptData['operations'] as $model => $perms) {
+                        $template = Template::create([
+                            'model'         =>  'pur-'.'operations'.'-'.$model,
+                            'can_create'    => $perms['create'] ?? 0,
+                            'can_update'    => $perms['edit'] ?? 0,
+                            'can_delete'    => $perms['delete'] ?? 0,
+                            'can_approve'   => $perms['approve'] ?? 0,
+                            'can_show'      => $perms['view'] ?? 0,
+                        ]);
+                        $package->templates()->attach($template->id);
+                    }
+                }
+            }
             if ($request->has('general')){
                 $deptData = $request->general;
                 foreach ($deptData as $model => $perms) {
@@ -247,6 +314,9 @@ class PackageController extends Controller
                     $package->templates()->attach($template->id);
                 }
             }
+
+
+
         });
 
         return redirect()->route('packages.index')->with('success', 'تم تعديل الحزمة بنجاح');

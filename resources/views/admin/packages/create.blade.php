@@ -649,6 +649,89 @@
             </li>
         </ul>
 
+        <h3> رقابة المشتريات  </h3>
+        <ul class="departments">
+            <li>
+                <strong>المدخلات</strong> <input type="checkbox" class="checkbox parent" name="pur[insertions]" value="1"  >
+                <ul>
+                    <li>
+                        <strong>الوحدات</strong> <input type="checkbox" class="checkbox parent" name="pur[insertions][units]" value="1"   >
+                        <ul>
+                            <li><strong>إضافة </strong> <input type="checkbox" name="pur[insertions][units][create]" value="1" class="checkbox"></li>
+                            <li><strong>عرض</strong> <input type="checkbox" name="pur[insertions][units][view]" value="1" class="checkbox"></li>
+                            <li><strong>تعديل</strong> <input type="checkbox" name="pur[insertions][units][edit]" value="1" class="checkbox"></li>
+                            <li><strong>حذف</strong> <input type="checkbox" name="pur[insertions][units][delete]" value="1" class="checkbox"></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>الأصناف</strong> <input type="checkbox" class="checkbox parent" name="pur[insertions][products]" value="1"  >
+                        <ul>
+                            <li><strong>إضافة </strong> <input type="checkbox" name="pur[insertions][products][create]" value="1" class="checkbox"></li>
+                            <li><strong>عرض</strong> <input type="checkbox" name="pur[insertions][products][view]" value="1" class="checkbox"></li>
+                            <li><strong>تعديل</strong> <input type="checkbox" name="pur[insertions][products][edit]" value="1" class="checkbox"></li>
+                            <li><strong>حذف</strong> <input type="checkbox" name="pur[insertions][products][delete]" value="1" class="checkbox"></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>المجموعات الرئيسية</strong> <input type="checkbox" class="checkbox parent" name="pur[insertions][main_groups]" value="1"  >
+                        <ul>
+                            <li><strong>إضافة </strong> <input type="checkbox" name="pur[insertions][main_groups][create]" value="1" class="checkbox"></li>
+                            <li><strong>عرض</strong> <input type="checkbox" name="pur[insertions][main_groups][view]" value="1" class="checkbox"></li>
+                            <li><strong>تعديل</strong> <input type="checkbox" name="pur[insertions][main_groups][edit]" value="1" class="checkbox"></li>
+                            <li><strong>حذف</strong> <input type="checkbox" name="pur[insertions][main_groups][delete]" value="1" class="checkbox"></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>المجموعات الفرعية</strong> <input type="checkbox" class="checkbox parent" name="pur[insertions][sub_groups]" value="1"  >
+                        <ul>
+                            <li><strong>إضافة </strong> <input type="checkbox" name="pur[insertions][sub_groups][create]" value="1" class="checkbox"></li>
+                            <li><strong>عرض</strong> <input type="checkbox" name="pur[insertions][sub_groups][view]" value="1" class="checkbox"></li>
+                            <li><strong>تعديل</strong> <input type="checkbox" name="pur[insertions][sub_groups][edit]" value="1" class="checkbox"></li>
+                            <li><strong>حذف</strong> <input type="checkbox" name="pur[insertions][sub_groups][delete]" value="1" class="checkbox"></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <strong>العمليات</strong> <input type="checkbox" class="checkbox parent" name="pur[operations]" value="1"  >
+                <ul>
+                    <li>
+                        <strong>الطلبات</strong> <input type="checkbox" class="checkbox parent" name="pur[operations][requests]" value="1"  >
+                        <ul>
+                            <li><strong>إضافة </strong> <input type="checkbox" name="pur[operations][requests][create]" value="1" class="checkbox"></li>
+                            <li><strong>عرض</strong> <input type="checkbox" name="pur[operations][requests][view]" value="1" class="checkbox"></li>
+                            <li><strong>تعديل</strong> <input type="checkbox" name="pur[operations][requests][edit]" value="1" class="checkbox"></li>
+                            <li><strong>حذف</strong> <input type="checkbox" name="pur[operations][requests][delete]" value="1" class="checkbox"></li>
+                            <li><strong>اعتماد</strong> <input type="checkbox" name="pur[operations][requests][approve]" value="1" class="checkbox"></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>المشتريات</strong> <input type="checkbox" class="checkbox parent" name="pur[operations][purchase]" value="1"  >
+                        <ul>
+                            <li><strong>إضافة </strong> <input type="checkbox" name="pur[operations][purchase][create]" value="1" class="checkbox"></li>
+                            <li><strong>عرض</strong> <input type="checkbox" name="pur[operations][purchase][view]" value="1" class="checkbox"></li>
+                            <li><strong>تعديل</strong> <input type="checkbox" name="pur[operations][purchase][edit]" value="1" class="checkbox"></li>
+                            <li><strong>حذف</strong> <input type="checkbox" name="pur[operations][purchase][delete]" value="1" class="checkbox"></li>
+                            <li><strong>اعتماد</strong> <input type="checkbox" name="pur[operations][purchase][approve]" value="1" class="checkbox"></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>الاستلامات</strong> <input type="checkbox" class="checkbox parent" name="pur[operations][intake]" value="1"  >
+                        <ul>
+                            <li><strong>إضافة </strong> <input type="checkbox" name="pu[operations][intake][create]" value="1" class="checkbox"></li>
+                            <li><strong>عرض</strong> <input type="checkbox" name="pu[operations][intake][view]" value="1" class="checkbox"></li>
+                            <li><strong>تعديل</strong> <input type="checkbox" name="pu[operations][intake][edit]" value="1" class="checkbox"></li>
+                            <li><strong>حذف</strong> <input type="checkbox" name="pu[operations][intake][delete]" value="1" class="checkbox"></li>
+                            <li><strong>اعتماد</strong> <input type="checkbox" name="pu[operations][intake][approve]" value="1" class="checkbox"></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+
         <div class="actions">
             <a href="{{ route('permissions.index') }}" class="btn btn-cancel">
                 <i class="fas fa-times" style="margin-left: 8px;"></i>
