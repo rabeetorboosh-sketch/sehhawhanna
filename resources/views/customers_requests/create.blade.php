@@ -54,24 +54,11 @@
 
             <div class="row-3">
 
-                <div class="form-group npt">
-                    <label><i class="fa-solid fa-user-tag"></i> اسم العميل</label>
-                    <input type="text" class="searcher" placeholder="ابحث عن العميل">
-                    <select name="customer_id" id="clientSelect" size="5" class="client-search">
-                        @foreach($customers as $clnt)
-                            <option value="{{ $clnt->id }}"
-                                    data-emp="{{ $clnt->employee_id }}"
-                                    data-route="{{ $clnt->sales_rout_id }}">
-                                {{ $clnt->item->name }}
-                            </option>
-                        @endforeach
-                    </select>
-            </div>
 
                 <div   style="display:inline-block;">
                     <label for="employee_id_pc">الموظف</label>
                     <select name="employee_id" id="employee_id_pc" class="emp-input employee-select" required>
-                        <option value="">اختر الموظف</option>
+
                         @foreach($employees as $emp)
                             <option value="{{ $emp->id }}" {{ old('employee_id') == $emp->id ? 'selected' : '' }}>
                                 {{ $emp->item?->name }}
@@ -192,7 +179,7 @@
                 <div class="mb-4 form-group" style="display: inline-block;">
                     <label for="employee_id_phone">الموظف</label>
                     <select name="employee_id" id="employee_id_phone" class="emp-input employee-select" required>
-                        <option value="">اختر الموظف</option>
+
                         @foreach($employees as $emp)
                             <option value="{{ $emp->id }}" {{ old('employee_id') == $emp->id ? 'selected' : '' }}>
                                 {{ $emp->item?->name }}

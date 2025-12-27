@@ -14,7 +14,7 @@
         <form class="smart-form" action="{{route('subGroup.create')}}" method="post">
             @csrf
             <div class="row-2">
-                <input type="hidden" value="{{$department}}">
+                <input type="hidden" value="{{$department??''}}" name="department">
                 <div class="form-group">
                     <label>اســـــم المجموعة</label>
                     <input name="name" type="text" autocomplete="off">

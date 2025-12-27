@@ -250,7 +250,7 @@ $issueType=IssueType::find($request->id);
             'main_group_id' => $validated['main_group'],
         ]);
 
-        return redirect()->route('subGroup.add')->with('success', 'تمت الإضافة بنجاح ✅');
+        return redirect()->route('subGroup.add',$request->department)->with('success', 'تمت الإضافة بنجاح ✅');
     }
 
     public function SubGroupedit(SubGroup $subGroup ,$department="" )

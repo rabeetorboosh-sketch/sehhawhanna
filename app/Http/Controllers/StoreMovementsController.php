@@ -66,7 +66,7 @@ class StoreMovementsController extends Controller
         $branches =Branch::all();
         $stores=Store::all();
         $users=User::all();
-            $movement=Movement::find($move??3);
+            $movement=Movement::findOrFail($move);
         $default = DefaultVal::where('item', 'main_store')->where('user_id',Auth::id())->first();
 
         if ($default) {

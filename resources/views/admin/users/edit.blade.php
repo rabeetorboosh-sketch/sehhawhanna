@@ -30,8 +30,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label>كلمة المرور (اتركها فارغة إذا لم ترغب بالتغيير)</label>
-                    <input name="password" type="password" autocomplete="off">
+                    <label>كلمة المرور </label>
+                    <input name="password" type="password" autocomplete="off" placeholder="اتركها فارغة إذا لم ترغب بالتغيير">
                 </div>
 
                 <div class="form-group">

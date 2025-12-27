@@ -38,8 +38,8 @@
                             <div id="product-fields">
                                 <div class="flex items-center" id="product-field-1">
                                     <div class="searchable-select">
-                                        <input  type="hidden" name="direction" value="{{$movement->direction}}">
-                                        <input  type="hidden" name="movement_id" value="{{$movement->id}}">
+                                        <input  type="hidden" name="direction" value="{{$movement?->direction}}">
+                                        <input  type="hidden" name="movement_id" value="{{$movement?->id}}">
                                         @foreach($productsGroup as $pro)
                                             <div class="S grp{{$pro->item->sub_group_id}} item-container" style="  margin-bottom: 1px; display: flex">
                                                 <input value="{{ $pro->item?->name }}" class="product-name" style=" border: none" disabled>
@@ -77,12 +77,12 @@
             </table>
 
 
-            <input type="hidden" name="stores_number" value="{{$movement->stores_number}}">
+            <input type="hidden" name="stores_number" value="{{$movement?->stores_number}}">
 
 
             <div>
                 <div class="mb-4" style="display: inline-block;">
-                    <label for="user_id_pc">  {{$movement->direction==0?'من':'الى'}}</label>
+                    <label for="user_id_pc">  {{$movement?->direction==0?'من':'الى'}}</label>
                     <select name="employee_id" id="user_id_pc" class="emp-input employee-select" required>
                         <option value="" > اختر الموظف</option>
                         @foreach($employees as $emp)
@@ -107,10 +107,10 @@
                 </select>
                 </div>
                 </div>
-
-            @if($movement->stores_number >1)
+ 
+            @if($movement?->stores_number >1)
                 <div class="mb-4" style="display: inline-block;">
-                    <label for="store_id">  {{$movement->direction==1?'من':'الى'}}</label>
+                    <label for="store_id">  {{$movement?->direction==1?'من':'الى'}}</label>
 
                     <!-- أضفنا class و data-default-store -->
                     <select name="store_id" id="store_id" class="emp-input store-select" data-default-store="{{ $defaults['value'] ?? '' }}" required>
@@ -188,8 +188,8 @@
         <form class="smart-form" action="{{ route('storeMovements.store')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-4">
-                <input  type="hidden" name="movement_id" value="{{$movement->id}}">
-                <input  type="hidden" name="direction" value="{{$movement->direction}}">
+                <input  type="hidden" name="movement_id" value="{{$movement?->id}}">
+                <input  type="hidden" name="direction" value="{{$movement?->direction}}">
                 <label for="products" class="block text-sm font-medium text-gray-700 productlpl">اختر المنتجات</label>
                 <div id="product-fields">
                     <div class="flex items-center mb-4" id="product-field-1">
@@ -230,10 +230,10 @@
 
 
 
-            <input type="hidden" name="stores_number" value="{{$movement->stores_number}}">
-            @if($movement->stores_number >1)
+            <input type="hidden" name="stores_number" value="{{$movement?->stores_number}}">
+            @if($movement?->stores_number >1)
                 <div class="mb-4" style="display: inline-block;">
-                    <label for="store_id">  {{$movement->direction==1?'من':'الى'}}</label>
+                    <label for="store_id">  {{$movement?->direction==1?'من':'الى'}}</label>
 
                     <!-- نفس التعديلات: class و data-default-store -->
                     <select name="store_id" id="store_id_phone" class="emp-input store-select" data-default-store="{{ $defaults['value'] ?? '' }}" required>
@@ -261,7 +261,7 @@
 
             <div class="row-2">
                 <div class="mb-4 form-group" style="display: inline-block;">
-                    <label for="user_id_phone">  {{$movement->direction==0?'من':'الى'}}</label>
+                    <label for="user_id_phone">  {{$movement?->direction==0?'من':'الى'}}</label>
                     <select name="employee_id" id="user_id_phone" class="emp-input employee-select" required>
                         <option value="" > اختر  الموظف</option>
                         @foreach($employees as $emp)

@@ -34,7 +34,27 @@ class CustomerRequestController extends Controller
     public function create()
     {
         $users = User::all();
-        $employees = Employee::all();
+        if (Auth::user()->isAdmin()) {
+            $employees = Employee::all();
+        } else {
+            $employees = Employee::where('user_id', Auth::id())->get();
+
+            if ($employees->isEmpty()) {
+                return "
+            <div style='text-align: center; margin-top: 50px;'>
+                <div class='worn' style='color: red; margin-bottom: 20px;'>
+                    هذا المستخدم لم يرتبط بموظف
+                </div>
+                <a href='javascript:history.back()' style='text-decoration: none; padding: 10px 20px; background-color: #3490dc; color: white; border-radius: 5px;'>
+                    عودة للخلف
+                </a>
+            </div>
+        ";
+            }
+        }
+
+
+
         $customers = Customer::all();
         $salesRouts = SalesRout::all();
         $sections = MainGroup::where('department_id',1)->get();
@@ -120,7 +140,24 @@ class CustomerRequestController extends Controller
         $requestModel = CustomerRequest::with('items')->findOrFail($id);
 
         $users = User::all();
-        $employees = Employee::all();
+        if (Auth::user()->isAdmin()) {
+            $employees = Employee::all();
+        } else {
+            $employees = Employee::where('user_id', Auth::id())->get();
+
+            if ($employees->isEmpty()) {
+                return "
+            <div style='text-align: center; margin-top: 50px;'>
+                <div class='worn' style='color: red; margin-bottom: 20px;'>
+                    هذا المستخدم لم يرتبط بموظف
+                </div>
+                <a href='javascript:history.back()' style='text-decoration: none; padding: 10px 20px; background-color: #3490dc; color: white; border-radius: 5px;'>
+                    عودة للخلف
+                </a>
+            </div>
+        ";
+            }
+        }
         $customers = Customer::all();
         $salesRouts = SalesRout::all();
         $products = Product::with(['item.units.unit'])->get();
