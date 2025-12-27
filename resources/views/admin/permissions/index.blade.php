@@ -31,8 +31,8 @@
                         <tr>
                             <td>{{ $user->id }}</td>
                             <td>{{ $user->name }}</td>
-                            <td>{{$user->packages->first()->name }}</td>
-                            <td>{{$user->packages->first()->description }}</td>
+                            <td>{{$user->packages?->first()?->name??'' }}</td>
+                            <td>{{$user->packages?->first()?->description ??''}}</td>
 
                             <td>
                                 <div class="actions">

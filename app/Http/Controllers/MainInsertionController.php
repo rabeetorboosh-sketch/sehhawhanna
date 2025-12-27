@@ -235,7 +235,7 @@ $issueType=IssueType::find($request->id);
             $mainGroups = MainGroup::where('department_id',$department)->get();
 
 
-        return view('admin.subGroup.add', compact('mainGroups'));
+        return view('admin.subGroup.add', compact('mainGroups','department'));
     }
 
     public function SubGroupcreate(Request $request)

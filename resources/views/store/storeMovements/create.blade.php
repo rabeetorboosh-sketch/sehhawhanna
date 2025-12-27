@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            إضافة حركة مخزون ({{$movement->name}})
+            إضافة حركة مخزون ({{$movement?->name}})
         </h2>
     </x-slot>
     <link rel="stylesheet" href="{{asset('css/form.css')}}">
@@ -33,7 +33,7 @@
 
                         <div class="mb-4">
                             <div class="group-header" >
-                                {{$group->name}}      <i class="fas fa-layer-group"></i>
+                                {{$group?->name}}      <i class="fas fa-layer-group"></i>
                             </div>
                             <div id="product-fields">
                                 <div class="flex items-center" id="product-field-1">
@@ -42,10 +42,10 @@
                                         <input  type="hidden" name="movement_id" value="{{$movement->id}}">
                                         @foreach($productsGroup as $pro)
                                             <div class="S grp{{$pro->item->sub_group_id}} item-container" style="  margin-bottom: 1px; display: flex">
-                                                <input value="{{ $pro->item->name }}" class="product-name" style=" border: none" disabled>
+                                                <input value="{{ $pro->item?->name }}" class="product-name" style=" border: none" disabled>
                                                 <input  name="product_id[{{$pro->id}}][id]" value="{{ $pro->id }}" class=" vlue-lbl">
                                                 <select name="product_id[{{$pro->id}}][unit]" class="unit-select">
-                                                    @foreach($pro->item->units as $unit)
+                                                    @foreach($pro->item?->units as $unit)
                                                         <option value="{{$unit->id}}">{{$unit->unit?->name}}</option>
                                                     @endforeach
                                                 </select>
@@ -101,7 +101,7 @@
                     <option value="">اختر مستودعا</option>
                     @foreach($stores as $store)
                         <option value="{{ $store->id }}" {{ (old('employee_store_id') == $store->id) || ($emp_store == $store->id) ? 'selected' : '' }}>
-                            {{ $store->name }}
+                            {{ $store?->name }}
                         </option>
                     @endforeach
                 </select>
@@ -117,7 +117,7 @@
                         <option value="" disabled>اختر مستودعا</option>
                         @foreach($stores as $store)
                             <option value="{{ $store->id }}"  {{ (old('store_id') == $store->id || (isset($defaults['item']) && $defaults['value'] == $store->id) )  ? 'selected' : '' }}>
-                                {{ $store->name }}
+                                {{ $store?->name }}
                             </option>
                         @endforeach
                     </select>
@@ -199,7 +199,7 @@
                                     <input value="{{ $pro->item?->name }}" class="product-name" style=" border: none" disabled>
                                     <input name="product_id[{{ $pro->id }}][id]" value="{{ $pro->id }}" class=" vlue-lbl">
                                    <select name="product_id[{{ $pro->id }}][unit]" class="unit-select">
-                                    @foreach($pro->item->units as $unit)
+                                    @foreach($pro->item?->units as $unit)
                                         <option value="{{$unit->id}}">{{$unit->unit?->name}}</option>
                                     @endforeach
                                    </select>
@@ -240,7 +240,7 @@
                         <option value="">اختر مستودعا</option>
                         @foreach($stores as $store)
                             <option value="{{ $store->id }}" {{ (old('store_id') == $store->id || (isset($defaults['item']) && $defaults['value'] == $store->id) )  ? 'selected' : '' }}>
-                                {{ $store->name }}
+                                {{ $store?->name }}
                             </option>
                         @endforeach
                     </select>
@@ -279,7 +279,7 @@
                     <option value="">اختر مستودعا</option>
                     @foreach($stores as $store)
                         <option value="{{ $store->id }}" {{ old('employee_store_id') == $store->id ? 'selected' : '' }}>
-                            {{ $store->name }}
+                            {{ $store?->name }}
                         </option>
                     @endforeach
                 </select>
