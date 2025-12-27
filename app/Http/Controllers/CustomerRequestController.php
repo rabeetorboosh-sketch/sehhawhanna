@@ -82,7 +82,7 @@ class CustomerRequestController extends Controller
 
         $request->validate([
             'employee_id' => 'required|exists:employees,id',
-            'customer_id' => 'required|exists:customers,id',
+            'customer_id' => 'nullable|exists:customers,id',
             'sales_rout_id' => 'required|exists:sales_routs,id',
             'description' => 'nullable|string|max:500',
             'items' => 'required|array|min:1',
