@@ -359,7 +359,7 @@
                             </ul>
                         </li>
                         <li>
-                            <strong>طلبات العملاء </strong>
+                            <strong>طلبات المندوبين </strong>
                             <input type="checkbox" class="checkbox parent" name="8[operations][customersRequests]" value="1"
                                    @if(isset($permissions['8']['operations']['customersRequests'])) checked @endif >
                             <ul>

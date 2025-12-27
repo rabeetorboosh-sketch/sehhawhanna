@@ -362,7 +362,7 @@
                         </ul>
                     </li>
                     <li>
-                        <strong>طلبات العملاء</strong> <input type="checkbox" class="checkbox parent" name="8[operations][customersRequests]" value="1" >
+                        <strong>طلبات المندوبين </strong> <input type="checkbox" class="checkbox parent" name="8[operations][customersRequests]" value="1" >
                         <ul>
                             <li><strong>إضافة</strong> <input type="checkbox" name="8[operations][customersRequests][create]" value="1" class="checkbox"></li>
                             <li><strong>عرض</strong> <input type="checkbox" name="8[operations][customersRequests][view]" value="1" class="checkbox"></li>

@@ -460,12 +460,12 @@
                                 @endif
                                 @if(Auth::user()->permissions('8-operations-customersRequests')?->can_show == 1)
                                     <li class="menu-item">
-                                        <button class="dropdown-btn">طلبات العملاء</button>
+                                        <button class="dropdown-btn">طلبات المندوبين</button>
                                         <ul class="submenu">
                                             @if(Auth::user()->permissions('8-operations-customersRequests')?->can_create == 1)
-                                                <li><a href="{{ route('customersRequests.create') }}">إضافة طلب عميل</a></li>
+                                                <li><a href="{{ route('customersRequests.create') }}">إضافة طلب مندوب</a></li>
                                             @endif
-                                            <li><a href="{{ route('customersRequests.index') }}">قائمة طلبات العملاء</a></li>
+                                            <li><a href="{{ route('customersRequests.index') }}">قائمة طلبات المندوبين</a></li>
                                         </ul>
                                     </li>
                                 @endif
