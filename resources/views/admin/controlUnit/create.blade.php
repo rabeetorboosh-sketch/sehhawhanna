@@ -75,7 +75,7 @@
 
                 <div class="form-group">
                     <label>
-                        <input type="checkbox" name="daily_control" value="1" class="checkbox">
+                        <input type="checkbox" name="daily_control" value="1" class="checkbox" checked>
                         ضمن الرقابة اليومية
                     </label>
                 </div>

@@ -196,6 +196,57 @@
                 </ul>
             </li>
         </ul>
+        <h3>رقابة الانتاج</h3>
+        <ul class="departments">
+            <li>
+                <strong>المدخلات</strong> <input type="checkbox" class="checkbox parent" name="10[insertions]" value="1"  >
+                <ul>
+
+                    <li>
+                        <strong>الوحدات الرقابية</strong> <input type="checkbox" class="checkbox parent" name="10[insertions][controlUnits]" value="1"   >
+                        <ul>
+                            <li><strong>إضافة </strong> <input type="checkbox" name="10[insertions][controlUnits][create]" value="1" class="checkbox"></li>
+                            <li><strong>عرض</strong> <input type="checkbox" name="10[insertions][controlUnits][view]" value="1" class="checkbox"></li>
+                            <li><strong>تعديل</strong> <input type="checkbox" name="10[insertions][controlUnits][edit]" value="1" class="checkbox"></li>
+                            <li><strong>حذف</strong> <input type="checkbox" name="10[insertions][controlUnits][delete]" value="1" class="checkbox"></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <strong>المجموعات الرئيسية</strong> <input type="checkbox" class="checkbox parent" name="10[insertions][main_groups]" value="1"  >
+                        <ul>
+                            <li><strong>إضافة </strong> <input type="checkbox" name="10[insertions][main_groups][create]" value="1" class="checkbox"></li>
+                            <li><strong>عرض</strong> <input type="checkbox" name="10[insertions][main_groups][view]" value="1" class="checkbox"></li>
+                            <li><strong>تعديل</strong> <input type="checkbox" name="10[insertions][main_groups][edit]" value="1" class="checkbox"></li>
+                            <li><strong>حذف</strong> <input type="checkbox" name="10[insertions][main_groups][delete]" value="1" class="checkbox"></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>المجموعات الفرعية</strong> <input type="checkbox" class="checkbox parent" name="10[insertions][sub_groups]" value="1"  >
+                        <ul>
+                            <li><strong>إضافة </strong> <input type="checkbox" name="10[insertions][sub_groups][create]" value="1" class="checkbox"></li>
+                            <li><strong>عرض</strong> <input type="checkbox" name="10[insertions][sub_groups][view]" value="1" class="checkbox"></li>
+                            <li><strong>تعديل</strong> <input type="checkbox" name="10[insertions][sub_groups][edit]" value="1" class="checkbox"></li>
+                            <li><strong>حذف</strong> <input type="checkbox" name="10[insertions][sub_groups][delete]" value="1" class="checkbox"></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <strong>العمليات</strong> <input type="checkbox" class="checkbox parent" name="10[operations]" value="1"  >
+                <ul>
+                    <li>
+                        <strong>البلاغات</strong> <input type="checkbox" class="checkbox parent" name="10[operations][reports]" value="1"  >
+                        <ul>
+                            <li><strong>إضافة </strong> <input type="checkbox" name="10[operations][reports][create]" value="1" class="checkbox"></li>
+                            <li><strong>عرض</strong> <input type="checkbox" name="10[operations][reports][view]" value="1" class="checkbox"></li>
+                            <li><strong>تعديل</strong> <input type="checkbox" name="10[operations][reports][edit]" value="1" class="checkbox"></li>
+                            <li><strong>حذف</strong> <input type="checkbox" name="10[operations][reports][delete]" value="1" class="checkbox"></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
 
 
         <h3>رقابة الأصول</h3>

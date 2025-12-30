@@ -211,6 +211,89 @@
             </ul>
         </li>
         @endif
+        @if(Auth::user()->sectionsPermissions('10'))
+        <li class="menu-item">
+
+            <button class="dropdown-btn"> رقابة الانتاج </button>
+            <ul class="submenu">
+                @if(Auth::user()->sectionsPermissions('10-insertions'))
+                <li class="menu-item">
+                    <button class="dropdown-btn">المدخلات</button>
+                    <ul class="submenu">
+
+                            @if(Auth::user()->permissions('10-insertions-controlUnits')?->can_show == 1)
+                                <li class="menu-item">
+                                    <button class="dropdown-btn">الوحدات الرقابية</button>
+                                    <ul class="submenu">
+                                        @if(Auth::user()->permissions('10-insertions-controlUnits')?->can_create == 1)
+                                            <li><a href="{{ route('controlUnit.create',10) }}">إضافة وحدة رقابية </a></li>
+                                        @endif
+                                        <li><a href="{{ route('controlUnit.index',10) }} ">قائمة الوحدات الرقابية</a></li>
+                                    </ul>
+                                </li>
+                            @endif
+
+
+                            @if(Auth::user()->permissions('10-insertions-main_groups')?->can_show == 1)
+                                <li class="menu-item">
+                                    <button class="dropdown-btn">المجموعات الرئيسية</button>
+                                    <ul class="submenu">
+                                        @if(Auth::user()->permissions('10-insertions-main_groups')?->can_create == 1)
+                                            <li><a href="{{ route('mainGroup.add',10) }}">إضافة مجموعة</a></li>
+                                        @endif
+                                        <li><a href="{{ route('mainGroup.index',10) }}">قائمة المجموعات</a></li>
+                                    </ul>
+                                </li>
+                            @endif
+
+                            @if(Auth::user()->permissions('10-insertions-sub_groups')?->can_show == 1)
+                                <li class="menu-item">
+                                    <button class="dropdown-btn">المجموعات الفرعية</button>
+                                    <ul class="submenu">
+                                        @if(Auth::user()->permissions('10-insertions-sub_groups')?->can_create == 1)
+                                            <li><a href="{{ route('subGroup.add',10) }}">إضافة مجموعة</a></li>
+                                        @endif
+                                        <li><a href="{{ route('subGroup.index',10) }}">قائمة المجموعات</a></li>
+                                    </ul>
+                                </li>
+                            @endif
+
+                    </ul>
+                </li>
+                @endif
+               @if(Auth::user()->sectionsPermissions('10-operations'))
+                <li class="menu-item">
+                    <button class="dropdown-btn">العمليات</button>
+                    <ul class="submenu">
+                        @if(Auth::user()->permissions('10-operations-reports')?->can_show == 1)
+                            <li class="menu-item">
+                                <button class="dropdown-btn">البلاغات</button>
+                                <ul class="submenu">
+                                    @if(Auth::user()->permissions('10-operations-reports')?->can_create == 1)
+                                        <li><a href="{{ route('reports.create',10) }}">إضافة بلاغ مخزني </a></li>
+                                    @endif
+                                    <li><a href="{{ route('reports.index',10) }}"> قائمة البلاغات المخزنية </a></li>
+                                </ul>
+                            </li>
+                        @endif
+
+                        @if(Auth::user()->permissions('daily_monitoring-daily_monitoring')?->can_show == 1)
+                            <li class="menu-item">
+                                <button class="dropdown-btn">الرقابة اليومية</button>
+                                <ul class="submenu">
+                                    @if(Auth::user()->permissions('daily_monitoring-daily_monitoring')?->can_create == 1)
+                                        <li><a href="{{ route('monitoring.partCreate',10) }}">إضافة رقابة يومية </a></li>
+                                    @endif
+                                    <li><a href="{{ route('monitoring.index',10) }}">قائمة الرقابة يومية</a></li>
+                                </ul>
+                            </li>
+                        @endif
+                    </ul>
+                </li>
+               @endif
+            </ul>
+        </li>
+        @endif
         @if(Auth::user()->sectionsPermissions('2'))
             <li class="menu-item">
                 <button class="dropdown-btn">رقابة الأصول</button>
