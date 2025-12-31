@@ -47,6 +47,7 @@ use App\Http\Controllers\TaskReceiptController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ViolationController;
 use App\Models\SubGroup;
 use Illuminate\Support\Facades\Route;
 
@@ -543,7 +544,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/purMainGroup/update/{purMainGroup}', [PurMainGroupController::class, 'update'])->name('purMainGroup.update');
     Route::delete('/purMainGroup/delete/{purMainGroup}', [PurMainGroupController::class, 'delete'])->name('purMainGroup.delete');
 
-
+    Route::resource('violations', ViolationController::class);
 //-///-/-//-/-/-/-/-/--/-/--/
 
     Route::get('/PurSubGroup', [PurSupGroupController::class, 'index'])->name('PurSubGroup.index');
